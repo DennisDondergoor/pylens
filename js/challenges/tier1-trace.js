@@ -1,10 +1,10 @@
-// PyLens Level 1 Trace Challenges: Absolute Basics
+// PyLens Tier 1 Trace Challenges: Absolute Basics
 // Topics: print output, basic arithmetic, strings, booleans, type()
 
-window.LEVEL1_TRACE = [
+window.TIER1_TRACE = [
     {
         id: "t1t-print-sep",
-        level: 1,
+        tier: 1,
         tags: ["print", "separator"],
         title: "Print with Separator",
         code: "print(1, 2, 3, sep='-')",
@@ -15,7 +15,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-division-types",
-        level: 1,
+        tier: 1,
         tags: ["arithmetic", "division", "operators"],
         title: "Integer vs Float Division",
         code: "print(7 // 2)\nprint(7 / 2)",
@@ -26,7 +26,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-string-ops",
-        level: 1,
+        tier: 1,
         tags: ["strings", "concatenation", "repetition"],
         title: "String Concatenation and Repetition",
         code: "word = 'Py'\nprint(word + 'thon')\nprint(word * 3)",
@@ -37,7 +37,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-bool-arithmetic",
-        level: 1,
+        tier: 1,
         tags: ["boolean", "arithmetic", "type-coercion"],
         title: "Boolean Values in Arithmetic",
         code: "result = True + True + False\nprint(result)",
@@ -48,7 +48,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-type-function",
-        level: 1,
+        tier: 1,
         tags: ["type", "built-in-functions"],
         title: "Type Function Returns",
         code: "x = 42\nprint(type(x))",
@@ -59,7 +59,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-multiline-string",
-        level: 1,
+        tier: 1,
         tags: ["strings", "escape-sequences"],
         title: "Newline Escape Sequence",
         code: "message = 'Hello\\nWorld'\nprint(message)",
@@ -70,7 +70,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-modulo-operator",
-        level: 1,
+        tier: 1,
         tags: ["arithmetic", "modulo", "operators"],
         title: "Modulo Operator",
         code: "print(17 % 5)\nprint(20 % 4)",
@@ -81,7 +81,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-string-indexing",
-        level: 1,
+        tier: 1,
         tags: ["strings", "indexing"],
         title: "String Character Access",
         code: "word = 'Python'\nprint(word[0])\nprint(word[3])",
@@ -92,7 +92,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-comparison-bool",
-        level: 1,
+        tier: 1,
         tags: ["comparison", "boolean", "operators"],
         title: "Comparison Returns Boolean",
         code: "x = 5\ny = 10\nprint(x < y)\nprint(x == y)",
@@ -103,7 +103,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-mixed-arithmetic",
-        level: 1,
+        tier: 1,
         tags: ["arithmetic", "int", "float", "type-coercion"],
         title: "Integer and Float Mixed Math",
         code: "result = 10 + 3.5\nprint(result)\nprint(type(result))",
@@ -114,7 +114,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-exponentiation",
-        level: 1,
+        tier: 1,
         tags: ["arithmetic", "operators", "exponentiation"],
         title: "Power Operator",
         code: "print(2 ** 3)\nprint(5 ** 2)",
@@ -125,7 +125,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-string-length",
-        level: 1,
+        tier: 1,
         tags: ["strings", "len", "built-in-functions"],
         title: "String Length Function",
         code: "text = 'Hello'\nprint(len(text))",
@@ -136,7 +136,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-string-methods",
-        level: 1,
+        tier: 1,
         tags: ["strings", "methods", "upper-lower"],
         title: "String Case Conversion",
         code: "word = 'Python'\nprint(word.upper())\nprint(word.lower())",
@@ -147,7 +147,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-print-end",
-        level: 1,
+        tier: 1,
         tags: ["print", "end-parameter"],
         title: "Print with Custom Ending",
         code: "print('Hello', end='!')\nprint('World')",
@@ -158,7 +158,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-negative-numbers",
-        level: 1,
+        tier: 1,
         tags: ["arithmetic", "operators", "negation"],
         title: "Negative Number Operations",
         code: "x = -5\nprint(x * 2)\nprint(abs(x))",
@@ -169,7 +169,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-string-quotes",
-        level: 1,
+        tier: 1,
         tags: ["strings", "quotes", "escape-sequences"],
         title: "Quotes Inside Strings",
         code: "text = \"It's Python\"\nprint(text)",
@@ -180,7 +180,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-operator-precedence",
-        level: 1,
+        tier: 1,
         tags: ["arithmetic", "operators", "precedence"],
         title: "Order of Operations",
         code: "result = 2 + 3 * 4\nprint(result)",
@@ -191,7 +191,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-logical-and",
-        level: 1,
+        tier: 1,
         tags: ["boolean", "logical-operators", "and"],
         title: "Logical AND Operator",
         code: "print(True and True)\nprint(True and False)",
@@ -202,7 +202,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-logical-or",
-        level: 1,
+        tier: 1,
         tags: ["boolean", "logical-operators", "or"],
         title: "Logical OR Operator",
         code: "print(False or True)\nprint(False or False)",
@@ -213,7 +213,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-string-format",
-        level: 1,
+        tier: 1,
         tags: ["strings", "f-strings", "formatting"],
         title: "F-String Formatting",
         code: "name = 'Alice'\nage = 30\nprint(f'{name} is {age}')",
@@ -224,7 +224,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-int-conversion",
-        level: 1,
+        tier: 1,
         tags: ["type-conversion", "int", "float"],
         title: "Float to Integer Conversion",
         code: "x = 7.9\nprint(int(x))\nprint(type(int(x)))",
@@ -235,7 +235,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-str-conversion",
-        level: 1,
+        tier: 1,
         tags: ["type-conversion", "str", "concatenation"],
         title: "Number to String Conversion",
         code: "num = 42\ntext = 'The answer is ' + str(num)\nprint(text)",
@@ -246,7 +246,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-not-operator",
-        level: 1,
+        tier: 1,
         tags: ["boolean", "logical-operators", "not"],
         title: "Logical NOT Operator",
         code: "value = True\nprint(not value)\nprint(not False)",
@@ -257,7 +257,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-tab-escape",
-        level: 1,
+        tier: 1,
         tags: ["strings", "escape-sequences", "tab"],
         title: "Tab Escape Sequence",
         code: "print('Name:\\tAlice')\nprint('Age:\\t25')",
@@ -268,7 +268,7 @@ window.LEVEL1_TRACE = [
     },
     {
         id: "t1t-chained-comparison",
-        level: 1,
+        tier: 1,
         tags: ["comparison", "operators", "boolean"],
         title: "Chained Comparison",
         code: "x = 15\nprint(10 < x < 20)\nprint(20 < x < 30)",

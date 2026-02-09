@@ -1,12 +1,12 @@
 /**
- * PyLens - Level 1 Debug Challenges
+ * PyLens - Tier 1 Debug Challenges
  * Level 1: Absolute Basics - Simple syntax and logic errors
  */
 
-window.LEVEL1_DEBUG = [
+window.TIER1_DEBUG = [
     {
         id: "t1d-print-parentheses",
-        level: 1,
+        tier: 1,
         tags: ["syntax", "print", "python3"],
         title: "Print Statement Issue",
         code: "name = 'Alice'\nage = 25\nprint 'Name:', name\nprint('Age:', age)",
@@ -25,7 +25,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-exponent-operator",
-        level: 1,
+        tier: 1,
         tags: ["operators", "arithmetic", "exponentiation"],
         title: "Wrong Power Operator",
         code: "radius = 5\narea = 3.14 * radius * 2\nprint('Circle area:', area)",
@@ -44,7 +44,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-string-int-concat",
-        level: 1,
+        tier: 1,
         tags: ["strings", "type-error", "concatenation"],
         title: "Type Mismatch in Concatenation",
         code: "score = 95\nmessage = 'Your score is: ' + score\nprint(message)",
@@ -63,7 +63,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-assignment-vs-comparison",
-        level: 1,
+        tier: 1,
         tags: ["operators", "conditionals", "syntax-error"],
         title: "Assignment in Condition",
         code: "temperature = 75\nif temperature = 80:\n    print('Hot day!')\nelse:\n    print('Nice weather')",
@@ -82,7 +82,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-typo-variable-name",
-        level: 1,
+        tier: 1,
         tags: ["variables", "name-error", "typo"],
         title: "Variable Name Typo",
         code: "first_name = 'Bob'\nlast_name = 'Smith'\nfull_name = first_name + ' ' + lastname\nprint(full_name)",
@@ -101,7 +101,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-integer-division",
-        level: 1,
+        tier: 1,
         tags: ["operators", "division", "arithmetic"],
         title: "Wrong Division Operator",
         code: "total_price = 100\nnum_people = 3\nprice_per_person = total_price // num_people\nprint('Each person pays:', price_per_person)",
@@ -120,7 +120,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-order-of-operations",
-        level: 1,
+        tier: 1,
         tags: ["operators", "arithmetic", "precedence"],
         title: "Missing Parentheses",
         code: "hours = 2\nminutes = 30\ntotal_minutes = hours * 60 + minutes / 60\nprint('Total hours:', total_minutes)",
@@ -139,7 +139,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-off-by-one-range",
-        level: 1,
+        tier: 1,
         tags: ["loops", "range", "off-by-one"],
         title: "Range Off-By-One Error",
         code: "print('Counting to 5:')\nfor i in range(5):\n    print(i)\nprint('Done!')",
@@ -158,7 +158,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-escape-sequence",
-        level: 1,
+        tier: 1,
         tags: ["strings", "escape-sequences", "syntax"],
         title: "Invalid Escape Sequence",
         code: "file_path = 'C:\\users\\data\\new_file.txt'\nprint('File location:', file_path)",
@@ -177,7 +177,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-type-comparison",
-        level: 1,
+        tier: 1,
         tags: ["types", "comparison", "string-vs-int"],
         title: "Comparing Different Types",
         code: "user_input = '42'\nexpected = 42\nif user_input == expected:\n    print('Correct!')\nelse:\n    print('Wrong answer')",
@@ -196,7 +196,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-indentation-error",
-        level: 1,
+        tier: 1,
         tags: ["syntax", "indentation", "whitespace"],
         title: "Inconsistent Indentation",
         code: "x = 10\nif x > 5:\n    print('x is large')\n  print('Still in if block')",
@@ -215,7 +215,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-missing-colon",
-        level: 1,
+        tier: 1,
         tags: ["syntax", "conditionals", "colon"],
         title: "Missing Colon After If",
         code: "age = 18\nif age >= 18\n    print('You can vote')\nelse:\n    print('Too young')",
@@ -234,7 +234,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-boolean-string",
-        level: 1,
+        tier: 1,
         tags: ["booleans", "strings", "type-error"],
         title: "Boolean as String",
         code: "is_ready = 'True'\nif is_ready:\n    print('Starting process...')",
@@ -253,7 +253,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-modulo-vs-divide",
-        level: 1,
+        tier: 1,
         tags: ["operators", "arithmetic", "modulo"],
         title: "Wrong Operator for Remainder",
         code: "number = 17\nremainder = number / 5\nprint('Remainder:', remainder)",
@@ -272,7 +272,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-string-quotes-mismatch",
-        level: 1,
+        tier: 1,
         tags: ["strings", "syntax", "quotes"],
         title: "Mismatched String Quotes",
         code: "greeting = 'Hello, World!\"\nprint(greeting)",
@@ -291,7 +291,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-xor-operator",
-        level: 1,
+        tier: 1,
         tags: ["operators", "arithmetic", "bitwise"],
         title: "Wrong XOR Operator",
         code: "base = 2\nexponent = 3\nresult = base ^ exponent\nprint('2 to the power of 3:', result)",
@@ -310,7 +310,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-undefined-variable",
-        level: 1,
+        tier: 1,
         tags: ["variables", "name-error", "scope"],
         title: "Using Variable Before Definition",
         code: "print('Total:', total)\ntotal = 100 + 50",
@@ -329,7 +329,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-float-int-confusion",
-        level: 1,
+        tier: 1,
         tags: ["types", "type-conversion", "float"],
         title: "Integer When Float Expected",
         code: "celsius = 20\nfahrenheit = celsius * 9 / 5 + 32\nprint('Temperature:', int(fahrenheit), 'F')",
@@ -348,7 +348,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-and-vs-ampersand",
-        level: 1,
+        tier: 1,
         tags: ["operators", "boolean", "logical"],
         title: "Bitwise AND Instead of Logical",
         code: "age = 25\nhas_license = True\nif age >= 18 & has_license:\n    print('Can drive')",
@@ -367,7 +367,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-string-multiplication",
-        level: 1,
+        tier: 1,
         tags: ["strings", "operators", "repetition"],
         title: "String Addition Instead of Multiplication",
         code: "char = '-'\nseparator = char + 20\nprint(separator)",
@@ -386,7 +386,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-not-equals",
-        level: 1,
+        tier: 1,
         tags: ["operators", "comparison", "inequality"],
         title: "Wrong Inequality Operator",
         code: "status = 'inactive'\nif status <> 'active':\n    print('Not active')",
@@ -405,7 +405,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-missing-quotes",
-        level: 1,
+        tier: 1,
         tags: ["strings", "syntax", "quotes"],
         title: "String Without Quotes",
         code: "city = New York\nprint('Location:', city)",
@@ -424,7 +424,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-negative-vs-subtract",
-        level: 1,
+        tier: 1,
         tags: ["operators", "arithmetic", "negation"],
         title: "Subtraction Spacing Error",
         code: "balance = 1000\nwithdrawal = 150\nnew_balance = balance- withdrawal\nprint('New balance:', new_balance)",
@@ -443,7 +443,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-type-function-call",
-        level: 1,
+        tier: 1,
         tags: ["types", "functions", "type-checking"],
         title: "Missing Parentheses on type()",
         code: "value = 42\ndata_type = type value\nprint('Type:', data_type)",
@@ -462,7 +462,7 @@ window.LEVEL1_DEBUG = [
     },
     {
         id: "t1d-case-sensitivity",
-        level: 1,
+        tier: 1,
         tags: ["booleans", "syntax", "case-sensitive"],
         title: "Boolean Case Sensitivity",
         code: "is_valid = true\nif is_valid:\n    print('Valid input')",

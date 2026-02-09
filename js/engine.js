@@ -5,30 +5,30 @@
 const Engine = (() => {
     const STREAK_MULTIPLIERS = [1, 1.5, 2, 2.5, 3];
 
-    const LEVELS = [
-        { level: 1, name: 'Absolute Basics', description: 'Print, arithmetic, strings, booleans, type()', unlockKey: null },
-        { level: 2, name: 'Collections', description: 'Lists, dicts, tuples, slicing, indexing, membership', unlockKey: 'level2' },
-        { level: 3, name: 'Functions & Control Flow', description: 'Functions, arguments, return values, loops, range', unlockKey: 'level3' },
-        { level: 4, name: 'Methods & Comprehensions', description: 'String/list/dict methods, comprehensions, sorting, unpacking', unlockKey: 'level4' },
-        { level: 5, name: 'Scope & Mutability', description: 'Closures, LEGB, mutable defaults, aliasing, shallow copy', unlockKey: 'level5' },
-        { level: 6, name: 'Object-Oriented Python', description: 'Classes, inheritance, super(), special methods', unlockKey: 'level6' },
-        { level: 7, name: 'Iterators & Error Handling', description: 'Generators, yield, try/except/finally, decorators', unlockKey: 'level7' },
-        { level: 8, name: 'Advanced Python', description: 'Metaclasses, descriptors, async, functools deep cuts', unlockKey: 'level8' }
+    const TIERS = [
+        { tier: 1, name: 'Absolute Basics', description: 'Print, arithmetic, strings, booleans, type()', unlockKey: null },
+        { tier: 2, name: 'Collections', description: 'Lists, dicts, tuples, slicing, indexing, membership', unlockKey: 'tier2' },
+        { tier: 3, name: 'Functions & Control Flow', description: 'Functions, arguments, return values, loops, range', unlockKey: 'tier3' },
+        { tier: 4, name: 'Methods & Comprehensions', description: 'String/list/dict methods, comprehensions, sorting, unpacking', unlockKey: 'tier4' },
+        { tier: 5, name: 'Scope & Mutability', description: 'Closures, LEGB, mutable defaults, aliasing, shallow copy', unlockKey: 'tier5' },
+        { tier: 6, name: 'Object-Oriented Python', description: 'Classes, inheritance, super(), special methods', unlockKey: 'tier6' },
+        { tier: 7, name: 'Iterators & Error Handling', description: 'Generators, yield, try/except/finally, decorators', unlockKey: 'tier7' },
+        { tier: 8, name: 'Advanced Python', description: 'Metaclasses, descriptors, async, functools deep cuts', unlockKey: 'tier8' }
     ];
 
     /**
-     * Get all challenges for a given mode and level.
+     * Get all challenges for a given mode and tier.
      */
-    function getChallenges(mode, level) {
-        const key = `LEVEL${level}_${mode.toUpperCase()}`;
+    function getChallenges(mode, tier) {
+        const key = `TIER${tier}_${mode.toUpperCase()}`;
         return window[key] || [];
     }
 
     /**
-     * Get all challenge IDs for a mode and level.
+     * Get all challenge IDs for a mode and tier.
      */
-    function getChallengeIds(mode, level) {
-        return getChallenges(mode, level).map(c => c.id);
+    function getChallengeIds(mode, tier) {
+        return getChallenges(mode, tier).map(c => c.id);
     }
 
     /**
@@ -37,7 +37,7 @@ const Engine = (() => {
     function getChallenge(id) {
         for (let t = 1; t <= 8; t++) {
             for (const mode of ['TRACE', 'DEBUG']) {
-                const pool = window[`LEVEL${t}_${mode}`];
+                const pool = window[`TIER${t}_${mode}`];
                 if (!pool) continue;
                 const found = pool.find(c => c.id === id);
                 if (found) return found;
@@ -47,10 +47,10 @@ const Engine = (() => {
     }
 
     /**
-     * Get the next uncompleted challenge in a mode/level, or the first one if all completed.
+     * Get the next uncompleted challenge in a mode/tier, or the first one if all completed.
      */
-    function getNextChallenge(mode, level) {
-        const challenges = getChallenges(mode, level);
+    function getNextChallenge(mode, tier) {
+        const challenges = getChallenges(mode, tier);
         for (const c of challenges) {
             if (!Storage.isCompleted(c.id)) return c;
         }
@@ -60,8 +60,8 @@ const Engine = (() => {
     /**
      * Get challenge index within its pool.
      */
-    function getChallengeIndex(challenge, mode, level) {
-        const challenges = getChallenges(mode, level);
+    function getChallengeIndex(challenge, mode, tier) {
+        const challenges = getChallenges(mode, tier);
         return challenges.findIndex(c => c.id === challenge.id);
     }
 
@@ -126,11 +126,11 @@ const Engine = (() => {
     }
 
     /**
-     * Get available levels for a mode.
+     * Get available tiers for a mode.
      */
-    function getAvailableLevels(mode) {
-        return LEVELS.map(t => {
-            const challenges = getChallenges(mode, t.level);
+    function getAvailableTiers(mode) {
+        return TIERS.map(t => {
+            const challenges = getChallenges(mode, t.tier);
             const ids = challenges.map(c => c.id);
             const completed = Storage.getCompletedCount(ids);
             const unlocked = t.unlockKey === null || Storage.isUnlocked(t.unlockKey);
@@ -147,14 +147,14 @@ const Engine = (() => {
 
     /**
      * Check and update unlock state based on current progress.
-     * Each level unlocks when 10+ challenges completed in the previous level.
+     * Each tier unlocks when 10+ challenges completed in the previous tier.
      */
     function checkUnlocks() {
         const newUnlocks = [];
 
-        // Levels 2-8: unlock when 10+ challenges completed in previous level
+        // Tiers 2-8: unlock when 10+ challenges completed in previous tier
         for (let t = 2; t <= 8; t++) {
-            const key = `level${t}`;
+            const key = `tier${t}`;
             if (!Storage.isUnlocked(key)) {
                 const prevTrace = Storage.getCompletedCount(getChallengeIds('trace', t - 1));
                 const prevDebug = Storage.getCompletedCount(getChallengeIds('debug', t - 1));
@@ -178,7 +178,7 @@ const Engine = (() => {
         checkTrace,
         checkDebug,
         applyStreakBonus,
-        getAvailableLevels,
+        getAvailableTiers,
         checkUnlocks
     };
 })();
