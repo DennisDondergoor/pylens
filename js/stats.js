@@ -80,22 +80,14 @@ const Stats = (() => {
      */
     function renderHomeProgress() {
         // Trace progress: all trace challenges across tiers
-        const traceIds = [
-            ...Engine.getChallengeIds('trace', 1),
-            ...Engine.getChallengeIds('trace', 2),
-            ...Engine.getChallengeIds('trace', 3),
-            ...Engine.getChallengeIds('trace', 4)
-        ];
+        const traceIds = [];
+        for (let t = 1; t <= 8; t++) traceIds.push(...Engine.getChallengeIds('trace', t));
         const traceCompleted = Storage.getCompletedCount(traceIds);
         updateProgressBar('trace-progress', 'trace-progress-label', traceCompleted, traceIds.length);
 
         // Debug progress
-        const debugIds = [
-            ...Engine.getChallengeIds('debug', 1),
-            ...Engine.getChallengeIds('debug', 2),
-            ...Engine.getChallengeIds('debug', 3),
-            ...Engine.getChallengeIds('debug', 4)
-        ];
+        const debugIds = [];
+        for (let t = 1; t <= 8; t++) debugIds.push(...Engine.getChallengeIds('debug', t));
         const debugCompleted = Storage.getCompletedCount(debugIds);
         updateProgressBar('debug-progress', 'debug-progress-label', debugCompleted, debugIds.length);
     }

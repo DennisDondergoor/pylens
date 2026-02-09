@@ -131,22 +131,30 @@ const App = (() => {
 
         grid.innerHTML = tiers.map(t => {
             const pct = t.total > 0 ? Math.round((t.completed / t.total) * 100) : 0;
-            const locked = !t.unlocked;
+            const comingSoon = !t.available;
+            const locked = !t.unlocked || comingSoon;
             const tierColor = `var(--tier${t.tier})`;
 
-            return `<div class="tier-card ${locked ? 'locked' : ''}" data-tier="${t.tier}">
+            let badge = '';
+            if (comingSoon) {
+                badge = '<span class="tier-lock-icon coming-soon-badge">Coming Soon</span>';
+            } else if (locked) {
+                badge = '<span class="tier-lock-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
+            }
+
+            return `<div class="tier-card ${locked ? 'locked' : ''} ${comingSoon ? 'coming-soon' : ''}" data-tier="${t.tier}">
                 <div class="tier-badge">${t.tier}</div>
                 <div class="tier-info">
                     <h3>${t.name}</h3>
                     <p>${t.description}</p>
-                    <div class="tier-progress">
+                    ${comingSoon ? '' : `<div class="tier-progress">
                         <div class="progress-bar">
                             <div class="progress-fill" style="width: ${pct}%; background: ${tierColor};"></div>
                         </div>
                         <span class="progress-label">${t.completed} / ${t.total}</span>
-                    </div>
+                    </div>`}
                 </div>
-                ${locked ? '<span class="tier-lock-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>' : ''}
+                ${badge}
             </div>`;
         }).join('');
 

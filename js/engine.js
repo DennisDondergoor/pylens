@@ -142,7 +142,7 @@ const Engine = (() => {
                 unlocked,
                 available: challenges.length > 0
             };
-        }).filter(t => t.available);
+        });
     }
 
     /**
