@@ -1,0 +1,563 @@
+/**
+ * Main application controller for PyLens.
+ * Handles view routing, navigation, and user interactions.
+ */
+const App = (() => {
+    // State
+    let currentMode = null;      // 'trace' | 'debug' | 'lens'
+    let currentTier = null;      // 1-4
+    let currentChallenge = null; // challenge object
+    let challengeStartTime = null;
+    let selectedLine = null;     // for debug mode
+    let lensClassification = null; // 'correct' | 'buggy'
+
+    // View references
+    const views = {};
+    const VIEWS = ['home', 'tiers', 'challenge', 'result', 'stats'];
+
+    function init() {
+        // Cache view elements
+        VIEWS.forEach(v => views[v] = document.getElementById(`view-${v}`));
+
+        // Bind navigation
+        document.getElementById('btn-back').addEventListener('click', handleBack);
+        document.getElementById('btn-stats').addEventListener('click', () => showView('stats'));
+        document.getElementById('btn-stats-home').addEventListener('click', () => showView('home'));
+        document.getElementById('btn-clear-progress').addEventListener('click', () => {
+            document.getElementById('modal-clear').classList.remove('hidden');
+        });
+        document.getElementById('btn-clear-cancel').addEventListener('click', () => {
+            document.getElementById('modal-clear').classList.add('hidden');
+        });
+        document.getElementById('btn-clear-confirm').addEventListener('click', () => {
+            Storage.clearAll();
+            document.getElementById('modal-clear').classList.add('hidden');
+            Stats.render();
+            Stats.renderHomeProgress();
+            showView('home');
+        });
+        document.getElementById('btn-next').addEventListener('click', handleNext);
+        document.getElementById('btn-back-to-tiers').addEventListener('click', () => {
+            if (currentMode === 'lens') {
+                showView('home');
+            } else {
+                showTiers(currentMode);
+            }
+        });
+
+        // Mode card clicks
+        document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const mode = card.dataset.mode;
+                if (mode === 'lens' && !Storage.isUnlocked('lens')) return;
+                currentMode = mode;
+                if (mode === 'lens') {
+                    currentTier = 0;
+                    startNextChallenge();
+                } else {
+                    showTiers(mode);
+                }
+            });
+        });
+
+        // Lens classification buttons
+        document.querySelectorAll('.lens-choice').forEach(btn => {
+            btn.addEventListener('click', () => handleLensClassify(btn.dataset.classify));
+        });
+
+        // Code line clicks (for debug mode)
+        document.getElementById('code-display').addEventListener('click', (e) => {
+            const line = e.target.closest('.code-line.selectable');
+            if (!line) return;
+            handleLineSelect(parseInt(line.dataset.line));
+        });
+
+        // Escape key = back/dismiss
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Dismiss modal first if open
+                const modal = document.getElementById('modal-clear');
+                if (!modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    return;
+                }
+                handleBack();
+            }
+        });
+
+        // Initial render
+        Stats.renderHomeProgress();
+        showView('home');
+    }
+
+    // === View Management ===
+
+    function showView(name) {
+        VIEWS.forEach(v => views[v].classList.remove('active'));
+        views[name].classList.add('active');
+
+        const backBtn = document.getElementById('btn-back');
+        const streakDisplay = document.getElementById('streak-display');
+
+        if (name === 'home') {
+            backBtn.style.display = 'none';
+            streakDisplay.style.display = 'none';
+            Stats.renderHomeProgress();
+        } else if (name === 'stats') {
+            backBtn.style.display = 'flex';
+            streakDisplay.style.display = 'none';
+            Stats.render();
+        } else if (name === 'challenge') {
+            backBtn.style.display = 'flex';
+            const streak = Storage.getCurrentStreak();
+            if (streak > 0) {
+                streakDisplay.style.display = 'flex';
+                document.getElementById('streak-count').textContent = streak;
+            } else {
+                streakDisplay.style.display = 'none';
+            }
+        } else {
+            backBtn.style.display = 'flex';
+        }
+    }
+
+    function handleBack() {
+        if (views.result.classList.contains('active')) {
+            if (currentMode === 'lens') showView('home');
+            else showTiers(currentMode);
+        } else if (views.challenge.classList.contains('active')) {
+            if (currentMode === 'lens') showView('home');
+            else showTiers(currentMode);
+        } else if (views.tiers.classList.contains('active')) {
+            showView('home');
+        } else if (views.stats.classList.contains('active')) {
+            showView('home');
+        } else {
+            showView('home');
+        }
+    }
+
+    // === Tier Selection ===
+
+    function showTiers(mode) {
+        currentMode = mode;
+        const title = mode === 'trace' ? 'Trace — Select Tier' : 'Debug — Select Tier';
+        document.getElementById('tiers-title').textContent = title;
+
+        const tiers = Engine.getAvailableTiers(mode);
+        const grid = document.getElementById('tier-grid');
+
+        grid.innerHTML = tiers.map(t => {
+            const pct = t.total > 0 ? Math.round((t.completed / t.total) * 100) : 0;
+            const locked = !t.unlocked;
+            const tierColor = `var(--tier${t.tier})`;
+
+            return `<div class="tier-card ${locked ? 'locked' : ''}" data-tier="${t.tier}">
+                <div class="tier-badge">${t.tier}</div>
+                <div class="tier-info">
+                    <h3>${t.name}</h3>
+                    <p>${t.description}</p>
+                    <div class="tier-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${pct}%; background: ${tierColor};"></div>
+                        </div>
+                        <span class="progress-label">${t.completed} / ${t.total}</span>
+                    </div>
+                </div>
+                ${locked ? '<span class="tier-lock-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>' : ''}
+            </div>`;
+        }).join('');
+
+        // Bind tier clicks
+        grid.querySelectorAll('.tier-card').forEach(card => {
+            card.addEventListener('click', () => {
+                if (card.classList.contains('locked')) return;
+                currentTier = parseInt(card.dataset.tier);
+                startNextChallenge();
+            });
+        });
+
+        showView('tiers');
+    }
+
+    // === Challenge ===
+
+    function startNextChallenge() {
+        const challenge = Engine.getNextChallenge(currentMode, currentTier);
+        if (!challenge) return;
+        presentChallenge(challenge);
+    }
+
+    function presentChallenge(challenge) {
+        currentChallenge = challenge;
+        challengeStartTime = Date.now();
+        selectedLine = null;
+        lensClassification = null;
+
+        // Header
+        const tierNum = challenge.tier || currentTier;
+        const tag = document.getElementById('challenge-tag');
+        tag.textContent = currentMode === 'lens' ? 'Lens Mode' : `Tier ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
+        tag.className = 'challenge-tag';
+        if (tierNum > 1) tag.classList.add(`tier-${tierNum}`);
+        if (currentMode === 'lens') tag.style.cssText = 'background: rgba(176,122,237,0.15); color: var(--accent-purple);';
+        else tag.style.cssText = '';
+
+        // Counter
+        const challenges = Engine.getChallenges(currentMode, currentTier);
+        const idx = Engine.getChallengeIndex(challenge, currentMode, currentTier);
+        document.getElementById('challenge-counter').textContent = `${idx + 1} / ${challenges.length}`;
+
+        // Title
+        document.getElementById('challenge-title').textContent = challenge.title;
+
+        // Code display
+        const isDebugMode = currentMode === 'debug';
+        const codeHtml = PySyntax.highlight(challenge.code, { selectable: isDebugMode });
+        document.getElementById('code-display').innerHTML = codeHtml;
+
+        // Hide all answer sections
+        document.getElementById('lens-classify').style.display = 'none';
+        document.getElementById('trace-answer').style.display = 'none';
+        document.getElementById('debug-answer').style.display = 'none';
+
+        // Show appropriate answer section
+        if (currentMode === 'lens') {
+            document.getElementById('lens-classify').style.display = 'block';
+            // Reset lens buttons
+            document.querySelectorAll('.lens-choice').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.disabled = false;
+            });
+        } else if (currentMode === 'trace') {
+            showTraceChoices(challenge);
+        } else if (currentMode === 'debug') {
+            // Debug: first select a line, then show choices
+            document.getElementById('debug-answer').style.display = 'block';
+            document.getElementById('debug-choices').innerHTML =
+                '<p style="color: var(--text-muted); font-size: 0.85rem;">Click on the line that contains the bug.</p>';
+        }
+
+        showView('challenge');
+    }
+
+    function showTraceChoices(challenge) {
+        const container = document.getElementById('trace-choices');
+        container.innerHTML = challenge.outputChoices.map((choice, i) => {
+            return `<button class="choice-btn trace-choice" data-index="${i}" data-value="${escapeAttr(choice)}">${escapeHtml(choice)}</button>`;
+        }).join('');
+
+        container.querySelectorAll('.trace-choice').forEach(btn => {
+            btn.addEventListener('click', () => handleTraceAnswer(btn.dataset.value));
+        });
+
+        document.getElementById('trace-answer').style.display = 'block';
+    }
+
+    function showDebugChoices(challenge) {
+        const container = document.getElementById('debug-choices');
+        container.innerHTML = challenge.bugChoices.map((choice, i) => {
+            return `<button class="choice-btn debug-choice" data-index="${i}">${escapeHtml(choice)}</button>`;
+        }).join('');
+
+        container.querySelectorAll('.debug-choice').forEach(btn => {
+            btn.addEventListener('click', () => handleDebugAnswer(parseInt(btn.dataset.index)));
+        });
+    }
+
+    // === Answer Handlers ===
+
+    function handleTraceAnswer(selectedOutput) {
+        const result = Engine.checkTrace(currentChallenge, selectedOutput);
+        const timeMs = Date.now() - challengeStartTime;
+
+        // Highlight correct/incorrect choices
+        document.querySelectorAll('.trace-choice').forEach(btn => {
+            btn.disabled = true;
+            if (btn.dataset.value === currentChallenge.correctOutput) {
+                btn.classList.add('correct');
+            } else if (btn.dataset.value === selectedOutput && !result.correct) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        setTimeout(() => showResult(result, timeMs), 600);
+    }
+
+    function handleLineSelect(lineNum) {
+        if (!currentChallenge) return;
+
+        selectedLine = lineNum;
+
+        // Update visual selection
+        document.querySelectorAll('.code-line').forEach(el => {
+            el.classList.remove('selected');
+            if (parseInt(el.dataset.line) === lineNum) {
+                el.classList.add('selected');
+            }
+        });
+
+        // Show bug choices
+        showDebugChoices(currentChallenge);
+    }
+
+    function handleDebugAnswer(choiceIndex) {
+        if (selectedLine === null) return;
+
+        const result = Engine.checkDebug(currentChallenge, selectedLine, choiceIndex);
+        const timeMs = Date.now() - challengeStartTime;
+
+        // Highlight correct/incorrect choices
+        document.querySelectorAll('.debug-choice').forEach(btn => {
+            btn.disabled = true;
+            if (parseInt(btn.dataset.index) === currentChallenge.correctBugChoice) {
+                btn.classList.add('correct');
+            } else if (parseInt(btn.dataset.index) === choiceIndex && !result.correct) {
+                btn.classList.add('incorrect');
+            }
+        });
+
+        // Highlight correct line
+        document.querySelectorAll('.code-line').forEach(el => {
+            if (parseInt(el.dataset.line) === currentChallenge.bugLine) {
+                el.classList.add('selected');
+            }
+        });
+
+        setTimeout(() => showResult(result, timeMs), 600);
+    }
+
+    function handleLensClassify(classification) {
+        lensClassification = classification;
+
+        // Disable lens buttons
+        document.querySelectorAll('.lens-choice').forEach(btn => {
+            btn.disabled = true;
+            if (btn.dataset.classify === classification) btn.classList.add('selected');
+        });
+
+        const userSaidCorrect = classification === 'correct';
+
+        if (userSaidCorrect) {
+            // User thinks code is correct → show trace choices
+            if (currentChallenge.isCorrect) {
+                showTraceChoices(currentChallenge);
+            } else {
+                // User was wrong — code has a bug. Show result immediately.
+                const result = Engine.checkLens(currentChallenge, true, null);
+                const timeMs = Date.now() - challengeStartTime;
+                setTimeout(() => showResult(result, timeMs), 400);
+                return;
+            }
+        } else {
+            // User thinks code has a bug → show debug interface
+            if (!currentChallenge.isCorrect) {
+                // Make lines selectable
+                const codeHtml = PySyntax.highlight(currentChallenge.code, { selectable: true });
+                document.getElementById('code-display').innerHTML = codeHtml;
+                document.getElementById('debug-answer').style.display = 'block';
+                document.getElementById('debug-choices').innerHTML =
+                    '<p style="color: var(--text-muted); font-size: 0.85rem;">Click on the line that contains the bug.</p>';
+            } else {
+                // User was wrong — code is actually correct. Show result immediately.
+                const result = Engine.checkLens(currentChallenge, false, null);
+                const timeMs = Date.now() - challengeStartTime;
+                setTimeout(() => showResult(result, timeMs), 400);
+                return;
+            }
+        }
+
+        // Override answer handlers for lens mode
+        if (userSaidCorrect && currentChallenge.isCorrect) {
+            // Replace trace handlers to route through lens scoring
+            setTimeout(() => {
+                document.querySelectorAll('.trace-choice').forEach(btn => {
+                    const newBtn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(newBtn, btn);
+                    newBtn.addEventListener('click', () => {
+                        const result = Engine.checkLens(currentChallenge, true, newBtn.dataset.value);
+                        const timeMs = Date.now() - challengeStartTime;
+
+                        document.querySelectorAll('.trace-choice').forEach(b => {
+                            b.disabled = true;
+                            if (b.dataset.value === currentChallenge.correctOutput) b.classList.add('correct');
+                            else if (b.dataset.value === newBtn.dataset.value && !result.correct) b.classList.add('incorrect');
+                        });
+
+                        setTimeout(() => showResult(result, timeMs), 600);
+                    });
+                });
+            }, 0);
+        } else if (!userSaidCorrect && !currentChallenge.isCorrect) {
+            // Override debug line click for lens
+            const codeEl = document.getElementById('code-display');
+            const newCodeEl = codeEl.cloneNode(true);
+            codeEl.parentNode.replaceChild(newCodeEl, codeEl);
+
+            newCodeEl.addEventListener('click', (e) => {
+                const line = e.target.closest('.code-line.selectable');
+                if (!line) return;
+                selectedLine = parseInt(line.dataset.line);
+
+                newCodeEl.querySelectorAll('.code-line').forEach(el => {
+                    el.classList.remove('selected');
+                    if (parseInt(el.dataset.line) === selectedLine) el.classList.add('selected');
+                });
+
+                // Show bug choices with lens scoring
+                const container = document.getElementById('debug-choices');
+                container.innerHTML = currentChallenge.bugChoices.map((choice, i) => {
+                    return `<button class="choice-btn debug-choice" data-index="${i}">${escapeHtml(choice)}</button>`;
+                }).join('');
+
+                container.querySelectorAll('.debug-choice').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const choiceIdx = parseInt(btn.dataset.index);
+                        const result = Engine.checkLens(currentChallenge, false, { line: selectedLine, choiceIndex: choiceIdx });
+                        const timeMs = Date.now() - challengeStartTime;
+
+                        container.querySelectorAll('.debug-choice').forEach(b => {
+                            b.disabled = true;
+                            if (parseInt(b.dataset.index) === currentChallenge.correctBugChoice) b.classList.add('correct');
+                            else if (parseInt(b.dataset.index) === choiceIdx && !result.correct) b.classList.add('incorrect');
+                        });
+
+                        newCodeEl.querySelectorAll('.code-line').forEach(el => {
+                            if (parseInt(el.dataset.line) === currentChallenge.bugLine) el.classList.add('selected');
+                        });
+
+                        setTimeout(() => showResult(result, timeMs), 600);
+                    });
+                });
+            });
+        }
+    }
+
+    // === Results ===
+
+    function showResult(result, timeMs) {
+        const wasCorrect = result.correct;
+        const wasPartial = result.partial;
+
+        // Update stats
+        const stats = Storage.updateStats(currentChallenge.tags, wasCorrect);
+        const streak = wasCorrect ? stats.currentStreak : 0;
+
+        // Calculate final score with streak bonus
+        const finalScore = wasCorrect ? Engine.applyStreakBonus(result.score, streak - 1) : result.score;
+
+        // Save progress
+        Storage.saveChallengeResult(currentChallenge.id, finalScore, timeMs);
+
+        // Save to history
+        Storage.addToHistory({
+            challengeId: currentChallenge.id,
+            title: currentChallenge.title,
+            mode: currentMode,
+            score: finalScore,
+            time: timeMs
+        });
+
+        // Check for new unlocks
+        Engine.checkUnlocks();
+
+        // Banner
+        const banner = document.getElementById('result-banner');
+        banner.className = 'result-banner';
+        const icon = document.getElementById('result-icon');
+        const text = document.getElementById('result-text');
+
+        if (wasCorrect) {
+            banner.classList.add('correct');
+            icon.textContent = '\u2713';
+            text.textContent = 'Correct!';
+        } else if (wasPartial) {
+            banner.classList.add('partial');
+            icon.textContent = '\u2248';
+            text.textContent = 'Partially Correct';
+        } else {
+            banner.classList.add('incorrect');
+            icon.textContent = '\u2717';
+            text.textContent = 'Incorrect';
+        }
+
+        // Score
+        document.getElementById('result-score').textContent = finalScore;
+
+        // Streak
+        const streakEl = document.getElementById('result-streak');
+        if (wasCorrect && streak > 1) {
+            streakEl.style.display = 'flex';
+            document.getElementById('result-streak-count').textContent = streak;
+        } else {
+            streakEl.style.display = 'none';
+        }
+
+        // Correct answer display
+        const correctBox = document.getElementById('correct-answer-box');
+        const correctDisplay = document.getElementById('correct-answer-display');
+        if (!wasCorrect) {
+            correctBox.style.display = 'block';
+            if (currentMode === 'trace' || (currentMode === 'lens' && currentChallenge.isCorrect)) {
+                correctDisplay.textContent = `Output: ${currentChallenge.correctOutput}`;
+            } else {
+                const bugDesc = currentChallenge.bugChoices[currentChallenge.correctBugChoice];
+                correctDisplay.textContent = `Line ${currentChallenge.bugLine}: ${bugDesc}`;
+            }
+        } else {
+            correctBox.style.display = 'none';
+        }
+
+        // Explanation
+        document.getElementById('explanation-text').textContent = currentChallenge.explanation;
+
+        // Concept link
+        const link = document.getElementById('concept-link');
+        if (currentChallenge.conceptLink) {
+            link.href = currentChallenge.conceptLink;
+            link.style.display = 'inline-block';
+        } else {
+            link.style.display = 'none';
+        }
+
+        showView('result');
+    }
+
+    function handleNext() {
+        const challenges = Engine.getChallenges(currentMode, currentTier);
+        const currentIdx = Engine.getChallengeIndex(currentChallenge, currentMode, currentTier);
+
+        if (currentIdx < challenges.length - 1) {
+            // Go to next challenge in sequence
+            presentChallenge(challenges[currentIdx + 1]);
+        } else {
+            // End of tier/mode — go back
+            if (currentMode === 'lens') {
+                showView('home');
+            } else {
+                showTiers(currentMode);
+            }
+        }
+    }
+
+    // === Utilities ===
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function escapeAttr(text) {
+        return text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // Start when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    return { init };
+})();

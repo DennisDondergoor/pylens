@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyLens — Python Code Reading Trainer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header id="header">
+            <div class="header-left">
+                <button id="btn-back" class="btn-icon" title="Back" style="display:none;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <h1 class="logo">Py<span class="logo-accent">Lens</span></h1>
+            </div>
+            <div class="header-right">
+                <div id="streak-display" class="streak" style="display:none;">
+                    <span class="streak-icon">&#9889;</span>
+                    <span id="streak-count">0</span>
+                </div>
+                <button id="btn-stats" class="btn-icon" title="Stats">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="10" width="3" height="8" rx="1" fill="currentColor"/><rect x="7" y="6" width="3" height="12" rx="1" fill="currentColor"/><rect x="12" y="2" width="3" height="16" rx="1" fill="currentColor"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- View: Home -->
+        <section id="view-home" class="view active">
+            <div class="home-intro">
+                <p class="tagline">Train your Python code-reading skills</p>
+            </div>
+            <div class="mode-cards">
+                <div class="mode-card" data-mode="trace">
+                    <div class="mode-icon">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><path d="M8 28L18 8L28 28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="22" r="2" fill="currentColor"/></svg>
+                    </div>
+                    <h2>Trace</h2>
+                    <p>Read code and predict the output. Build an accurate mental model of Python execution.</p>
+                    <div class="mode-progress">
+                        <div class="progress-bar"><div class="progress-fill" id="trace-progress"></div></div>
+                        <span class="progress-label" id="trace-progress-label">0 / 0</span>
+                    </div>
+                </div>
+                <div class="mode-card" data-mode="debug">
+                    <div class="mode-icon">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="10" stroke="currentColor" stroke-width="2.5"/><path d="M14 18L17 21L22 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h2>Debug</h2>
+                    <p>Find the bug in broken code. Sharpen your eye for subtle errors and common gotchas.</p>
+                    <div class="mode-progress">
+                        <div class="progress-bar"><div class="progress-fill" id="debug-progress"></div></div>
+                        <span class="progress-label" id="debug-progress-label">0 / 0</span>
+                    </div>
+                </div>
+                <div class="mode-card locked" data-mode="lens" id="lens-card">
+                    <div class="lock-badge" id="lens-lock">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        <span>Complete Tier 1</span>
+                    </div>
+                    <div class="mode-icon">
+                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="10" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="18" r="4" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="1.5" fill="currentColor"/></svg>
+                    </div>
+                    <h2>Lens</h2>
+                    <p>Is it correct or buggy? You decide first, then prove it. The ultimate code-reading challenge.</p>
+                    <div class="mode-progress">
+                        <div class="progress-bar"><div class="progress-fill" id="lens-progress"></div></div>
+                        <span class="progress-label" id="lens-progress-label">0 / 0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Tier Select -->
+        <section id="view-tiers" class="view">
+            <h2 class="view-title" id="tiers-title">Select Tier</h2>
+            <div class="tier-grid" id="tier-grid">
+                <!-- Tiers populated by JS -->
+            </div>
+        </section>
+
+        <!-- View: Challenge -->
+        <section id="view-challenge" class="view">
+            <div class="challenge-header">
+                <span class="challenge-tag" id="challenge-tag">Tier 1</span>
+                <span class="challenge-counter" id="challenge-counter">1 / 15</span>
+            </div>
+            <h3 class="challenge-title" id="challenge-title">Challenge Title</h3>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-filename">snippet.py</span>
+                </div>
+                <pre class="code-block" id="code-block"><code id="code-display"></code></pre>
+            </div>
+
+            <!-- Lens mode: classify first -->
+            <div id="lens-classify" class="answer-section" style="display:none;">
+                <p class="answer-prompt">Is this code correct or does it have a bug?</p>
+                <div class="answer-choices">
+                    <button class="choice-btn lens-choice" data-classify="correct">Correct — runs as intended</button>
+                    <button class="choice-btn lens-choice" data-classify="buggy">Has a bug</button>
+                </div>
+            </div>
+
+            <!-- Trace: predict output -->
+            <div id="trace-answer" class="answer-section" style="display:none;">
+                <p class="answer-prompt">What does this code output?</p>
+                <div class="answer-choices" id="trace-choices">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Debug: identify bug -->
+            <div id="debug-answer" class="answer-section" style="display:none;">
+                <p class="answer-prompt">Click the line with the bug, then select the issue:</p>
+                <div class="answer-choices" id="debug-choices">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- View: Result -->
+        <section id="view-result" class="view">
+            <div class="result-banner" id="result-banner">
+                <span class="result-icon" id="result-icon"></span>
+                <span class="result-text" id="result-text">Correct!</span>
+            </div>
+
+            <div class="result-score-row">
+                <div class="result-score" id="result-score">100</div>
+                <span class="result-score-label">points</span>
+                <div class="result-streak" id="result-streak" style="display:none;">
+                    <span class="streak-icon">&#9889;</span> <span id="result-streak-count">0</span> streak
+                </div>
+            </div>
+
+            <!-- Show correct answer if wrong -->
+            <div id="correct-answer-box" class="correct-answer-box" style="display:none;">
+                <h4>Correct Answer</h4>
+                <pre class="correct-answer-code" id="correct-answer-display"></pre>
+            </div>
+
+            <div class="explanation-box">
+                <h4>Explanation</h4>
+                <p id="explanation-text"></p>
+                <a id="concept-link" class="concept-link" href="#" target="_blank" rel="noopener" style="display:none;">Learn more</a>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn btn-primary" id="btn-next">Next Challenge</button>
+                <button class="btn btn-secondary" id="btn-back-to-tiers">Back to Tiers</button>
+            </div>
+        </section>
+
+        <!-- View: Stats -->
+        <section id="view-stats" class="view">
+            <h2 class="view-title">Your Progress</h2>
+
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-total">0</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-best-streak">0</span>
+                    <span class="stat-label">Best Streak</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="stat-avg-score">0</span>
+                    <span class="stat-label">Avg Score</span>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h3>Tag Mastery</h3>
+                <div id="tag-mastery-grid" class="tag-mastery-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h3>Recent Activity</h3>
+                <div id="recent-activity" class="recent-activity">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div class="stats-actions">
+                <button class="btn btn-secondary" id="btn-stats-home">Back to Home</button>
+                <button class="btn btn-danger" id="btn-clear-progress">Clear Progress</button>
+            </div>
+        </section>
+
+        <!-- Modal: Confirm Clear Progress -->
+        <div id="modal-clear" class="modal hidden">
+            <div class="modal-content">
+                <h2>Clear All Progress?</h2>
+                <p>This will reset all scores, streaks, unlocks, and history. This cannot be undone.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="btn-clear-cancel">Cancel</button>
+                    <button class="btn btn-danger" id="btn-clear-confirm">Clear Everything</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/syntax.js"></script>
+    <script src="js/challenges/tier1-trace.js"></script>
+    <script src="js/challenges/tier1-debug.js"></script>
+    <script src="js/challenges/tier2-trace.js"></script>
+    <script src="js/challenges/tier2-debug.js"></script>
+    <script src="js/challenges/lens.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
