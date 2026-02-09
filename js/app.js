@@ -102,6 +102,7 @@ const App = (() => {
             }
         } else {
             backBtn.style.display = 'flex';
+            streakDisplay.style.display = 'none';
         }
     }
 

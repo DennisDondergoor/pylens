@@ -219,10 +219,6 @@ body {
     color: var(--success-color);
 }
 
-.mode-card[data-mode="lens"] .mode-icon {
-    color: var(--accent-purple);
-}
-
 .mode-card h2 {
     font-size: 1.15rem;
     font-weight: 600;
@@ -260,10 +256,6 @@ body {
 
 .mode-card[data-mode="debug"] .progress-fill {
     background: var(--success-color);
-}
-
-.mode-card[data-mode="lens"] .progress-fill {
-    background: var(--accent-purple);
 }
 
 .progress-label {
@@ -900,7 +892,6 @@ body {
 
 .activity-mode.trace { background: rgba(74, 158, 255, 0.15); color: var(--tier1); }
 .activity-mode.debug { background: rgba(74, 222, 128, 0.15); color: var(--tier2); }
-.activity-mode.lens { background: rgba(176, 122, 237, 0.15); color: var(--accent-purple); }
 
 .activity-title {
     flex: 1;

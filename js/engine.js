@@ -66,16 +66,6 @@ const Engine = (() => {
     }
 
     /**
-     * Determine the effective mode for a challenge.
-     */
-    function getEffectiveMode(challenge) {
-        if (challenge.bugLine !== undefined && challenge.bugLine !== null) {
-            return 'debug';
-        }
-        return 'trace';
-    }
-
-    /**
      * Check a trace answer.
      */
     function checkTrace(challenge, selectedChoice) {
@@ -174,7 +164,7 @@ const Engine = (() => {
         getChallenge,
         getNextChallenge,
         getChallengeIndex,
-        getEffectiveMode,
+
         checkTrace,
         checkDebug,
         applyStreakBonus,
