@@ -123,7 +123,7 @@ const App = (() => {
 
     function showTiers(mode) {
         currentMode = mode;
-        const title = mode === 'trace' ? 'Trace — Select Tier' : 'Debug — Select Tier';
+        const title = mode === 'trace' ? 'Trace — Select Level' : 'Debug — Select Level';
         document.getElementById('tiers-title').textContent = title;
 
         const tiers = Engine.getAvailableTiers(mode);
@@ -186,7 +186,7 @@ const App = (() => {
         // Header
         const tierNum = challenge.tier || currentTier;
         const tag = document.getElementById('challenge-tag');
-        tag.textContent = `Tier ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
+        tag.textContent = `Level ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
         tag.className = 'challenge-tag';
         if (tierNum > 1) tag.classList.add(`tier-${tierNum}`);
 
