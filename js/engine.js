@@ -5,6 +5,17 @@
 const Engine = (() => {
     const STREAK_MULTIPLIERS = [1, 1.5, 2, 2.5, 3];
 
+    const TIERS = [
+        { tier: 1, name: 'Absolute Basics', description: 'Print, arithmetic, strings, booleans, type()', unlockKey: null },
+        { tier: 2, name: 'Collections', description: 'Lists, dicts, tuples, slicing, indexing, membership', unlockKey: 'tier2' },
+        { tier: 3, name: 'Functions & Control Flow', description: 'Functions, arguments, return values, loops, range', unlockKey: 'tier3' },
+        { tier: 4, name: 'Methods & Comprehensions', description: 'String/list/dict methods, comprehensions, sorting, unpacking', unlockKey: 'tier4' },
+        { tier: 5, name: 'Scope & Mutability', description: 'Closures, LEGB, mutable defaults, aliasing, shallow copy', unlockKey: 'tier5' },
+        { tier: 6, name: 'Object-Oriented Python', description: 'Classes, inheritance, super(), special methods', unlockKey: 'tier6' },
+        { tier: 7, name: 'Iterators & Error Handling', description: 'Generators, yield, try/except/finally, decorators', unlockKey: 'tier7' },
+        { tier: 8, name: 'Advanced Python', description: 'Metaclasses, descriptors, async, functools deep cuts', unlockKey: 'tier8' }
+    ];
+
     /**
      * Get all challenges for a given mode and tier.
      */
@@ -25,16 +36,17 @@ const Engine = (() => {
      * Get a specific challenge by id from any pool.
      */
     function getChallenge(id) {
-        const pools = [
-            window.TIER1_TRACE, window.TIER1_DEBUG,
-            window.TIER2_TRACE, window.TIER2_DEBUG,
-            window.TIER3_TRACE, window.TIER3_DEBUG,
-            window.TIER4_TRACE, window.TIER4_DEBUG,
-            window.LENS_CHALLENGES
-        ];
-        for (const pool of pools) {
-            if (!pool) continue;
-            const found = pool.find(c => c.id === id);
+        for (let t = 1; t <= 8; t++) {
+            for (const mode of ['TRACE', 'DEBUG']) {
+                const pool = window[`TIER${t}_${mode}`];
+                if (!pool) continue;
+                const found = pool.find(c => c.id === id);
+                if (found) return found;
+            }
+        }
+        const lens = window.LENS_CHALLENGES;
+        if (lens) {
+            const found = lens.find(c => c.id === id);
             if (found) return found;
         }
         return null;
@@ -45,11 +57,9 @@ const Engine = (() => {
      */
     function getNextChallenge(mode, tier) {
         const challenges = getChallenges(mode, tier);
-        // Find first uncompleted
         for (const c of challenges) {
             if (!Storage.isCompleted(c.id)) return c;
         }
-        // All completed — return first for replay
         return challenges[0] || null;
     }
 
@@ -63,7 +73,6 @@ const Engine = (() => {
 
     /**
      * Determine the effective mode for a challenge.
-     * Lens challenges can be either trace or debug depending on isCorrect.
      */
     function getEffectiveMode(challenge) {
         if (challenge.mode === 'both' || challenge.isCorrect !== undefined) {
@@ -77,7 +86,6 @@ const Engine = (() => {
 
     /**
      * Check a trace answer.
-     * Returns { correct, score, correctAnswer }
      */
     function checkTrace(challenge, selectedChoice) {
         const correct = selectedChoice === challenge.correctOutput;
@@ -90,7 +98,6 @@ const Engine = (() => {
 
     /**
      * Check a debug answer.
-     * Returns { correct, partial, score, correctLine, correctChoice }
      */
     function checkDebug(challenge, selectedLine, selectedChoiceIndex) {
         const lineCorrect = selectedLine === challenge.bugLine;
@@ -120,7 +127,6 @@ const Engine = (() => {
 
     /**
      * Check a lens classification.
-     * Returns { classificationCorrect }
      */
     function checkLensClassification(challenge, userSaidCorrect) {
         return {
@@ -130,7 +136,6 @@ const Engine = (() => {
 
     /**
      * Check full lens answer (classification + answer).
-     * Returns { correct, partial, score, ... }
      */
     function checkLens(challenge, userSaidCorrect, answer) {
         const classOk = userSaidCorrect === challenge.isCorrect;
@@ -147,7 +152,6 @@ const Engine = (() => {
             };
         }
 
-        // Classification correct — now check the actual answer
         if (challenge.isCorrect) {
             const traceResult = checkTrace(challenge, answer);
             return {
@@ -182,14 +186,7 @@ const Engine = (() => {
      * Get available tiers for a mode.
      */
     function getAvailableTiers(mode) {
-        const tiers = [
-            { tier: 1, name: 'Foundations', description: 'Basic types, operations, and control flow', unlockKey: null },
-            { tier: 2, name: 'Intermediate', description: 'Mutability, closures, comprehensions, and gotchas', unlockKey: 'tier2' },
-            { tier: 3, name: 'Advanced', description: 'Exceptions, decorators, generators, and classes', unlockKey: 'tier3' },
-            { tier: 4, name: 'Expert', description: 'Descriptors, metaclasses, async, and deep cuts', unlockKey: 'tier4' }
-        ];
-
-        return tiers.map(t => {
+        return TIERS.map(t => {
             const challenges = getChallenges(mode, t.tier);
             const ids = challenges.map(c => c.id);
             const completed = Storage.getCompletedCount(ids);
@@ -207,47 +204,31 @@ const Engine = (() => {
 
     /**
      * Check and update unlock state based on current progress.
-     * Returns array of newly unlocked keys.
+     * Each tier unlocks when 10+ challenges completed in the previous tier.
+     * Lens unlocks when level 1 is completed in both modes.
      */
     function checkUnlocks() {
         const newUnlocks = [];
 
-        // Tier 2 unlocks when 10+ tier 1 challenges completed (across trace+debug)
-        if (!Storage.isUnlocked('tier2')) {
-            const t1Trace = Storage.getCompletedCount(getChallengeIds('trace', 1));
-            const t1Debug = Storage.getCompletedCount(getChallengeIds('debug', 1));
-            if (t1Trace + t1Debug >= 10) {
-                Storage.setUnlock('tier2', true);
-                newUnlocks.push('tier2');
+        // Tiers 2-8: unlock when 10+ challenges completed in previous tier
+        for (let t = 2; t <= 8; t++) {
+            const key = `tier${t}`;
+            if (!Storage.isUnlocked(key)) {
+                const prevTrace = Storage.getCompletedCount(getChallengeIds('trace', t - 1));
+                const prevDebug = Storage.getCompletedCount(getChallengeIds('debug', t - 1));
+                if (prevTrace + prevDebug >= 10) {
+                    Storage.setUnlock(key, true);
+                    newUnlocks.push(key);
+                }
             }
         }
 
-        // Tier 3 unlocks when 10+ tier 2 challenges completed
-        if (!Storage.isUnlocked('tier3')) {
-            const t2Trace = Storage.getCompletedCount(getChallengeIds('trace', 2));
-            const t2Debug = Storage.getCompletedCount(getChallengeIds('debug', 2));
-            if (t2Trace + t2Debug >= 10) {
-                Storage.setUnlock('tier3', true);
-                newUnlocks.push('tier3');
-            }
-        }
-
-        // Tier 4 unlocks when 10+ tier 3 challenges completed
-        if (!Storage.isUnlocked('tier4')) {
-            const t3Trace = Storage.getCompletedCount(getChallengeIds('trace', 3));
-            const t3Debug = Storage.getCompletedCount(getChallengeIds('debug', 3));
-            if (t3Trace + t3Debug >= 10) {
-                Storage.setUnlock('tier4', true);
-                newUnlocks.push('tier4');
-            }
-        }
-
-        // Lens unlocks when tier 1 is fully completed in both modes
+        // Lens unlocks when level 1 is completed in both modes
         if (!Storage.isUnlocked('lens')) {
             const t1TraceIds = getChallengeIds('trace', 1);
             const t1DebugIds = getChallengeIds('debug', 1);
-            const traceComplete = Storage.getCompletedCount(t1TraceIds) >= Math.min(10, t1TraceIds.length);
-            const debugComplete = Storage.getCompletedCount(t1DebugIds) >= Math.min(10, t1DebugIds.length);
+            const traceComplete = Storage.getCompletedCount(t1TraceIds) >= Math.min(8, t1TraceIds.length);
+            const debugComplete = Storage.getCompletedCount(t1DebugIds) >= Math.min(8, t1DebugIds.length);
             if (traceComplete && debugComplete) {
                 Storage.setUnlock('lens', true);
                 newUnlocks.push('lens');

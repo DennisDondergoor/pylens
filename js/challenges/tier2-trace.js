@@ -1,242 +1,115 @@
+// PyLens Tier 2 Trace Challenges: Collections
+// Topics: lists, dicts, tuples, sets, slicing, indexing, membership
+
 window.TIER2_TRACE = [
     {
-        id: "t2t-mutable-default",
+        id: "t2t-list-len",
         tier: 2,
-        tags: ["functions", "mutable-defaults", "gotcha"],
-        title: "Mutable Default Argument Trap",
-        code: "def add_item(item, lst=[]):\n    lst.append(item)\n    return lst\n\nprint(add_item(1))\nprint(add_item(2))",
-        correctOutput: "[1]\n[1, 2]",
-        outputChoices: [
-            "[1]\n[2]",
-            "[1]\n[1, 2]",
-            "[1, 1]\n[2, 2]",
-            "[[1]]\n[[2]]"
-        ],
-        explanation: "Default mutable arguments are created once when the function is defined, not each time it's called. Both calls share the same list object, so the second call appends to the list that already contains 1.",
-        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values"
+        tags: ["list", "len", "built-in-functions"],
+        title: "List Creation and Length",
+        code: "numbers = [10, 20, 30, 40]\nprint(len(numbers))\nprint(numbers[1])",
+        correctOutput: "4\n20",
+        outputChoices: ["4\n20", "4\n10", "3\n20", "5\n20"],
+        explanation: "len() returns the number of items in the list (4 elements). List indexing starts at 0, so numbers[1] returns the second element, which is 20.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#list"
     },
     {
-        id: "t2t-closure-late-binding",
+        id: "t2t-dict-access",
         tier: 2,
-        tags: ["closures", "lambda", "scope"],
-        title: "Late Binding in Closures",
-        code: "funcs = []\nfor i in range(3):\n    funcs.append(lambda: i)\n\nprint(funcs[0]())\nprint(funcs[1]())\nprint(funcs[2]())",
-        correctOutput: "2\n2\n2",
-        outputChoices: [
-            "0\n1\n2",
-            "2\n2\n2",
-            "0\n0\n0",
-            "None\nNone\nNone"
-        ],
-        explanation: "Lambda functions capture variables by reference, not by value. All lambdas reference the same variable 'i', which has the value 2 after the loop completes. This is called late binding.",
-        conceptLink: "https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result"
+        tags: ["dict", "dictionary", "indexing"],
+        title: "Dictionary Key Access",
+        code: "person = {'name': 'Alice', 'age': 25}\nprint(person['name'])\nprint(person['age'])",
+        correctOutput: "Alice\n25",
+        outputChoices: ["Alice\n25", "name\nage", "'name'\n'age'", "Alice 25"],
+        explanation: "Dictionary values are accessed using keys in square brackets. person['name'] returns 'Alice' and person['age'] returns 25.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict"
     },
     {
-        id: "t2t-list-comp-conditional",
+        id: "t2t-tuple-unpack",
         tier: 2,
-        tags: ["comprehensions", "conditionals"],
-        title: "List Comprehension with Filter",
-        code: "result = [x for x in range(10) if x % 2 == 0]\nprint(result)",
-        correctOutput: "[0, 2, 4, 6, 8]",
-        outputChoices: [
-            "[0, 2, 4, 6, 8]",
-            "[1, 3, 5, 7, 9]",
-            "[2, 4, 6, 8, 10]",
-            "[0, 1, 2, 3, 4]"
-        ],
-        explanation: "The comprehension iterates through range(10) which gives 0-9, and the 'if x % 2 == 0' filter keeps only even numbers. Zero is even because 0 % 2 equals 0.",
-        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions"
-    },
-    {
-        id: "t2t-generator-exhaustion",
-        tier: 2,
-        tags: ["generators", "iterators"],
-        title: "Generator Exhaustion",
-        code: "gen = (x * 2 for x in range(3))\nprint(list(gen))\nprint(list(gen))",
-        correctOutput: "[0, 2, 4]\n[]",
-        outputChoices: [
-            "[0, 2, 4]\n[0, 2, 4]",
-            "[0, 2, 4]\n[]",
-            "[]\n[0, 2, 4]",
-            "[0, 2, 4]\nNone"
-        ],
-        explanation: "Generators can only be iterated once. The first list() call consumes all values from the generator. The second call finds an already-exhausted generator and returns an empty list.",
-        conceptLink: "https://docs.python.org/3/tutorial/classes.html#generators"
-    },
-    {
-        id: "t2t-dict-merge-operator",
-        tier: 2,
-        tags: ["dictionaries", "operators", "python3.9+"],
-        title: "Dictionary Merge Operator",
-        code: "d1 = {1: 'a', 2: 'b'}\nd2 = {2: 'c', 3: 'd'}\nresult = d1 | d2\nprint(result)",
-        correctOutput: "{1: 'a', 2: 'c', 3: 'd'}",
-        outputChoices: [
-            "{1: 'a', 2: 'b', 3: 'd'}",
-            "{1: 'a', 2: 'c', 3: 'd'}",
-            "{1: 'a', 2: 'b', 2: 'c', 3: 'd'}",
-            "{2: 'c', 3: 'd'}"
-        ],
-        explanation: "The | operator merges dictionaries with the right operand taking precedence. Key 2 exists in both dictionaries, so the value from d2 ('c') overwrites the value from d1 ('b').",
-        conceptLink: "https://docs.python.org/3/library/stdtypes.html#mapping-types-dict"
-    },
-    {
-        id: "t2t-walrus-operator",
-        tier: 2,
-        tags: ["walrus-operator", "assignment-expressions", "python3.8+"],
-        title: "Walrus Operator Side Effect",
-        code: "result = [y := x + 1 for x in range(3)]\nprint(y)",
-        correctOutput: "3",
-        outputChoices: [
-            "2",
-            "3",
-            "[1, 2, 3]",
-            "NameError"
-        ],
-        explanation: "The walrus operator := assigns while also returning the value. In the comprehension, y is assigned for each iteration. After the comprehension completes, y retains the last assigned value: 2 + 1 = 3.",
-        conceptLink: "https://docs.python.org/3/whatsnew/3.8.html#assignment-expressions"
-    },
-    {
-        id: "t2t-star-unpacking",
-        tier: 2,
-        tags: ["unpacking", "starred-expressions"],
-        title: "Star Unpacking",
-        code: "a, *b = [1, 2, 3, 4]\nprint(a)\nprint(b)",
-        correctOutput: "1\n[2, 3, 4]",
-        outputChoices: [
-            "1\n[2, 3, 4]",
-            "[1]\n[2, 3, 4]",
-            "1\n(2, 3, 4)",
-            "1\n2"
-        ],
-        explanation: "Star unpacking captures remaining items in a list. The first element (1) is assigned to 'a', and the starred expression *b captures all remaining elements as a list [2, 3, 4].",
+        tags: ["tuple", "unpacking", "assignment"],
+        title: "Tuple Unpacking",
+        code: "a, b = 10, 20\nprint(a)\nprint(b)\nprint(a + b)",
+        correctOutput: "10\n20\n30",
+        outputChoices: ["10\n20\n30", "20\n10\n30", "10\n20\n1020", "(10, 20)\n30"],
+        explanation: "Tuple unpacking assigns multiple values simultaneously. a gets 10, b gets 20, then a + b = 30.",
         conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences"
     },
     {
-        id: "t2t-enumerate-start",
+        id: "t2t-list-slice",
         tier: 2,
-        tags: ["enumerate", "built-in-functions"],
-        title: "Enumerate with Start Parameter",
-        code: "result = list(enumerate(['a', 'b', 'c'], start=1))\nprint(result)",
-        correctOutput: "[(1, 'a'), (2, 'b'), (3, 'c')]",
-        outputChoices: [
-            "[(0, 'a'), (1, 'b'), (2, 'c')]",
-            "[(1, 'a'), (2, 'b'), (3, 'c')]",
-            "[('a', 1), ('b', 2), ('c', 3)]",
-            "[(1, 0), (2, 1), (3, 2)]"
-        ],
-        explanation: "enumerate() creates tuples of (index, value). The start parameter sets the starting index to 1 instead of the default 0, producing 1-indexed results.",
-        conceptLink: "https://docs.python.org/3/library/functions.html#enumerate"
+        tags: ["list", "slicing"],
+        title: "List Slicing Start to Stop",
+        code: "items = ['a', 'b', 'c', 'd', 'e']\nprint(items[1:4])",
+        correctOutput: "['b', 'c', 'd']",
+        outputChoices: ["['b', 'c', 'd']", "['a', 'b', 'c']", "['b', 'c', 'd', 'e']", "['a', 'b', 'c', 'd']"],
+        explanation: "Slicing [1:4] returns elements from index 1 up to (but not including) index 4. This gives ['b', 'c', 'd'].",
+        conceptLink: "https://docs.python.org/3/tutorial/introduction.html#lists"
     },
     {
-        id: "t2t-zip-truncation",
+        id: "t2t-in-operator",
         tier: 2,
-        tags: ["zip", "built-in-functions", "iterators"],
-        title: "Zip Truncates to Shortest",
-        code: "result = list(zip([1, 2, 3], ['a', 'b']))\nprint(result)",
-        correctOutput: "[(1, 'a'), (2, 'b')]",
-        outputChoices: [
-            "[(1, 'a'), (2, 'b'), (3, None)]",
-            "[(1, 'a'), (2, 'b')]",
-            "[(1, 'a'), (2, 'b'), (3, '')]",
-            "[1, 'a', 2, 'b', 3]"
-        ],
-        explanation: "zip() combines iterables element-by-element but stops when the shortest iterable is exhausted. The second list has only 2 elements, so zip produces only 2 tuples. The third element (3) is not paired.",
-        conceptLink: "https://docs.python.org/3/library/functions.html#zip"
+        tags: ["membership", "in", "strings"],
+        title: "Membership Test with In",
+        code: "text = 'Python'\nprint('th' in text)\nprint('x' in text)",
+        correctOutput: "True\nFalse",
+        outputChoices: ["True\nFalse", "False\nTrue", "1\n0", "th\nx"],
+        explanation: "The 'in' operator checks if a substring exists within a string. 'th' is in 'Python' (True), but 'x' is not (False).",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#membership-test-operations"
     },
     {
-        id: "t2t-nested-comprehension",
+        id: "t2t-set-duplicates",
         tier: 2,
-        tags: ["comprehensions", "nested-loops"],
-        title: "Nested Comprehension Order",
-        code: "result = [[j for j in range(i)] for i in range(4)]\nprint(result)",
-        correctOutput: "[[], [0], [0, 1], [0, 1, 2]]",
-        outputChoices: [
-            "[[0], [0, 1], [0, 1, 2], [0, 1, 2, 3]]",
-            "[[], [0], [0, 1], [0, 1, 2]]",
-            "[[0, 0, 0, 0], [1, 1, 1], [2, 2], [3]]",
-            "[[0, 1, 2, 3]]"
-        ],
-        explanation: "The outer comprehension iterates i from 0 to 3. For each i, the inner comprehension creates a list from range(i). range(0) is empty, range(1) is [0], range(2) is [0,1], and range(3) is [0,1,2].",
+        tags: ["set", "duplicates", "type-conversion"],
+        title: "Set Removes Duplicates",
+        code: "numbers = [1, 2, 2, 3, 3, 3]\nunique = set(numbers)\nprint(len(unique))",
+        correctOutput: "3",
+        outputChoices: ["3", "6", "4", "5"],
+        explanation: "Converting a list to a set removes all duplicate values. The list has 6 items, but only 3 unique values (1, 2, 3), so len(unique) is 3.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#set"
+    },
+    {
+        id: "t2t-negative-index",
+        tier: 2,
+        tags: ["list", "negative-indexing"],
+        title: "Negative List Indexing",
+        code: "letters = ['a', 'b', 'c', 'd']\nprint(letters[-1])\nprint(letters[-2])",
+        correctOutput: "d\nc",
+        outputChoices: ["d\nc", "a\nb", "c\nd", "d\nb"],
+        explanation: "Negative indices count from the end of the list. letters[-1] is the last element 'd', and letters[-2] is the second-to-last element 'c'.",
+        conceptLink: "https://docs.python.org/3/tutorial/introduction.html#lists"
+    },
+    {
+        id: "t2t-dict-keys",
+        tier: 2,
+        tags: ["dict", "dictionary", "keys", "iteration"],
+        title: "Dictionary Keys Iteration",
+        code: "data = {'x': 1, 'y': 2, 'z': 3}\nfor key in data.keys():\n    print(key, end=' ')",
+        correctOutput: "x y z ",
+        outputChoices: ["x y z ", "1 2 3 ", "xyz", "x y z"],
+        explanation: "The .keys() method returns the dictionary keys. The loop prints each key followed by a space (end=' '). Note the trailing space after 'z'.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict.keys"
+    },
+    {
+        id: "t2t-slice-step",
+        tier: 2,
+        tags: ["list", "slicing", "step"],
+        title: "List Slicing with Step",
+        code: "nums = [0, 1, 2, 3, 4, 5, 6]\nprint(nums[::2])",
+        correctOutput: "[0, 2, 4, 6]",
+        outputChoices: ["[0, 2, 4, 6]", "[0, 1, 2, 3]", "[1, 3, 5]", "[0, 2, 4, 6, 8]"],
+        explanation: "The slice [::2] means start at the beginning, go to the end, taking every 2nd element (step of 2). This gives [0, 2, 4, 6].",
+        conceptLink: "https://docs.python.org/3/library/functions.html#slice"
+    },
+    {
+        id: "t2t-nested-list",
+        tier: 2,
+        tags: ["list", "nested", "indexing"],
+        title: "Nested List Access",
+        code: "matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(matrix[1][2])\nprint(matrix[0][0])",
+        correctOutput: "6\n1",
+        outputChoices: ["6\n1", "5\n1", "6\n3", "2\n1"],
+        explanation: "matrix[1][2] accesses row 1 (second row [4,5,6]), then element 2 (third element: 6). matrix[0][0] accesses the first element of the first row: 1.",
         conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#nested-list-comprehensions"
-    },
-    {
-        id: "t2t-dict-setdefault",
-        tier: 2,
-        tags: ["dictionaries", "methods"],
-        title: "Dictionary setdefault Behavior",
-        code: "d = {'a': 1}\nprint(d.setdefault('a', 99))\nprint(d.setdefault('b', 99))\nprint(d)",
-        correctOutput: "1\n99\n{'a': 1, 'b': 99}",
-        outputChoices: [
-            "99\n99\n{'a': 99, 'b': 99}",
-            "1\n99\n{'a': 1, 'b': 99}",
-            "1\nNone\n{'a': 1}",
-            "None\n99\n{'a': 1, 'b': 99}"
-        ],
-        explanation: "setdefault(key, default) returns the existing value if the key exists, or sets and returns the default if it doesn't. Key 'a' already exists with value 1 (unchanged), key 'b' doesn't exist so it's set to 99.",
-        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict.setdefault"
-    },
-    {
-        id: "t2t-counter-most-common",
-        tier: 2,
-        tags: ["collections", "Counter"],
-        title: "Counter most_common",
-        code: "from collections import Counter\nc = Counter(['a', 'b', 'a', 'c', 'b', 'a'])\nprint(c.most_common(2))",
-        correctOutput: "[('a', 3), ('b', 2)]",
-        outputChoices: [
-            "[('a', 3), ('b', 2)]",
-            "['a', 'b']",
-            "[('a', 3), ('b', 2), ('c', 1)]",
-            "{'a': 3, 'b': 2}"
-        ],
-        explanation: "Counter.most_common(n) returns a list of the n most common elements as (element, count) tuples, ordered by frequency. 'a' appears 3 times and 'b' appears 2 times, making them the top 2.",
-        conceptLink: "https://docs.python.org/3/library/collections.html#collections.Counter.most_common"
-    },
-    {
-        id: "t2t-any-all-generators",
-        tier: 2,
-        tags: ["built-in-functions", "any", "all", "generators"],
-        title: "any() and all() with Generators",
-        code: "nums = [1, 2, 3]\nprint(any(x > 3 for x in nums))\nprint(all(x > 0 for x in nums))",
-        correctOutput: "False\nTrue",
-        outputChoices: [
-            "True\nTrue",
-            "False\nTrue",
-            "False\nFalse",
-            "True\nFalse"
-        ],
-        explanation: "any() returns True if at least one element is truthy. No number in [1,2,3] is greater than 3, so the first returns False. all() returns True if all elements are truthy. All numbers are greater than 0, so the second returns True.",
-        conceptLink: "https://docs.python.org/3/library/functions.html#any"
-    },
-    {
-        id: "t2t-chained-assignment-mutability",
-        tier: 2,
-        tags: ["assignment", "mutability", "references"],
-        title: "Chained Assignment with Mutable Objects",
-        code: "a = b = [1, 2]\na.append(3)\nprint(b)",
-        correctOutput: "[1, 2, 3]",
-        outputChoices: [
-            "[1, 2]",
-            "[1, 2, 3]",
-            "[1, 2, 3, 3]",
-            "None"
-        ],
-        explanation: "Chained assignment makes both variables reference the same object. When a.append(3) modifies the list, both 'a' and 'b' see the change because they point to the same list object in memory.",
-        conceptLink: "https://docs.python.org/3/reference/simple_stmts.html#assignment-statements"
-    },
-    {
-        id: "t2t-sorted-key-function",
-        tier: 2,
-        tags: ["sorting", "built-in-functions", "key-functions"],
-        title: "sorted() with Key Function",
-        code: "words = ['banana', 'pie', 'a']\nresult = sorted(words, key=len)\nprint(result)",
-        correctOutput: "['a', 'pie', 'banana']",
-        outputChoices: [
-            "['a', 'banana', 'pie']",
-            "['a', 'pie', 'banana']",
-            "['banana', 'pie', 'a']",
-            "['pie', 'a', 'banana']"
-        ],
-        explanation: "sorted() with key=len sorts by the length of each string rather than alphabetically. 'a' has length 1, 'pie' has length 3, and 'banana' has length 6, so they're sorted in ascending order by length.",
-        conceptLink: "https://docs.python.org/3/howto/sorting.html"
     }
 ];

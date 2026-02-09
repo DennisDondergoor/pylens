@@ -20,9 +20,13 @@
 
     /* Tier colors */
     --tier1: #4a9eff;
-    --tier2: #4ade80;
-    --tier3: #e8a854;
-    --tier4: #f87171;
+    --tier2: #34d399;
+    --tier3: #4ade80;
+    --tier4: #e8a854;
+    --tier5: #f59e0b;
+    --tier6: #f87171;
+    --tier7: #e879a8;
+    --tier8: #b07aed;
 
     /* Syntax colors */
     --syn-keyword: #c678dd;
@@ -321,9 +325,13 @@ body {
 }
 
 .tier-card[data-tier="1"] .tier-badge { background: rgba(74, 158, 255, 0.15); color: var(--tier1); }
-.tier-card[data-tier="2"] .tier-badge { background: rgba(74, 222, 128, 0.15); color: var(--tier2); }
-.tier-card[data-tier="3"] .tier-badge { background: rgba(232, 168, 84, 0.15); color: var(--tier3); }
-.tier-card[data-tier="4"] .tier-badge { background: rgba(248, 113, 113, 0.15); color: var(--tier4); }
+.tier-card[data-tier="2"] .tier-badge { background: rgba(52, 211, 153, 0.15); color: var(--tier2); }
+.tier-card[data-tier="3"] .tier-badge { background: rgba(74, 222, 128, 0.15); color: var(--tier3); }
+.tier-card[data-tier="4"] .tier-badge { background: rgba(232, 168, 84, 0.15); color: var(--tier4); }
+.tier-card[data-tier="5"] .tier-badge { background: rgba(245, 158, 11, 0.15); color: var(--tier5); }
+.tier-card[data-tier="6"] .tier-badge { background: rgba(248, 113, 113, 0.15); color: var(--tier6); }
+.tier-card[data-tier="7"] .tier-badge { background: rgba(232, 121, 168, 0.15); color: var(--tier7); }
+.tier-card[data-tier="8"] .tier-badge { background: rgba(176, 122, 237, 0.15); color: var(--tier8); }
 
 .tier-info {
     flex: 1;
@@ -378,9 +386,13 @@ body {
     color: var(--tier1);
 }
 
-.challenge-tag.tier-2 { background: rgba(74, 222, 128, 0.15); color: var(--tier2); }
-.challenge-tag.tier-3 { background: rgba(232, 168, 84, 0.15); color: var(--tier3); }
-.challenge-tag.tier-4 { background: rgba(248, 113, 113, 0.15); color: var(--tier4); }
+.challenge-tag.tier-2 { background: rgba(52, 211, 153, 0.15); color: var(--tier2); }
+.challenge-tag.tier-3 { background: rgba(74, 222, 128, 0.15); color: var(--tier3); }
+.challenge-tag.tier-4 { background: rgba(232, 168, 84, 0.15); color: var(--tier4); }
+.challenge-tag.tier-5 { background: rgba(245, 158, 11, 0.15); color: var(--tier5); }
+.challenge-tag.tier-6 { background: rgba(248, 113, 113, 0.15); color: var(--tier6); }
+.challenge-tag.tier-7 { background: rgba(232, 121, 168, 0.15); color: var(--tier7); }
+.challenge-tag.tier-8 { background: rgba(176, 122, 237, 0.15); color: var(--tier8); }
 
 .challenge-counter {
     font-size: 0.8rem;

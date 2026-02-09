@@ -1,287 +1,197 @@
+/**
+ * PyLens - Tier 1 Debug Challenges
+ * Level 1: Absolute Basics - Simple syntax and logic errors
+ */
+
 window.TIER1_DEBUG = [
     {
-        id: "t1d-offbyone-range",
+        id: "t1d-print-parentheses",
         tier: 1,
-        tags: ["loops", "range", "off-by-one"],
-        title: "Print First N Numbers",
-        code: "# Print numbers from 1 to n\nn = 5\nfor i in range(1, n):\n    print(i)",
+        tags: ["syntax", "print", "python3"],
+        title: "Print Statement Issue",
+        code: "name = 'Alice'\nage = 25\nprint 'Name:', name\nprint('Age:', age)",
         bugLine: 3,
-        bugDescription: "range(1, n) stops at n-1, not n",
+        bugDescription: "Python 3 requires parentheses for print function",
         bugChoices: [
-            "range(1, n) stops at n-1, not n",
-            "range should start at 0, not 1",
-            "The loop variable should be named 'num' instead of 'i'",
-            "print(i) needs parentheses around i"
+            "print requires parentheses in Python 3",
+            "Missing quotation marks around the string",
+            "Variable name is not defined",
+            "Need to use f-string formatting"
         ],
         correctBugChoice: 0,
-        fixedCode: "# Print numbers from 1 to n\nn = 5\nfor i in range(1, n + 1):\n    print(i)",
-        explanation: "The range() function's stop parameter is exclusive, meaning range(1, n) generates numbers from 1 to n-1. To include n, use range(1, n + 1). With n=5, range(1, 5) produces [1, 2, 3, 4], but we want [1, 2, 3, 4, 5].",
-        conceptLink: null
+        fixedCode: "name = 'Alice'\nage = 25\nprint('Name:', name)\nprint('Age:', age)",
+        explanation: "In Python 3, print is a function and requires parentheses: print(). In Python 2, print was a statement and didn't need parentheses. This is one of the most common migration issues when moving from Python 2 to Python 3.",
+        conceptLink: "https://docs.python.org/3/whatsnew/3.0.html#print-is-a-function"
     },
     {
-        id: "t1d-comparison-operator",
+        id: "t1d-exponent-operator",
         tier: 1,
-        tags: ["conditionals", "operators", "comparison"],
-        title: "Check Even Number",
-        code: "def is_even(num):\n    if num % 2 = 0:\n        return True\n    return False",
+        tags: ["operators", "arithmetic", "exponentiation"],
+        title: "Wrong Power Operator",
+        code: "radius = 5\narea = 3.14 * radius * 2\nprint('Circle area:', area)",
         bugLine: 2,
-        bugDescription: "Using assignment = instead of comparison ==",
+        bugDescription: "Should use ** for exponentiation, not * 2",
         bugChoices: [
-            "Using assignment = instead of comparison ==",
-            "Should use num // 2 instead of num % 2",
-            "Missing colon after the if statement",
-            "The condition should be num % 2 == 1"
+            "Should use ** for exponentiation (radius ** 2), not multiply by 2",
+            "Missing parentheses around the multiplication",
+            "Variable radius is not defined correctly",
+            "The value of pi should be more precise"
         ],
         correctBugChoice: 0,
-        fixedCode: "def is_even(num):\n    if num % 2 == 0:\n        return True\n    return False",
-        explanation: "In Python, = is the assignment operator, while == is the comparison operator. Using = in a condition causes a SyntaxError. The correct syntax is 'if num % 2 == 0:' to check if the remainder is equal to zero.",
-        conceptLink: null
-    },
-    {
-        id: "t1d-missing-return",
-        tier: 1,
-        tags: ["functions", "return"],
-        title: "Calculate Square",
-        code: "def square(x):\n    result = x * x\n\nprint(square(5))",
-        bugLine: 2,
-        bugDescription: "Function computes result but doesn't return it",
-        bugChoices: [
-            "Function computes result but doesn't return it",
-            "Should use x ** 2 instead of x * x",
-            "Variable name 'result' is too generic",
-            "Missing parentheses in the multiplication"
-        ],
-        correctBugChoice: 0,
-        fixedCode: "def square(x):\n    result = x * x\n    return result\n\nprint(square(5))",
-        explanation: "The function calculates the square but never returns the value. Without a return statement, the function returns None by default. This causes print(square(5)) to output 'None' instead of 25. Always use 'return' to send values back from a function.",
-        conceptLink: null
-    },
-    {
-        id: "t1d-wrong-indentation",
-        tier: 1,
-        tags: ["loops", "indentation", "logic"],
-        title: "Sum All Numbers",
-        code: "def sum_list(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n        return total",
-        bugLine: 5,
-        bugDescription: "return is inside loop, returns after first iteration",
-        bugChoices: [
-            "return is inside loop, returns after first iteration",
-            "Should use total = total + num",
-            "Missing initialization of total",
-            "Loop variable should be 'n' not 'num'"
-        ],
-        correctBugChoice: 0,
-        fixedCode: "def sum_list(numbers):\n    total = 0\n    for num in numbers:\n        total += num\n    return total",
-        explanation: "The return statement is indented to be inside the for loop, causing the function to return after processing only the first number. The return should be at the same indentation level as the for loop (but still inside the function) so it executes after the loop completes. Proper indentation is critical in Python.",
-        conceptLink: null
-    },
-    {
-        id: "t1d-string-method-misuse",
-        tier: 1,
-        tags: ["strings", "methods"],
-        title: "Check Substring Presence",
-        code: "text = \"Hello World\"\nif text.find(\"World\"):\n    print(\"Found it!\")\nelse:\n    print(\"Not found\")",
-        bugLine: 2,
-        bugDescription: "find() returns index (0 is falsy), use 'in' operator or check != -1",
-        bugChoices: [
-            "find() returns index (0 is falsy), use 'in' operator or check != -1",
-            "Should use text.search() instead of find()",
-            "Missing quotes around World",
-            "Should use == instead of if"
-        ],
-        correctBugChoice: 0,
-        fixedCode: "text = \"Hello World\"\nif \"World\" in text:\n    print(\"Found it!\")\nelse:\n    print(\"Not found\")",
-        explanation: "The find() method returns the index where the substring is found, or -1 if not found. If the substring is at index 0, the condition evaluates to False (since 0 is falsy in Python). Use the 'in' operator for boolean checks, or check 'if text.find(\"World\") != -1'.",
-        conceptLink: null
-    },
-    {
-        id: "t1d-modify-while-iterate",
-        tier: 1,
-        tags: ["lists", "loops", "mutation"],
-        title: "Remove Negative Numbers",
-        code: "numbers = [1, -2, 3, -4, 5]\nfor num in numbers:\n    if num < 0:\n        numbers.remove(num)\nprint(numbers)",
-        bugLine: 4,
-        bugDescription: "Modifying list during iteration skips elements",
-        bugChoices: [
-            "Modifying list during iteration skips elements",
-            "remove() doesn't exist for lists",
-            "Should use numbers.delete(num) instead",
-            "The condition should be num <= 0"
-        ],
-        correctBugChoice: 0,
-        fixedCode: "numbers = [1, -2, 3, -4, 5]\nfiltered = [num for num in numbers if num >= 0]\nprint(filtered)",
-        explanation: "Removing items from a list while iterating over it causes the iterator to skip elements because indices shift when items are removed. For example, after removing -2 at index 1, the element that was at index 2 moves to index 1, but the loop has already moved to index 2. Use list comprehension or iterate over a copy.",
-        conceptLink: null
+        fixedCode: "radius = 5\narea = 3.14 * radius ** 2\nprint('Circle area:', area)",
+        explanation: "The exponentiation operator in Python is **, not ^. The formula for circle area is π * r², which requires radius ** 2 (radius squared), not radius * 2 (radius times two). Multiplying by 2 gives the diameter, not the area.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#the-power-operator"
     },
     {
         id: "t1d-string-int-concat",
         tier: 1,
-        tags: ["strings", "types", "concatenation"],
-        title: "Display Counter",
-        code: "count = 10\nmessage = \"Count: \" + count\nprint(message)",
+        tags: ["strings", "type-error", "concatenation"],
+        title: "Type Mismatch in Concatenation",
+        code: "score = 95\nmessage = 'Your score is: ' + score\nprint(message)",
         bugLine: 2,
-        bugDescription: "Cannot concatenate str and int, need str(count)",
+        bugDescription: "Cannot concatenate string and integer without conversion",
         bugChoices: [
-            "Cannot concatenate str and int, need str(count)",
-            "Should use comma instead of plus",
-            "count should be in quotes",
-            "Missing parentheses around count"
+            "Cannot concatenate string and int; need str(score) or use f-string",
+            "Missing parentheses in the print statement",
+            "Variable score should be a float, not an int",
+            "Need to use comma instead of plus sign"
         ],
         correctBugChoice: 0,
-        fixedCode: "count = 10\nmessage = \"Count: \" + str(count)\nprint(message)",
-        explanation: "Python doesn't automatically convert integers to strings during concatenation. Attempting to concatenate a string and an integer with + raises a TypeError. Use str(count) to convert the integer to a string, or use f-strings: f\"Count: {count}\".",
-        conceptLink: null
+        fixedCode: "score = 95\nmessage = 'Your score is: ' + str(score)\nprint(message)",
+        explanation: "Python doesn't allow concatenating strings with integers using the + operator. You must explicitly convert the integer to a string using str(), or use alternative formatting like f-strings: f'Your score is: {score}' or format(): 'Your score is: {}'.format(score).",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#str"
     },
     {
-        id: "t1d-missing-dict-key",
+        id: "t1d-assignment-vs-comparison",
         tier: 1,
-        tags: ["dictionaries", "keys", "errors"],
-        title: "Get Student Grade",
-        code: "grades = {\"Alice\": 95, \"Bob\": 87}\nstudent = \"Charlie\"\ngrade = grades[student]\nprint(f\"{student}: {grade}\")",
+        tags: ["operators", "conditionals", "syntax-error"],
+        title: "Assignment in Condition",
+        code: "temperature = 75\nif temperature = 80:\n    print('Hot day!')\nelse:\n    print('Nice weather')",
+        bugLine: 2,
+        bugDescription: "Used assignment = instead of comparison ==",
+        bugChoices: [
+            "Should use == for comparison, not = for assignment",
+            "Missing colon after the if statement",
+            "Indentation error in the print statement",
+            "Variable temperature is not defined"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "temperature = 75\nif temperature == 80:\n    print('Hot day!')\nelse:\n    print('Nice weather')",
+        explanation: "In Python, = is the assignment operator (assigns a value to a variable), while == is the comparison operator (tests if two values are equal). Using = in an if condition causes a SyntaxError. This is a common mistake for beginners coming from languages like C.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#comparisons"
+    },
+    {
+        id: "t1d-typo-variable-name",
+        tier: 1,
+        tags: ["variables", "name-error", "typo"],
+        title: "Variable Name Typo",
+        code: "first_name = 'Bob'\nlast_name = 'Smith'\nfull_name = first_name + ' ' + lastname\nprint(full_name)",
         bugLine: 3,
-        bugDescription: "Key 'Charlie' doesn't exist, causes KeyError",
+        bugDescription: "Variable name typo: lastname should be last_name",
         bugChoices: [
-            "Key 'Charlie' doesn't exist, causes KeyError",
-            "Should use grades.get(student) syntax",
-            "Dictionary brackets should be parentheses",
-            "student variable needs quotes"
+            "Variable lastname is undefined; should be last_name (with underscore)",
+            "Missing quotes around the space character",
+            "Need to use str() to convert variables",
+            "Wrong concatenation operator used"
         ],
         correctBugChoice: 0,
-        fixedCode: "grades = {\"Alice\": 95, \"Bob\": 87}\nstudent = \"Charlie\"\ngrade = grades.get(student, \"Not found\")\nprint(f\"{student}: {grade}\")",
-        explanation: "Accessing a dictionary key with brackets (grades[student]) raises a KeyError if the key doesn't exist. Use the get() method instead, which returns None (or a default value) if the key is missing: grades.get(student) or grades.get(student, 'Not found').",
-        conceptLink: null
+        fixedCode: "first_name = 'Bob'\nlast_name = 'Smith'\nfull_name = first_name + ' ' + last_name\nprint(full_name)",
+        explanation: "Python variable names are case-sensitive and must match exactly. The variable was defined as last_name (with underscore), but used as lastname (no underscore) on line 3. This causes a NameError: name 'lastname' is not defined. Always double-check spelling and capitalization of variable names.",
+        conceptLink: "https://docs.python.org/3/tutorial/errors.html#exceptions"
     },
     {
-        id: "t1d-missing-self",
+        id: "t1d-integer-division",
         tier: 1,
-        tags: ["classes", "methods", "self"],
-        title: "Circle Class Method",
-        code: "class Circle:\n    def __init__(self, radius):\n        self.radius = radius\n    \n    def area():\n        return 3.14 * self.radius ** 2",
-        bugLine: 5,
-        bugDescription: "Method missing 'self' parameter",
-        bugChoices: [
-            "Method missing 'self' parameter",
-            "Should use this instead of self",
-            "Missing colon after def area()",
-            "radius should be a global variable"
-        ],
-        correctBugChoice: 0,
-        fixedCode: "class Circle:\n    def __init__(self, radius):\n        self.radius = radius\n    \n    def area(self):\n        return 3.14 * self.radius ** 2",
-        explanation: "Instance methods in Python classes must have 'self' as their first parameter to access instance attributes and other methods. Without 'self', calling the method results in a TypeError because Python passes the instance automatically, but the method signature doesn't accept it.",
-        conceptLink: null
-    },
-    {
-        id: "t1d-assignment-in-condition",
-        tier: 1,
-        tags: ["conditionals", "logic", "operators"],
-        title: "Password Validator",
-        code: "password = \"secret123\"\nmin_length = 8\nif len(password) > min_length:\n    valid = True\nif valid:\n    print(\"Password accepted\")",
-        bugLine: 5,
-        bugDescription: "Variable 'valid' may not be defined if condition is False",
-        bugChoices: [
-            "Variable 'valid' may not be defined if condition is False",
-            "Should use >= instead of >",
-            "valid should be assigned before the if statement",
-            "Missing else clause in first if"
-        ],
-        correctBugChoice: 0,
-        fixedCode: "password = \"secret123\"\nmin_length = 8\nvalid = False\nif len(password) > min_length:\n    valid = True\nif valid:\n    print(\"Password accepted\")",
-        explanation: "The variable 'valid' is only created if the first condition is True. If the password is too short, 'valid' is never assigned, causing a NameError when the second if statement tries to use it. Always initialize variables before conditional assignment, or handle both cases in the logic.",
-        conceptLink: null
-    },
-    {
-        id: "t1d-wrong-loop-variable",
-        tier: 1,
-        tags: ["loops", "variables", "scope"],
-        title: "Nested Loop Matrix",
-        code: "for i in range(3):\n    for j in range(3):\n        print(f\"({i}, {i})\")\n    print()",
+        tags: ["operators", "division", "arithmetic"],
+        title: "Wrong Division Operator",
+        code: "total_price = 100\nnum_people = 3\nprice_per_person = total_price // num_people\nprint('Each person pays:', price_per_person)",
         bugLine: 3,
-        bugDescription: "Using 'i' twice instead of 'i' and 'j'",
+        bugDescription: "Used floor division // instead of regular division /",
         bugChoices: [
-            "Using 'i' twice instead of 'i' and 'j'",
-            "range(3) should be range(1, 3)",
-            "Missing colon after for statement",
-            "print() should have arguments"
+            "Used // (floor division) which truncates; should use / for decimal result",
+            "Need to convert total_price to float first",
+            "Division operator is missing parentheses",
+            "Variables should be in reverse order"
         ],
         correctBugChoice: 0,
-        fixedCode: "for i in range(3):\n    for j in range(3):\n        print(f\"({i}, {j})\")\n    print()",
-        explanation: "The code uses variable 'i' in both positions of the coordinate pair, ignoring the inner loop variable 'j'. This results in output like (0, 0), (0, 0), (0, 0) instead of (0, 0), (0, 1), (0, 2). Always use the correct loop variable, especially in nested loops where it's easy to copy-paste errors.",
-        conceptLink: null
+        fixedCode: "total_price = 100\nnum_people = 3\nprice_per_person = total_price / num_people\nprint('Each person pays:', price_per_person)",
+        explanation: "Python has two division operators: / (true division) returns a float result, while // (floor division) returns an integer by rounding down. Using // for 100 // 3 gives 33, losing the .33... remainder. For accurate financial calculations, use / to get 33.333..., then round if needed.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#binary-arithmetic-operations"
     },
     {
-        id: "t1d-index-out-of-range",
+        id: "t1d-order-of-operations",
         tier: 1,
-        tags: ["lists", "indexing", "errors"],
-        title: "Get Last Element",
-        code: "numbers = [10, 20, 30, 40, 50]\nlast_index = len(numbers)\nlast = numbers[last_index]\nprint(last)",
+        tags: ["operators", "arithmetic", "precedence"],
+        title: "Missing Parentheses",
+        code: "hours = 2\nminutes = 30\ntotal_minutes = hours * 60 + minutes / 60\nprint('Total hours:', total_minutes)",
         bugLine: 3,
-        bugDescription: "Index equals length, should be len(numbers) - 1",
+        bugDescription: "Division happens before intended; need parentheses around (hours * 60 + minutes)",
         bugChoices: [
-            "Index equals length, should be len(numbers) - 1",
-            "Should use numbers.last() instead",
-            "len() returns wrong value for lists",
-            "Missing parentheses in index"
+            "Need parentheses: (hours * 60 + minutes) / 60 due to operator precedence",
+            "Should use // instead of / for division",
+            "Missing multiplication operator between hours and 60",
+            "Variables are in the wrong order"
         ],
         correctBugChoice: 0,
-        fixedCode: "numbers = [10, 20, 30, 40, 50]\nlast_index = len(numbers) - 1\nlast = numbers[last_index]\nprint(last)",
-        explanation: "List indices start at 0, so a list of length 5 has valid indices 0-4. Using len(numbers) as an index (which is 5) causes an IndexError. The last valid index is always len(numbers) - 1. Alternatively, use negative indexing: numbers[-1] to get the last element.",
-        conceptLink: null
+        fixedCode: "hours = 2\nminutes = 30\ntotal_minutes = (hours * 60 + minutes) / 60\nprint('Total hours:', total_minutes)",
+        explanation: "Python follows mathematical operator precedence: multiplication and division happen before addition. Without parentheses, the expression calculates (hours * 60) + (minutes / 60) = 120 + 0.5 = 120.5. With parentheses (hours * 60 + minutes) / 60, it correctly calculates (120 + 30) / 60 = 2.5 hours.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#operator-precedence"
     },
     {
-        id: "t1d-wrong-arg-order",
+        id: "t1d-off-by-one-range",
         tier: 1,
-        tags: ["functions", "arguments", "parameters"],
-        title: "Format Full Name",
-        code: "def make_fullname(first, last):\n    return f\"{first} {last}\"\n\nname = make_fullname(\"Smith\", \"John\")\nprint(name)",
-        bugLine: 4,
-        bugDescription: "Arguments reversed, should be (\"John\", \"Smith\")",
+        tags: ["loops", "range", "off-by-one"],
+        title: "Range Off-By-One Error",
+        code: "print('Counting to 5:')\nfor i in range(5):\n    print(i)\nprint('Done!')",
+        bugLine: 2,
+        bugDescription: "range(5) produces 0-4; should use range(1, 6) to print 1-5",
         bugChoices: [
-            "Arguments reversed, should be (\"John\", \"Smith\")",
-            "Function should return last + first",
-            "Missing comma in function call",
-            "Should use concatenation instead of f-string"
+            "range(5) gives 0-4; should use range(1, 6) to print 1 through 5",
+            "Missing colon after the for statement",
+            "Variable i is not defined",
+            "Need to use range(0, 5) instead"
         ],
         correctBugChoice: 0,
-        fixedCode: "def make_fullname(first, last):\n    return f\"{first} {last}\"\n\nname = make_fullname(\"John\", \"Smith\")\nprint(name)",
-        explanation: "The function expects first name then last name, but the arguments are passed in reverse order (last name first). This produces \"Smith John\" instead of \"John Smith\". Always pass arguments in the order defined by the function parameters, or use keyword arguments (first=\"John\", last=\"Smith\") to make the intent explicit and prevent order mistakes.",
-        conceptLink: null
+        fixedCode: "print('Counting to 5:')\nfor i in range(1, 6):\n    print(i)\nprint('Done!')",
+        explanation: "range(5) generates numbers from 0 to 4 (5 numbers total, but stops before 5). To count from 1 to 5 inclusive, use range(1, 6) which starts at 1 and stops before 6. The range function follows the pattern range(start, stop) where stop is exclusive. This is a classic off-by-one error.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#range"
     },
     {
-        id: "t1d-forgot-function-call",
+        id: "t1d-escape-sequence",
         tier: 1,
-        tags: ["functions", "syntax", "common-mistakes"],
-        title: "Get Random Number",
-        code: "import random\n\ndef get_dice_roll():\n    return random.randint(1, 6)\n\nresult = get_dice_roll\nprint(f\"You rolled: {result}\")",
-        bugLine: 6,
-        bugDescription: "Missing parentheses, get_dice_roll() not called",
+        tags: ["strings", "escape-sequences", "syntax"],
+        title: "Invalid Escape Sequence",
+        code: "file_path = 'C:\\users\\data\\new_file.txt'\nprint('File location:', file_path)",
+        bugLine: 1,
+        bugDescription: "\\n is interpreted as newline; use raw string r'...' or escape backslashes \\\\",
         bugChoices: [
-            "Missing parentheses, get_dice_roll() not called",
-            "random.randint needs three arguments",
-            "Should use return statement in print",
-            "Function name should be capitalized"
+            "\\n is treated as newline escape; use raw string r'C:\\users\\...' or double backslashes",
+            "Missing quotes around the file path",
+            "Should use forward slashes instead of any backslashes",
+            "Variable file_path is not a valid name"
         ],
         correctBugChoice: 0,
-        fixedCode: "import random\n\ndef get_dice_roll():\n    return random.randint(1, 6)\n\nresult = get_dice_roll()\nprint(f\"You rolled: {result}\")",
-        explanation: "Without parentheses, 'get_dice_roll' refers to the function object itself, not the result of calling it. The code assigns the function object to 'result', so printing it shows something like '<function get_dice_roll at 0x...>' instead of a number. Always use () to call functions.",
-        conceptLink: null
+        fixedCode: "file_path = r'C:\\users\\data\\new_file.txt'\nprint('File location:', file_path)",
+        explanation: "In Python strings, backslash \\ starts escape sequences: \\n is newline, \\t is tab. In the path C:\\users\\data\\new_file.txt, \\n becomes a newline character. Solutions: use raw strings r'C:\\users\\...' (treats backslashes literally), double backslashes 'C:\\\\users\\\\...', or forward slashes 'C:/users/...' (Windows accepts both).",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals"
     },
     {
-        id: "t1d-append-vs-extend",
+        id: "t1d-type-comparison",
         tier: 1,
-        tags: ["lists", "methods", "append-extend"],
-        title: "Combine Number Lists",
-        code: "numbers = [1, 2, 3]\nmore_numbers = [4, 5, 6]\nnumbers.append(more_numbers)\nprint(numbers)",
+        tags: ["types", "comparison", "string-vs-int"],
+        title: "Comparing Different Types",
+        code: "user_input = '42'\nexpected = 42\nif user_input == expected:\n    print('Correct!')\nelse:\n    print('Wrong answer')",
         bugLine: 3,
-        bugDescription: "append() adds list as single element, use extend()",
+        bugDescription: "Comparing string '42' with int 42; convert with int(user_input)",
         bugChoices: [
-            "append() adds list as single element, use extend()",
-            "Should use numbers + more_numbers",
-            "append() doesn't exist for lists",
-            "Missing parentheses in method call"
+            "Comparing string '42' with int 42; need int(user_input) to convert",
+            "Using wrong comparison operator, should use is",
+            "Missing colon after if statement",
+            "Variables are in wrong order"
         ],
         correctBugChoice: 0,
-        fixedCode: "numbers = [1, 2, 3]\nmore_numbers = [4, 5, 6]\nnumbers.extend(more_numbers)\nprint(numbers)",
-        explanation: "The append() method adds its argument as a single element, so numbers.append([4, 5, 6]) creates [1, 2, 3, [4, 5, 6]]. To add individual elements from another list, use extend() which results in [1, 2, 3, 4, 5, 6]. Alternatively, use numbers += more_numbers or numbers = numbers + more_numbers.",
-        conceptLink: null
+        fixedCode: "user_input = '42'\nexpected = 42\nif int(user_input) == expected:\n    print('Correct!')\nelse:\n    print('Wrong answer')",
+        explanation: "In Python, '42' (string) and 42 (integer) are different types and not equal when compared with ==. This commonly occurs with user input, which is always a string. Convert the string to an integer using int(user_input) before comparison. Note: Python 3 allows comparing different types with ==, but they're never equal.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#int"
     }
 ];
