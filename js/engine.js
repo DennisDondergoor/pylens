@@ -148,7 +148,6 @@ const Engine = (() => {
     /**
      * Check and update unlock state based on current progress.
      * Each tier unlocks when 10+ challenges completed in the previous tier.
-     * Lens unlocks when level 1 is completed in both modes.
      */
     function checkUnlocks() {
         const newUnlocks = [];

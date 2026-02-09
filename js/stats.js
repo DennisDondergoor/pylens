@@ -39,7 +39,7 @@ const Stats = (() => {
         grid.innerHTML = tags.map(tag => {
             const data = tagMastery[tag];
             const pct = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
-            const color = pct >= 80 ? 'var(--accent-green)' : pct >= 50 ? 'var(--accent-orange)' : 'var(--accent-red)';
+            const color = pct >= 80 ? 'var(--success-color)' : pct >= 50 ? 'var(--accent-orange)' : 'var(--error-color)';
 
             return `<div class="tag-mastery-item">
                 <div class="tag-mastery-name">${escapeHtml(tag)}</div>

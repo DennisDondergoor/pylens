@@ -69,7 +69,10 @@ const Storage = (() => {
             tier2: false,
             tier3: false,
             tier4: false,
-            lens: false
+            tier5: false,
+            tier6: false,
+            tier7: false,
+            tier8: false
         });
     }
 

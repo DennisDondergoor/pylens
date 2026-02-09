@@ -4,8 +4,8 @@
  */
 const App = (() => {
     // State
-    let currentMode = null;      // 'trace' | 'debug' | 'lens'
-    let currentTier = null;      // 1-4
+    let currentMode = null;      // 'trace' | 'debug'
+    let currentTier = null;      // 1-8
     let currentChallenge = null; // challenge object
     let challengeStartTime = null;
     let selectedLine = null;     // for debug mode
@@ -222,7 +222,8 @@ const App = (() => {
 
     function showTraceChoices(challenge) {
         const container = document.getElementById('trace-choices');
-        container.innerHTML = challenge.outputChoices.map((choice, i) => {
+        const shuffled = shuffleArray(challenge.outputChoices);
+        container.innerHTML = shuffled.map((choice, i) => {
             return `<button class="choice-btn trace-choice" data-index="${i}" data-value="${escapeAttr(choice)}">${escapeHtml(choice)}</button>`;
         }).join('');
 
@@ -235,8 +236,11 @@ const App = (() => {
 
     function showDebugChoices(challenge) {
         const container = document.getElementById('debug-choices');
-        container.innerHTML = challenge.bugChoices.map((choice, i) => {
-            return `<button class="choice-btn debug-choice" data-index="${i}">${escapeHtml(choice)}</button>`;
+        // Shuffle choices but track original indices
+        const indexed = challenge.bugChoices.map((choice, i) => ({ choice, originalIndex: i }));
+        const shuffled = shuffleArray(indexed);
+        container.innerHTML = shuffled.map((item, i) => {
+            return `<button class="choice-btn debug-choice" data-index="${item.originalIndex}">${escapeHtml(item.choice)}</button>`;
         }).join('');
 
         container.querySelectorAll('.debug-choice').forEach(btn => {
@@ -410,6 +414,15 @@ const App = (() => {
     }
 
     // === Utilities ===
+
+    function shuffleArray(arr) {
+        const shuffled = [...arr];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
 
     function escapeHtml(text) {
         const div = document.createElement('div');
