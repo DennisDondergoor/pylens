@@ -193,5 +193,290 @@ window.TIER1_DEBUG = [
         fixedCode: "user_input = '42'\nexpected = 42\nif int(user_input) == expected:\n    print('Correct!')\nelse:\n    print('Wrong answer')",
         explanation: "In Python, '42' (string) and 42 (integer) are different types and not equal when compared with ==. This commonly occurs with user input, which is always a string. Convert the string to an integer using int(user_input) before comparison. Note: Python 3 allows comparing different types with ==, but they're never equal.",
         conceptLink: "https://docs.python.org/3/library/functions.html#int"
+    },
+    {
+        id: "t1d-indentation-error",
+        tier: 1,
+        tags: ["syntax", "indentation", "whitespace"],
+        title: "Inconsistent Indentation",
+        code: "x = 10\nif x > 5:\n    print('x is large')\n  print('Still in if block')",
+        bugLine: 4,
+        bugDescription: "Inconsistent indentation: must use same number of spaces",
+        bugChoices: [
+            "Inconsistent indentation (2 spaces vs 4 spaces); Python requires consistent indentation",
+            "Missing colon after if statement",
+            "Variable x is not defined",
+            "print statement syntax is incorrect"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "x = 10\nif x > 5:\n    print('x is large')\n    print('Still in if block')",
+        explanation: "Python uses indentation to define code blocks. All statements in the same block must have identical indentation. Line 4 uses 2 spaces while line 3 uses 4 spaces, causing an IndentationError. Consistently use 4 spaces (PEP 8 recommendation) or tabs throughout your code, never mix them.",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#indentation"
+    },
+    {
+        id: "t1d-missing-colon",
+        tier: 1,
+        tags: ["syntax", "conditionals", "colon"],
+        title: "Missing Colon After If",
+        code: "age = 18\nif age >= 18\n    print('You can vote')\nelse:\n    print('Too young')",
+        bugLine: 2,
+        bugDescription: "Missing colon : at end of if statement",
+        bugChoices: [
+            "Missing colon : at the end of the if statement",
+            "Wrong comparison operator used",
+            "Variable age is not defined",
+            "Indentation is incorrect"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "age = 18\nif age >= 18:\n    print('You can vote')\nelse:\n    print('Too young')",
+        explanation: "Python requires a colon : at the end of compound statements (if, elif, else, for, while, def, class). The colon signals the start of an indented block. Forgetting the colon is a common syntax error that Python will catch immediately when you run the code.",
+        conceptLink: "https://docs.python.org/3/reference/compound_stmts.html"
+    },
+    {
+        id: "t1d-boolean-string",
+        tier: 1,
+        tags: ["booleans", "strings", "type-error"],
+        title: "Boolean as String",
+        code: "is_ready = 'True'\nif is_ready:\n    print('Starting process...')",
+        bugLine: 1,
+        bugDescription: "String 'True' is not boolean True; any non-empty string is truthy",
+        bugChoices: [
+            "String 'True' is always truthy; use boolean True without quotes",
+            "Missing parentheses around True",
+            "Variable name cannot start with is_",
+            "if statement syntax is incorrect"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "is_ready = True\nif is_ready:\n    print('Starting process...')",
+        explanation: "In Python, 'True' (string) and True (boolean) are different. Any non-empty string is truthy, so 'True' and even 'False' both evaluate to True in conditions. Use boolean literals True and False without quotes. This mistake often occurs when reading configuration values without proper type conversion.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#truth-value-testing"
+    },
+    {
+        id: "t1d-modulo-vs-divide",
+        tier: 1,
+        tags: ["operators", "arithmetic", "modulo"],
+        title: "Wrong Operator for Remainder",
+        code: "number = 17\nremainder = number / 5\nprint('Remainder:', remainder)",
+        bugLine: 2,
+        bugDescription: "Division / gives quotient; use modulo % for remainder",
+        bugChoices: [
+            "Division / returns quotient (3.4); use modulo % to get remainder (2)",
+            "Need to use // instead of /",
+            "Missing parentheses around the division",
+            "Variable number must be a float"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "number = 17\nremainder = number % 5\nprint('Remainder:', remainder)",
+        explanation: "The modulo operator % returns the remainder after division: 17 % 5 = 2 (because 17 = 5 * 3 + 2). The division operator / returns the full quotient: 17 / 5 = 3.4. Use % when you need to check divisibility, find remainders, or cycle through values.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#binary-arithmetic-operations"
+    },
+    {
+        id: "t1d-string-quotes-mismatch",
+        tier: 1,
+        tags: ["strings", "syntax", "quotes"],
+        title: "Mismatched String Quotes",
+        code: "greeting = 'Hello, World!\"\nprint(greeting)",
+        bugLine: 1,
+        bugDescription: "String starts with single quote but ends with double quote",
+        bugChoices: [
+            "String starts with ' but ends with \"; quotes must match",
+            "Missing comma in the string",
+            "Variable name greeting is invalid",
+            "Need to use triple quotes for strings"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "greeting = 'Hello, World!'\nprint(greeting)",
+        explanation: "Python strings must start and end with matching quotes: both single ('...') or both double (\"...\"). Mixing quote types causes a SyntaxError. You can use single quotes inside double-quoted strings and vice versa: \"It's working\" or 'She said \"hi\"', or use escape sequences.",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals"
+    },
+    {
+        id: "t1d-xor-operator",
+        tier: 1,
+        tags: ["operators", "arithmetic", "bitwise"],
+        title: "Wrong XOR Operator",
+        code: "base = 2\nexponent = 3\nresult = base ^ exponent\nprint('2 to the power of 3:', result)",
+        bugLine: 3,
+        bugDescription: "^ is XOR, not exponentiation; use ** for power",
+        bugChoices: [
+            "^ is bitwise XOR, not exponentiation; use ** for power (2 ** 3 = 8)",
+            "Missing parentheses around the operation",
+            "Variables are in wrong order",
+            "Should use base * exponent instead"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "base = 2\nexponent = 3\nresult = base ** exponent\nprint('2 to the power of 3:', result)",
+        explanation: "In Python, ^ is the bitwise XOR operator, not exponentiation. This confuses programmers from languages like Ruby or Excel where ^ means power. In Python, ** is the exponentiation operator: 2 ** 3 = 8. The expression 2 ^ 3 performs XOR and returns 1, not 8.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#the-power-operator"
+    },
+    {
+        id: "t1d-undefined-variable",
+        tier: 1,
+        tags: ["variables", "name-error", "scope"],
+        title: "Using Variable Before Definition",
+        code: "print('Total:', total)\ntotal = 100 + 50",
+        bugLine: 1,
+        bugDescription: "Variable total used before assignment",
+        bugChoices: [
+            "Variable total is used before being defined; move assignment before print",
+            "Missing quotes around the word total",
+            "print statement syntax is incorrect",
+            "Need to use str(total) for conversion"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "total = 100 + 50\nprint('Total:', total)",
+        explanation: "Python executes code line by line from top to bottom. Variables must be defined (assigned a value) before they can be used. Attempting to use an undefined variable raises NameError: name 'total' is not defined. Always ensure variables are initialized before use.",
+        conceptLink: "https://docs.python.org/3/tutorial/errors.html#exceptions"
+    },
+    {
+        id: "t1d-float-int-confusion",
+        tier: 1,
+        tags: ["types", "type-conversion", "float"],
+        title: "Integer When Float Expected",
+        code: "celsius = 20\nfahrenheit = celsius * 9 / 5 + 32\nprint('Temperature:', int(fahrenheit), 'F')",
+        bugLine: 3,
+        bugDescription: "Converting to int loses decimal precision; keep as float",
+        bugChoices: [
+            "int() truncates decimal part; remove int() to keep precision (68.0 not 68)",
+            "Wrong formula for temperature conversion",
+            "Missing parentheses in the calculation",
+            "Variable celsius should be a string"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "celsius = 20\nfahrenheit = celsius * 9 / 5 + 32\nprint('Temperature:', fahrenheit, 'F')",
+        explanation: "Converting a float to int with int() truncates the decimal part. For 20°C, the correct result is 68.0°F. Using int(68.0) gives 68, which is mathematically correct here, but for other values like 21°C (69.8°F), int() would incorrectly give 69 instead of 69.8. Keep float values unless you specifically need integers.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#int"
+    },
+    {
+        id: "t1d-and-vs-ampersand",
+        tier: 1,
+        tags: ["operators", "boolean", "logical"],
+        title: "Bitwise AND Instead of Logical",
+        code: "age = 25\nhas_license = True\nif age >= 18 & has_license:\n    print('Can drive')",
+        bugLine: 3,
+        bugDescription: "& is bitwise AND; use logical and for boolean conditions",
+        bugChoices: [
+            "& is bitwise AND; use 'and' keyword for logical boolean operations",
+            "Missing colon after if statement",
+            "Wrong comparison operator used",
+            "Variable has_license should be a string"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "age = 25\nhas_license = True\nif age >= 18 and has_license:\n    print('Can drive')",
+        explanation: "Python has separate logical and bitwise operators. For boolean logic, use keywords: 'and', 'or', 'not'. Bitwise operators (&, |, ~) work on integers at the bit level. Using & for boolean conditions may work sometimes but can produce unexpected results. Always use 'and' for logical conditions.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#boolean-operations"
+    },
+    {
+        id: "t1d-string-multiplication",
+        tier: 1,
+        tags: ["strings", "operators", "repetition"],
+        title: "String Addition Instead of Multiplication",
+        code: "char = '-'\nseparator = char + 20\nprint(separator)",
+        bugLine: 2,
+        bugDescription: "Cannot add string and int; use * for string repetition",
+        bugChoices: [
+            "Cannot concatenate string and int; use char * 20 to repeat string 20 times",
+            "Missing parentheses around the addition",
+            "Variable char should be an integer",
+            "Need to use str(20) for conversion"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "char = '-'\nseparator = char * 20\nprint(separator)",
+        explanation: "In Python, string * int repeats the string: '-' * 20 gives '--------------------'. You cannot add a string and integer with +, which causes TypeError. The * operator has special behavior with strings for repetition, making it easy to create repeated patterns.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#common-sequence-operations"
+    },
+    {
+        id: "t1d-not-equals",
+        tier: 1,
+        tags: ["operators", "comparison", "inequality"],
+        title: "Wrong Inequality Operator",
+        code: "status = 'inactive'\nif status <> 'active':\n    print('Not active')",
+        bugLine: 2,
+        bugDescription: "<> is not valid in Python 3; use != for not equals",
+        bugChoices: [
+            "<> is invalid in Python 3; use != for not equals comparison",
+            "Missing quotes around active",
+            "Variable status is not defined",
+            "Should use == instead of <>"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "status = 'inactive'\nif status != 'active':\n    print('Not active')",
+        explanation: "Python 3 uses != for inequality (not equal) comparison. The <> operator was available in Python 2 but removed in Python 3. This causes a SyntaxError. Always use != to test if two values are not equal. Some programmers from other languages mistakenly use <> or =/=.",
+        conceptLink: "https://docs.python.org/3/whatsnew/3.0.html#removed-syntax"
+    },
+    {
+        id: "t1d-missing-quotes",
+        tier: 1,
+        tags: ["strings", "syntax", "quotes"],
+        title: "String Without Quotes",
+        code: "city = New York\nprint('Location:', city)",
+        bugLine: 1,
+        bugDescription: "String must be enclosed in quotes",
+        bugChoices: [
+            "String literals must be enclosed in quotes: 'New York' or \"New York\"",
+            "Variable name cannot contain spaces",
+            "Missing comma between New and York",
+            "Need to use city = str(New York)"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "city = 'New York'\nprint('Location:', city)",
+        explanation: "In Python, all string literals must be enclosed in quotes (single or double). Without quotes, Python treats New and York as variable names, causing a SyntaxError. This is a fundamental syntax requirement. Always wrap text in quotes: 'text' or \"text\".",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals"
+    },
+    {
+        id: "t1d-negative-vs-subtract",
+        tier: 1,
+        tags: ["operators", "arithmetic", "negation"],
+        title: "Subtraction Spacing Error",
+        code: "balance = 1000\nwithdrawal = 150\nnew_balance = balance- withdrawal\nprint('New balance:', new_balance)",
+        bugLine: 3,
+        bugDescription: "No space after balance before - operator; confusing but valid syntax",
+        bugChoices: [
+            "Missing space around - operator makes code hard to read (balance - withdrawal)",
+            "Should use + instead of - for subtraction",
+            "Variable names cannot contain underscores",
+            "Need parentheses around the subtraction"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "balance = 1000\nwithdrawal = 150\nnew_balance = balance - withdrawal\nprint('New balance:', new_balance)",
+        explanation: "While balance-withdrawal is technically valid Python (it works), PEP 8 style guidelines recommend spaces around binary operators for readability: balance - withdrawal. Without spaces, the code is harder to read and can be confused with negative numbers or compound identifiers in other contexts.",
+        conceptLink: "https://peps.python.org/pep-0008/#whitespace-in-expressions-and-statements"
+    },
+    {
+        id: "t1d-type-function-call",
+        tier: 1,
+        tags: ["types", "functions", "type-checking"],
+        title: "Missing Parentheses on type()",
+        code: "value = 42\ndata_type = type value\nprint('Type:', data_type)",
+        bugLine: 2,
+        bugDescription: "type() is a function and requires parentheses: type(value)",
+        bugChoices: [
+            "type is a function requiring parentheses: type(value), not type value",
+            "Variable value is not defined",
+            "Should use typeof instead of type",
+            "Missing quotes around value"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "value = 42\ndata_type = type(value)\nprint('Type:', data_type)",
+        explanation: "In Python, all functions must be called with parentheses, even if they take no arguments: type(value), len(list), print(). Unlike some languages where parentheses are optional, Python requires them for all function calls. The type() function returns the type of an object.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#type"
+    },
+    {
+        id: "t1d-case-sensitivity",
+        tier: 1,
+        tags: ["booleans", "syntax", "case-sensitive"],
+        title: "Boolean Case Sensitivity",
+        code: "is_valid = true\nif is_valid:\n    print('Valid input')",
+        bugLine: 1,
+        bugDescription: "Python is case-sensitive; use True not true",
+        bugChoices: [
+            "Boolean must be capitalized: True not true (Python is case-sensitive)",
+            "Variable name is_valid is invalid",
+            "Missing quotes around true",
+            "Should use is_valid = 1 instead"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "is_valid = True\nif is_valid:\n    print('Valid input')",
+        explanation: "Python is case-sensitive and boolean literals must be capitalized: True and False, not true/false. Using lowercase true raises NameError: name 'true' is not defined. This is a common mistake for programmers coming from JavaScript, Java, or other languages that use lowercase booleans.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#boolean-values"
     }
 ];

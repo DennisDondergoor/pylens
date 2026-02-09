@@ -111,5 +111,170 @@ window.TIER1_TRACE = [
         outputChoices: ["13.5\n<class 'float'>", "13\n<class 'int'>", "13.5\n<class 'int'>", "14\n<class 'float'>"],
         explanation: "When integers and floats are mixed in arithmetic, Python converts the result to a float. 10 + 3.5 = 13.5 (a float).",
         conceptLink: "https://docs.python.org/3/library/stdtypes.html#numeric-types-int-float-complex"
+    },
+    {
+        id: "t1t-exponentiation",
+        tier: 1,
+        tags: ["arithmetic", "operators", "exponentiation"],
+        title: "Power Operator",
+        code: "print(2 ** 3)\nprint(5 ** 2)",
+        correctOutput: "8\n25",
+        outputChoices: ["8\n25", "6\n10", "9\n25", "8\n10"],
+        explanation: "The ** operator performs exponentiation. 2 ** 3 means 2 to the power of 3 (2 * 2 * 2 = 8), and 5 ** 2 means 5 squared (25).",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#the-power-operator"
+    },
+    {
+        id: "t1t-string-length",
+        tier: 1,
+        tags: ["strings", "len", "built-in-functions"],
+        title: "String Length Function",
+        code: "text = 'Hello'\nprint(len(text))",
+        correctOutput: "5",
+        outputChoices: ["5", "4", "6", "Hello"],
+        explanation: "The len() function returns the number of characters in a string. 'Hello' contains 5 characters, so len(text) returns 5.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#len"
+    },
+    {
+        id: "t1t-string-methods",
+        tier: 1,
+        tags: ["strings", "methods", "upper-lower"],
+        title: "String Case Conversion",
+        code: "word = 'Python'\nprint(word.upper())\nprint(word.lower())",
+        correctOutput: "PYTHON\npython",
+        outputChoices: ["PYTHON\npython", "python\nPYTHON", "Python\nPython", "PYTHON\nPYTHON"],
+        explanation: "The .upper() method converts all characters to uppercase, while .lower() converts all to lowercase. The original string remains unchanged.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#string-methods"
+    },
+    {
+        id: "t1t-print-end",
+        tier: 1,
+        tags: ["print", "end-parameter"],
+        title: "Print with Custom Ending",
+        code: "print('Hello', end='!')\nprint('World')",
+        correctOutput: "Hello!World",
+        outputChoices: ["Hello!World", "Hello!\nWorld", "Hello World!", "Hello! World"],
+        explanation: "The end parameter in print() replaces the default newline with the specified string. end='!' makes the second print start immediately after the '!'.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#print"
+    },
+    {
+        id: "t1t-negative-numbers",
+        tier: 1,
+        tags: ["arithmetic", "operators", "negation"],
+        title: "Negative Number Operations",
+        code: "x = -5\nprint(x * 2)\nprint(abs(x))",
+        correctOutput: "-10\n5",
+        outputChoices: ["-10\n5", "10\n5", "-10\n-5", "10\n-5"],
+        explanation: "Multiplying -5 by 2 gives -10. The abs() function returns the absolute value, converting -5 to 5.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#abs"
+    },
+    {
+        id: "t1t-string-quotes",
+        tier: 1,
+        tags: ["strings", "quotes", "escape-sequences"],
+        title: "Quotes Inside Strings",
+        code: "text = \"It's Python\"\nprint(text)",
+        correctOutput: "It's Python",
+        outputChoices: ["It's Python", "It\\'s Python", "Its Python", "Error"],
+        explanation: "Using double quotes to wrap a string allows single quotes inside without escaping. The string prints exactly as written: It's Python.",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals"
+    },
+    {
+        id: "t1t-operator-precedence",
+        tier: 1,
+        tags: ["arithmetic", "operators", "precedence"],
+        title: "Order of Operations",
+        code: "result = 2 + 3 * 4\nprint(result)",
+        correctOutput: "14",
+        outputChoices: ["14", "20", "24", "11"],
+        explanation: "Multiplication has higher precedence than addition. Python calculates 3 * 4 = 12 first, then 2 + 12 = 14.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#operator-precedence"
+    },
+    {
+        id: "t1t-logical-and",
+        tier: 1,
+        tags: ["boolean", "logical-operators", "and"],
+        title: "Logical AND Operator",
+        code: "print(True and True)\nprint(True and False)",
+        correctOutput: "True\nFalse",
+        outputChoices: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
+        explanation: "The 'and' operator returns True only if both operands are True. True and True is True, but True and False is False.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#boolean-operations-and-or-not"
+    },
+    {
+        id: "t1t-logical-or",
+        tier: 1,
+        tags: ["boolean", "logical-operators", "or"],
+        title: "Logical OR Operator",
+        code: "print(False or True)\nprint(False or False)",
+        correctOutput: "True\nFalse",
+        outputChoices: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
+        explanation: "The 'or' operator returns True if at least one operand is True. False or True is True, but False or False is False.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#boolean-operations-and-or-not"
+    },
+    {
+        id: "t1t-string-format",
+        tier: 1,
+        tags: ["strings", "f-strings", "formatting"],
+        title: "F-String Formatting",
+        code: "name = 'Alice'\nage = 30\nprint(f'{name} is {age}')",
+        correctOutput: "Alice is 30",
+        outputChoices: ["Alice is 30", "{name} is {age}", "Alice30", "name is age"],
+        explanation: "F-strings (formatted string literals) allow embedding expressions inside strings using curly braces. {name} and {age} are replaced with their values.",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#f-strings"
+    },
+    {
+        id: "t1t-int-conversion",
+        tier: 1,
+        tags: ["type-conversion", "int", "float"],
+        title: "Float to Integer Conversion",
+        code: "x = 7.9\nprint(int(x))\nprint(type(int(x)))",
+        correctOutput: "7\n<class 'int'>",
+        outputChoices: ["7\n<class 'int'>", "8\n<class 'int'>", "7.9\n<class 'float'>", "8\n<class 'float'>"],
+        explanation: "The int() function truncates (doesn't round) the decimal part. 7.9 becomes 7, and the result type is int.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#int"
+    },
+    {
+        id: "t1t-str-conversion",
+        tier: 1,
+        tags: ["type-conversion", "str", "concatenation"],
+        title: "Number to String Conversion",
+        code: "num = 42\ntext = 'The answer is ' + str(num)\nprint(text)",
+        correctOutput: "The answer is 42",
+        outputChoices: ["The answer is 42", "The answer is num", "Error", "The answer is '42'"],
+        explanation: "You cannot concatenate strings and numbers directly. str(num) converts 42 to the string '42', allowing concatenation with 'The answer is '.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#func-str"
+    },
+    {
+        id: "t1t-not-operator",
+        tier: 1,
+        tags: ["boolean", "logical-operators", "not"],
+        title: "Logical NOT Operator",
+        code: "value = True\nprint(not value)\nprint(not False)",
+        correctOutput: "False\nTrue",
+        outputChoices: ["False\nTrue", "True\nFalse", "False\nFalse", "True\nTrue"],
+        explanation: "The 'not' operator inverts a boolean value. not True becomes False, and not False becomes True.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#boolean-operations-and-or-not"
+    },
+    {
+        id: "t1t-tab-escape",
+        tier: 1,
+        tags: ["strings", "escape-sequences", "tab"],
+        title: "Tab Escape Sequence",
+        code: "print('Name:\\tAlice')\nprint('Age:\\t25')",
+        correctOutput: "Name:\tAlice\nAge:\t25",
+        outputChoices: ["Name:\tAlice\nAge:\t25", "Name:tAlice\nAge:t25", "Name: Alice\nAge: 25", "Name:\\tAlice\\nAge:\\t25"],
+        explanation: "The \\t escape sequence inserts a tab character, creating consistent spacing. Both lines have a tab between the label and value.",
+        conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals"
+    },
+    {
+        id: "t1t-chained-comparison",
+        tier: 1,
+        tags: ["comparison", "operators", "boolean"],
+        title: "Chained Comparison",
+        code: "x = 15\nprint(10 < x < 20)\nprint(20 < x < 30)",
+        correctOutput: "True\nFalse",
+        outputChoices: ["True\nFalse", "False\nTrue", "True\nTrue", "False\nFalse"],
+        explanation: "Python allows chained comparisons. 10 < 15 < 20 checks if 15 is between 10 and 20 (True). 20 < 15 < 30 is False because 15 is not greater than 20.",
+        conceptLink: "https://docs.python.org/3/reference/expressions.html#comparisons"
     }
 ];

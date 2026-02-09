@@ -57,21 +57,6 @@
                         <span class="progress-label" id="debug-progress-label">0 / 0</span>
                     </div>
                 </div>
-                <div class="mode-card locked" data-mode="lens" id="lens-card">
-                    <div class="lock-badge" id="lens-lock">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                        <span>Complete Tier 1</span>
-                    </div>
-                    <div class="mode-icon">
-                        <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="10" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="18" r="4" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="1.5" fill="currentColor"/></svg>
-                    </div>
-                    <h2>Lens</h2>
-                    <p>Is it correct or buggy? You decide first, then prove it. The ultimate code-reading challenge.</p>
-                    <div class="mode-progress">
-                        <div class="progress-bar"><div class="progress-fill" id="lens-progress"></div></div>
-                        <span class="progress-label" id="lens-progress-label">0 / 0</span>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -96,15 +81,6 @@
                     <span class="code-filename">snippet.py</span>
                 </div>
                 <pre class="code-block" id="code-block"><code id="code-display"></code></pre>
-            </div>
-
-            <!-- Lens mode: classify first -->
-            <div id="lens-classify" class="answer-section" style="display:none;">
-                <p class="answer-prompt">Is this code correct or does it have a bug?</p>
-                <div class="answer-choices">
-                    <button class="choice-btn lens-choice" data-classify="correct">Correct — runs as intended</button>
-                    <button class="choice-btn lens-choice" data-classify="buggy">Has a bug</button>
-                </div>
             </div>
 
             <!-- Trace: predict output -->
@@ -218,7 +194,6 @@
     <script src="js/challenges/tier3-debug.js"></script>
     <script src="js/challenges/tier4-trace.js"></script>
     <script src="js/challenges/tier4-debug.js"></script>
-    <script src="js/challenges/lens.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/engine.js"></script>
     <script src="js/stats.js"></script>

@@ -158,5 +158,245 @@ window.TIER4_TRACE = [
         ],
         explanation: "The list comprehension applies .upper() to each string in words, converting 'hello' to 'HELLO', 'world' to 'WORLD', and 'python' to 'PYTHON'.",
         conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions"
+    },
+    {
+        id: "t4t-str-format",
+        tier: 4,
+        tags: ["strings", "format", "formatting"],
+        title: "String Format Method",
+        code: "name = 'Alice'\nage = 30\nmsg = 'Name: {}, Age: {}'.format(name, age)\nprint(msg)",
+        correctOutput: "Name: Alice, Age: 30",
+        outputChoices: [
+            "Name: Alice, Age: 30",
+            "Name: {}, Age: {}",
+            "Name: name, Age: age",
+            "Alice 30"
+        ],
+        explanation: ".format() replaces {} placeholders with the provided arguments in order. First {} gets 'Alice', second {} gets 30.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#str.format"
+    },
+    {
+        id: "t4t-list-count",
+        tier: 4,
+        tags: ["lists", "count", "methods"],
+        title: "List Count Method",
+        code: "numbers = [1, 2, 2, 3, 2, 4, 2]\ncount = numbers.count(2)\nprint(count)",
+        correctOutput: "4",
+        outputChoices: [
+            "4",
+            "2",
+            "7",
+            "3"
+        ],
+        explanation: "The count() method returns how many times 2 appears in the list. The value 2 appears 4 times.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#list.count"
+    },
+    {
+        id: "t4t-dict-items",
+        tier: 4,
+        tags: ["dictionaries", "items", "iteration"],
+        title: "Dict Items Iteration",
+        code: "data = {'x': 10, 'y': 20}\nfor key, val in data.items():\n    print(f'{key}={val}', end=' ')",
+        correctOutput: "x=10 y=20 ",
+        outputChoices: [
+            "x=10 y=20 ",
+            "10 20 ",
+            "x y ",
+            "('x', 10) ('y', 20) "
+        ],
+        explanation: "data.items() returns key-value pairs as tuples. The loop unpacks each (key, val) pair and prints them in the format key=val.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict.items"
+    },
+    {
+        id: "t4t-nested-comp",
+        tier: 4,
+        tags: ["list-comprehension", "nested", "comprehensions"],
+        title: "Nested List Comprehension",
+        code: "matrix = [[1, 2], [3, 4]]\nflat = [num for row in matrix for num in row]\nprint(flat)",
+        correctOutput: "[1, 2, 3, 4]",
+        outputChoices: [
+            "[1, 2, 3, 4]",
+            "[[1, 2], [3, 4]]",
+            "[1, 3, 2, 4]",
+            "[2, 4, 6, 8]"
+        ],
+        explanation: "The nested comprehension iterates through each row, then through each num in that row. This flattens [[1, 2], [3, 4]] into [1, 2, 3, 4].",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#nested-list-comprehensions"
+    },
+    {
+        id: "t4t-set-comp",
+        tier: 4,
+        tags: ["set-comprehension", "comprehensions", "sets"],
+        title: "Set Comprehension",
+        code: "numbers = [1, 2, 2, 3, 3, 3, 4]\nunique = {n for n in numbers}\nprint(sorted(unique))",
+        correctOutput: "[1, 2, 3, 4]",
+        outputChoices: [
+            "[1, 2, 3, 4]",
+            "[1, 2, 2, 3, 3, 3, 4]",
+            "{1, 2, 3, 4}",
+            "4"
+        ],
+        explanation: "Set comprehension creates {1, 2, 3, 4}, automatically removing duplicates. sorted() converts the set to a sorted list [1, 2, 3, 4].",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#sets"
+    },
+    {
+        id: "t4t-str-startswith",
+        tier: 4,
+        tags: ["strings", "startswith", "methods"],
+        title: "String Startswith",
+        code: "words = ['python', 'java', 'javascript']\njs_words = [w for w in words if w.startswith('j')]\nprint(js_words)",
+        correctOutput: "['java', 'javascript']",
+        outputChoices: [
+            "['java', 'javascript']",
+            "['python', 'java', 'javascript']",
+            "['javascript']",
+            "['python']"
+        ],
+        explanation: "The comprehension filters words that start with 'j'. Both 'java' and 'javascript' match, while 'python' does not.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#str.startswith"
+    },
+    {
+        id: "t4t-str-endswith",
+        tier: 4,
+        tags: ["strings", "endswith", "methods"],
+        title: "String Endswith",
+        code: "files = ['doc.txt', 'image.png', 'data.txt']\ntxt_files = [f for f in files if f.endswith('.txt')]\nprint(txt_files)",
+        correctOutput: "['doc.txt', 'data.txt']",
+        outputChoices: [
+            "['doc.txt', 'data.txt']",
+            "['image.png']",
+            "['doc.txt', 'image.png', 'data.txt']",
+            "['data.txt']"
+        ],
+        explanation: "The comprehension filters files ending with '.txt'. Both 'doc.txt' and 'data.txt' match, while 'image.png' does not.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#str.endswith"
+    },
+    {
+        id: "t4t-reversed",
+        tier: 4,
+        tags: ["reversed", "iteration", "lists"],
+        title: "Reversed Iteration",
+        code: "nums = [1, 2, 3, 4]\nfor n in reversed(nums):\n    print(n, end=' ')",
+        correctOutput: "4 3 2 1 ",
+        outputChoices: [
+            "4 3 2 1 ",
+            "1 2 3 4 ",
+            "[4, 3, 2, 1] ",
+            "Error"
+        ],
+        explanation: "reversed(nums) returns an iterator that yields elements in reverse order: 4, 3, 2, 1.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#reversed"
+    },
+    {
+        id: "t4t-map-function",
+        tier: 4,
+        tags: ["map", "functions", "iteration"],
+        title: "Map Function",
+        code: "nums = [1, 2, 3, 4]\nsquared = list(map(lambda x: x**2, nums))\nprint(squared)",
+        correctOutput: "[1, 4, 9, 16]",
+        outputChoices: [
+            "[1, 4, 9, 16]",
+            "[2, 4, 6, 8]",
+            "[1, 2, 3, 4]",
+            "16"
+        ],
+        explanation: "map() applies the lambda function to each element. It squares each number: 1**2=1, 2**2=4, 3**2=9, 4**2=16.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#map"
+    },
+    {
+        id: "t4t-filter-function",
+        tier: 4,
+        tags: ["filter", "functions", "iteration"],
+        title: "Filter Function",
+        code: "nums = [1, 2, 3, 4, 5, 6]\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)",
+        correctOutput: "[2, 4, 6]",
+        outputChoices: [
+            "[2, 4, 6]",
+            "[1, 3, 5]",
+            "[1, 2, 3, 4, 5, 6]",
+            "True"
+        ],
+        explanation: "filter() keeps only elements where the lambda returns True. The lambda checks if x % 2 == 0, so even numbers [2, 4, 6] are kept.",
+        conceptLink: "https://docs.python.org/3/library/functions.html#filter"
+    },
+    {
+        id: "t4t-multiple-unpack",
+        tier: 4,
+        tags: ["unpacking", "tuples", "assignment"],
+        title: "Multiple Unpacking",
+        code: "data = [(1, 2), (3, 4), (5, 6)]\nfor a, b in data:\n    print(a + b, end=' ')",
+        correctOutput: "3 7 11 ",
+        outputChoices: [
+            "3 7 11 ",
+            "1 3 5 ",
+            "2 4 6 ",
+            "6 12 18 "
+        ],
+        explanation: "Each tuple is unpacked into a and b. The sums are: 1+2=3, 3+4=7, 5+6=11.",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences"
+    },
+    {
+        id: "t4t-dict-update",
+        tier: 4,
+        tags: ["dictionaries", "update", "methods"],
+        title: "Dict Update Method",
+        code: "scores = {'Alice': 85, 'Bob': 90}\nscores.update({'Bob': 95, 'Charlie': 88})\nprint(scores['Bob'])",
+        correctOutput: "95",
+        outputChoices: [
+            "95",
+            "90",
+            "88",
+            "Error"
+        ],
+        explanation: "update() merges the new dictionary into scores. 'Bob' already exists, so its value is updated from 90 to 95. 'Charlie' is added.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict.update"
+    },
+    {
+        id: "t4t-sorted-reverse",
+        tier: 4,
+        tags: ["sorting", "sorted", "reverse"],
+        title: "Sorted with Reverse",
+        code: "numbers = [3, 1, 4, 1, 5]\nresult = sorted(numbers, reverse=True)\nprint(result)",
+        correctOutput: "[5, 4, 3, 1, 1]",
+        outputChoices: [
+            "[5, 4, 3, 1, 1]",
+            "[1, 1, 3, 4, 5]",
+            "[3, 1, 4, 1, 5]",
+            "[1, 5, 1, 4, 3]"
+        ],
+        explanation: "sorted() with reverse=True sorts in descending order. The numbers are arranged from largest to smallest: [5, 4, 3, 1, 1].",
+        conceptLink: "https://docs.python.org/3/library/functions.html#sorted"
+    },
+    {
+        id: "t4t-str-strip",
+        tier: 4,
+        tags: ["strings", "strip", "methods"],
+        title: "String Strip Method",
+        code: "text = '  hello  '\nresult = text.strip().upper()\nprint(result)",
+        correctOutput: "HELLO",
+        outputChoices: [
+            "HELLO",
+            "  HELLO  ",
+            "hello",
+            "  hello  "
+        ],
+        explanation: "strip() removes leading and trailing whitespace, producing 'hello'. Then upper() converts it to 'HELLO'.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#str.strip"
+    },
+    {
+        id: "t4t-list-extend",
+        tier: 4,
+        tags: ["lists", "extend", "methods"],
+        title: "List Extend Method",
+        code: "a = [1, 2]\nb = [3, 4]\na.extend(b)\nprint(a)",
+        correctOutput: "[1, 2, 3, 4]",
+        outputChoices: [
+            "[1, 2, 3, 4]",
+            "[1, 2, [3, 4]]",
+            "[3, 4]",
+            "[[1, 2], [3, 4]]"
+        ],
+        explanation: "extend() adds all elements from b to the end of a. This modifies a to [1, 2, 3, 4].",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#list.extend"
     }
 ];

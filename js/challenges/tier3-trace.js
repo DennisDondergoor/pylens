@@ -158,5 +158,245 @@ window.TIER3_TRACE = [
         ],
         explanation: "The conditional expression evaluates the condition. For age=15 (< 18), it returns 'minor'. For age=20 (>= 18), it returns 'adult'.",
         conceptLink: "https://docs.python.org/3/reference/expressions.html#conditional-expressions"
+    },
+    {
+        id: "t3t-recursion-countdown",
+        tier: 3,
+        tags: ["recursion", "functions", "base-case"],
+        title: "Simple Recursion",
+        code: "def countdown(n):\n    if n <= 0:\n        print('Done!')\n    else:\n        print(n)\n        countdown(n - 1)\n\ncountdown(3)",
+        correctOutput: "3\n2\n1\nDone!",
+        outputChoices: [
+            "3\n2\n1\nDone!",
+            "Done!\n1\n2\n3",
+            "3\n2\n1",
+            "Done!"
+        ],
+        explanation: "countdown(3) prints 3, then calls countdown(2), which prints 2, then calls countdown(1), which prints 1, then calls countdown(0), which prints 'Done!' (base case).",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#defining-functions"
+    },
+    {
+        id: "t3t-nested-function",
+        tier: 3,
+        tags: ["nested-functions", "functions", "scope"],
+        title: "Nested Function",
+        code: "def outer(x):\n    def inner(y):\n        return x + y\n    return inner(10)\n\nprint(outer(5))",
+        correctOutput: "15",
+        outputChoices: [
+            "15",
+            "10",
+            "5",
+            "Error"
+        ],
+        explanation: "outer(5) defines inner function that can access x from outer scope. inner(10) is called with y=10, returning 5 + 10 = 15.",
+        conceptLink: "https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces"
+    },
+    {
+        id: "t3t-closure",
+        tier: 3,
+        tags: ["closures", "nested-functions", "scope"],
+        title: "Closure Capturing Variable",
+        code: "def multiplier(factor):\n    def multiply(num):\n        return num * factor\n    return multiply\n\ntimes3 = multiplier(3)\nprint(times3(7))",
+        correctOutput: "21",
+        outputChoices: [
+            "21",
+            "10",
+            "3",
+            "7"
+        ],
+        explanation: "multiplier(3) returns the multiply function, which captures factor=3. When times3(7) is called, it computes 7 * 3 = 21.",
+        conceptLink: "https://docs.python.org/3/faq/programming.html#what-are-closures"
+    },
+    {
+        id: "t3t-global-keyword",
+        tier: 3,
+        tags: ["global", "scope", "variables"],
+        title: "Global Keyword",
+        code: "count = 0\n\ndef increment():\n    global count\n    count += 1\n\nincrement()\nincrement()\nprint(count)",
+        correctOutput: "2",
+        outputChoices: [
+            "2",
+            "0",
+            "1",
+            "Error"
+        ],
+        explanation: "The global keyword allows increment() to modify the global count variable. Two calls increment it from 0 to 1 to 2.",
+        conceptLink: "https://docs.python.org/3/reference/simple_stmts.html#global"
+    },
+    {
+        id: "t3t-nonlocal-keyword",
+        tier: 3,
+        tags: ["nonlocal", "nested-functions", "scope"],
+        title: "Nonlocal Keyword",
+        code: "def outer():\n    x = 1\n    def inner():\n        nonlocal x\n        x += 2\n    inner()\n    return x\n\nprint(outer())",
+        correctOutput: "3",
+        outputChoices: [
+            "3",
+            "1",
+            "2",
+            "Error"
+        ],
+        explanation: "nonlocal allows inner() to modify x from outer's scope. inner() changes x from 1 to 3, then outer() returns 3.",
+        conceptLink: "https://docs.python.org/3/reference/simple_stmts.html#nonlocal"
+    },
+    {
+        id: "t3t-early-return",
+        tier: 3,
+        tags: ["return", "functions", "control-flow"],
+        title: "Early Return Pattern",
+        code: "def check_positive(n):\n    if n <= 0:\n        return 'Invalid'\n    if n > 100:\n        return 'Too large'\n    return 'Valid'\n\nprint(check_positive(50))",
+        correctOutput: "Valid",
+        outputChoices: [
+            "Valid",
+            "Invalid",
+            "Too large",
+            "None"
+        ],
+        explanation: "For n=50, the first condition (n <= 0) is false, the second condition (n > 100) is false, so execution reaches the final return statement.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#defining-functions"
+    },
+    {
+        id: "t3t-multiple-return-paths",
+        tier: 3,
+        tags: ["return", "functions", "conditionals"],
+        title: "Multiple Return Paths",
+        code: "def classify(score):\n    if score >= 90:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    else:\n        return 'C'\n\nprint(classify(85))",
+        correctOutput: "B",
+        outputChoices: [
+            "B",
+            "A",
+            "C",
+            "None"
+        ],
+        explanation: "For score=85, the first condition (>= 90) is false, but the second condition (>= 80) is true, so the function returns 'B'.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#if-statements"
+    },
+    {
+        id: "t3t-loop-else-break",
+        tier: 3,
+        tags: ["for", "else", "break", "control-flow"],
+        title: "Loop Else with Break",
+        code: "for n in [3, 6, 9, 12]:\n    if n > 10:\n        print('Found')\n        break\nelse:\n    print('Not found')",
+        correctOutput: "Found",
+        outputChoices: [
+            "Found",
+            "Not found",
+            "Found\nNot found",
+            ""
+        ],
+        explanation: "When n=12, the condition n > 10 is true, so 'Found' prints and break executes. Since break was triggered, the else clause does not run.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops"
+    },
+    {
+        id: "t3t-continue-statement",
+        tier: 3,
+        tags: ["continue", "for", "control-flow"],
+        title: "Continue Statement",
+        code: "for i in range(5):\n    if i % 2 == 0:\n        continue\n    print(i, end=' ')",
+        correctOutput: "1 3 ",
+        outputChoices: [
+            "1 3 ",
+            "0 2 4 ",
+            "1 2 3 4 ",
+            "0 1 2 3 4 "
+        ],
+        explanation: "When i is even (0, 2, 4), continue skips the rest of the loop body. Only odd values (1, 3) are printed.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops"
+    },
+    {
+        id: "t3t-nested-conditionals",
+        tier: 3,
+        tags: ["conditionals", "if-else", "nesting"],
+        title: "Nested Conditionals",
+        code: "x = 15\nif x > 10:\n    if x < 20:\n        print('Medium')\n    else:\n        print('Large')\nelse:\n    print('Small')",
+        correctOutput: "Medium",
+        outputChoices: [
+            "Medium",
+            "Large",
+            "Small",
+            "Medium\nLarge"
+        ],
+        explanation: "x=15 satisfies x > 10, so we enter the outer if. Then x < 20 is true, so 'Medium' is printed.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#if-statements"
+    },
+    {
+        id: "t3t-function-as-argument",
+        tier: 3,
+        tags: ["functions", "higher-order", "lambda"],
+        title: "Function as Argument",
+        code: "def apply(func, value):\n    return func(value)\n\nresult = apply(lambda x: x * 2, 8)\nprint(result)",
+        correctOutput: "16",
+        outputChoices: [
+            "16",
+            "8",
+            "2",
+            "lambda x: x * 2"
+        ],
+        explanation: "apply receives the lambda function and value 8. It calls the lambda with 8, which returns 8 * 2 = 16.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions"
+    },
+    {
+        id: "t3t-recursion-sum",
+        tier: 3,
+        tags: ["recursion", "functions", "base-case"],
+        title: "Recursive Sum",
+        code: "def sum_to(n):\n    if n == 1:\n        return 1\n    return n + sum_to(n - 1)\n\nprint(sum_to(4))",
+        correctOutput: "10",
+        outputChoices: [
+            "10",
+            "4",
+            "1",
+            "Error"
+        ],
+        explanation: "sum_to(4) returns 4 + sum_to(3). This expands to 4 + 3 + sum_to(2), then 4 + 3 + 2 + sum_to(1), then 4 + 3 + 2 + 1 = 10.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#defining-functions"
+    },
+    {
+        id: "t3t-while-else",
+        tier: 3,
+        tags: ["while", "else", "control-flow"],
+        title: "While-Else Construct",
+        code: "x = 0\nwhile x < 3:\n    x += 1\nelse:\n    print('Done')\nprint(x)",
+        correctOutput: "Done\n3",
+        outputChoices: [
+            "Done\n3",
+            "3",
+            "Done\n0",
+            "Done"
+        ],
+        explanation: "The while loop runs until x reaches 3. Since the loop completes normally (no break), the else clause executes, printing 'Done'. Then x (which is 3) is printed.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#break-and-continue-statements-and-else-clauses-on-loops"
+    },
+    {
+        id: "t3t-kwargs-basic",
+        tier: 3,
+        tags: ["kwargs", "functions", "keyword-arguments"],
+        title: "Keyword Arguments Collection",
+        code: "def describe(**kwargs):\n    for key, val in kwargs.items():\n        print(f'{key}: {val}')\n\ndescribe(name='Alice', age=30)",
+        correctOutput: "name: Alice\nage: 30",
+        outputChoices: [
+            "name: Alice\nage: 30",
+            "Alice\n30",
+            "{'name': 'Alice', 'age': 30}",
+            "key: val"
+        ],
+        explanation: "**kwargs collects all keyword arguments into a dictionary {'name': 'Alice', 'age': 30}. The loop iterates and prints each key-value pair.",
+        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#keyword-arguments"
+    },
+    {
+        id: "t3t-range-empty",
+        tier: 3,
+        tags: ["range", "loops", "edge-cases"],
+        title: "Empty Range",
+        code: "total = 0\nfor i in range(5, 2):\n    total += i\nprint(total)",
+        correctOutput: "0",
+        outputChoices: [
+            "0",
+            "5",
+            "9",
+            "Error"
+        ],
+        explanation: "range(5, 2) with default step of 1 cannot go from 5 to 2, so it produces an empty sequence. The loop body never executes, leaving total at 0.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#range"
     }
 ];

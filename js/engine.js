@@ -20,7 +20,6 @@ const Engine = (() => {
      * Get all challenges for a given mode and tier.
      */
     function getChallenges(mode, tier) {
-        if (mode === 'lens') return window.LENS_CHALLENGES || [];
         const key = `TIER${tier}_${mode.toUpperCase()}`;
         return window[key] || [];
     }
@@ -43,11 +42,6 @@ const Engine = (() => {
                 const found = pool.find(c => c.id === id);
                 if (found) return found;
             }
-        }
-        const lens = window.LENS_CHALLENGES;
-        if (lens) {
-            const found = lens.find(c => c.id === id);
-            if (found) return found;
         }
         return null;
     }
@@ -75,9 +69,6 @@ const Engine = (() => {
      * Determine the effective mode for a challenge.
      */
     function getEffectiveMode(challenge) {
-        if (challenge.mode === 'both' || challenge.isCorrect !== undefined) {
-            return 'lens';
-        }
         if (challenge.bugLine !== undefined && challenge.bugLine !== null) {
             return 'debug';
         }
@@ -123,54 +114,6 @@ const Engine = (() => {
             correctChoice: challenge.correctBugChoice,
             correctDescription: challenge.bugChoices[challenge.correctBugChoice]
         };
-    }
-
-    /**
-     * Check a lens classification.
-     */
-    function checkLensClassification(challenge, userSaidCorrect) {
-        return {
-            classificationCorrect: userSaidCorrect === challenge.isCorrect
-        };
-    }
-
-    /**
-     * Check full lens answer (classification + answer).
-     */
-    function checkLens(challenge, userSaidCorrect, answer) {
-        const classOk = userSaidCorrect === challenge.isCorrect;
-
-        if (!classOk) {
-            return {
-                correct: false,
-                partial: false,
-                score: 0,
-                classificationCorrect: false,
-                details: challenge.isCorrect
-                    ? { type: 'trace', correctAnswer: challenge.correctOutput }
-                    : { type: 'debug', correctLine: challenge.bugLine, correctChoice: challenge.correctBugChoice }
-            };
-        }
-
-        if (challenge.isCorrect) {
-            const traceResult = checkTrace(challenge, answer);
-            return {
-                correct: traceResult.correct,
-                partial: !traceResult.correct,
-                score: traceResult.correct ? 100 : 25,
-                classificationCorrect: true,
-                details: { type: 'trace', ...traceResult }
-            };
-        } else {
-            const debugResult = checkDebug(challenge, answer.line, answer.choiceIndex);
-            return {
-                correct: debugResult.correct,
-                partial: debugResult.partial || (!debugResult.correct),
-                score: debugResult.correct ? 100 : (debugResult.partial ? 50 : 25),
-                classificationCorrect: true,
-                details: { type: 'debug', ...debugResult }
-            };
-        }
     }
 
     /**
@@ -223,18 +166,6 @@ const Engine = (() => {
             }
         }
 
-        // Lens unlocks when level 1 is completed in both modes
-        if (!Storage.isUnlocked('lens')) {
-            const t1TraceIds = getChallengeIds('trace', 1);
-            const t1DebugIds = getChallengeIds('debug', 1);
-            const traceComplete = Storage.getCompletedCount(t1TraceIds) >= Math.min(8, t1TraceIds.length);
-            const debugComplete = Storage.getCompletedCount(t1DebugIds) >= Math.min(8, t1DebugIds.length);
-            if (traceComplete && debugComplete) {
-                Storage.setUnlock('lens', true);
-                newUnlocks.push('lens');
-            }
-        }
-
         return newUnlocks;
     }
 
@@ -247,8 +178,6 @@ const Engine = (() => {
         getEffectiveMode,
         checkTrace,
         checkDebug,
-        checkLensClassification,
-        checkLens,
         applyStreakBonus,
         getAvailableTiers,
         checkUnlocks

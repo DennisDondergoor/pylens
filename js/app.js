@@ -9,7 +9,6 @@ const App = (() => {
     let currentChallenge = null; // challenge object
     let challengeStartTime = null;
     let selectedLine = null;     // for debug mode
-    let lensClassification = null; // 'correct' | 'buggy'
 
     // View references
     const views = {};
@@ -38,31 +37,16 @@ const App = (() => {
         });
         document.getElementById('btn-next').addEventListener('click', handleNext);
         document.getElementById('btn-back-to-tiers').addEventListener('click', () => {
-            if (currentMode === 'lens') {
-                showView('home');
-            } else {
-                showTiers(currentMode);
-            }
+            showTiers(currentMode);
         });
 
         // Mode card clicks
         document.querySelectorAll('.mode-card').forEach(card => {
             card.addEventListener('click', () => {
                 const mode = card.dataset.mode;
-                if (mode === 'lens' && !Storage.isUnlocked('lens')) return;
                 currentMode = mode;
-                if (mode === 'lens') {
-                    currentTier = 0;
-                    startNextChallenge();
-                } else {
-                    showTiers(mode);
-                }
+                showTiers(mode);
             });
-        });
-
-        // Lens classification buttons
-        document.querySelectorAll('.lens-choice').forEach(btn => {
-            btn.addEventListener('click', () => handleLensClassify(btn.dataset.classify));
         });
 
         // Code line clicks (for debug mode)
@@ -123,11 +107,9 @@ const App = (() => {
 
     function handleBack() {
         if (views.result.classList.contains('active')) {
-            if (currentMode === 'lens') showView('home');
-            else showTiers(currentMode);
+            showTiers(currentMode);
         } else if (views.challenge.classList.contains('active')) {
-            if (currentMode === 'lens') showView('home');
-            else showTiers(currentMode);
+            showTiers(currentMode);
         } else if (views.tiers.classList.contains('active')) {
             showView('home');
         } else if (views.stats.classList.contains('active')) {
@@ -192,16 +174,13 @@ const App = (() => {
         currentChallenge = challenge;
         challengeStartTime = Date.now();
         selectedLine = null;
-        lensClassification = null;
 
         // Header
         const tierNum = challenge.tier || currentTier;
         const tag = document.getElementById('challenge-tag');
-        tag.textContent = currentMode === 'lens' ? 'Lens Mode' : `Tier ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
+        tag.textContent = `Tier ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
         tag.className = 'challenge-tag';
         if (tierNum > 1) tag.classList.add(`tier-${tierNum}`);
-        if (currentMode === 'lens') tag.style.cssText = 'background: rgba(176,122,237,0.15); color: var(--accent-purple);';
-        else tag.style.cssText = '';
 
         // Counter
         const challenges = Engine.getChallenges(currentMode, currentTier);
@@ -217,19 +196,11 @@ const App = (() => {
         document.getElementById('code-display').innerHTML = codeHtml;
 
         // Hide all answer sections
-        document.getElementById('lens-classify').style.display = 'none';
         document.getElementById('trace-answer').style.display = 'none';
         document.getElementById('debug-answer').style.display = 'none';
 
         // Show appropriate answer section
-        if (currentMode === 'lens') {
-            document.getElementById('lens-classify').style.display = 'block';
-            // Reset lens buttons
-            document.querySelectorAll('.lens-choice').forEach(btn => {
-                btn.classList.remove('selected');
-                btn.disabled = false;
-            });
-        } else if (currentMode === 'trace') {
+        if (currentMode === 'trace') {
             showTraceChoices(challenge);
         } else if (currentMode === 'debug') {
             // Debug: first select a line, then show choices
@@ -327,112 +298,6 @@ const App = (() => {
         setTimeout(() => showResult(result, timeMs), 600);
     }
 
-    function handleLensClassify(classification) {
-        lensClassification = classification;
-
-        // Disable lens buttons
-        document.querySelectorAll('.lens-choice').forEach(btn => {
-            btn.disabled = true;
-            if (btn.dataset.classify === classification) btn.classList.add('selected');
-        });
-
-        const userSaidCorrect = classification === 'correct';
-
-        if (userSaidCorrect) {
-            // User thinks code is correct → show trace choices
-            if (currentChallenge.isCorrect) {
-                showTraceChoices(currentChallenge);
-            } else {
-                // User was wrong — code has a bug. Show result immediately.
-                const result = Engine.checkLens(currentChallenge, true, null);
-                const timeMs = Date.now() - challengeStartTime;
-                setTimeout(() => showResult(result, timeMs), 400);
-                return;
-            }
-        } else {
-            // User thinks code has a bug → show debug interface
-            if (!currentChallenge.isCorrect) {
-                // Make lines selectable
-                const codeHtml = PySyntax.highlight(currentChallenge.code, { selectable: true });
-                document.getElementById('code-display').innerHTML = codeHtml;
-                document.getElementById('debug-answer').style.display = 'block';
-                document.getElementById('debug-choices').innerHTML =
-                    '<p style="color: var(--text-muted); font-size: 0.85rem;">Click on the line that contains the bug.</p>';
-            } else {
-                // User was wrong — code is actually correct. Show result immediately.
-                const result = Engine.checkLens(currentChallenge, false, null);
-                const timeMs = Date.now() - challengeStartTime;
-                setTimeout(() => showResult(result, timeMs), 400);
-                return;
-            }
-        }
-
-        // Override answer handlers for lens mode
-        if (userSaidCorrect && currentChallenge.isCorrect) {
-            // Replace trace handlers to route through lens scoring
-            setTimeout(() => {
-                document.querySelectorAll('.trace-choice').forEach(btn => {
-                    const newBtn = btn.cloneNode(true);
-                    btn.parentNode.replaceChild(newBtn, btn);
-                    newBtn.addEventListener('click', () => {
-                        const result = Engine.checkLens(currentChallenge, true, newBtn.dataset.value);
-                        const timeMs = Date.now() - challengeStartTime;
-
-                        document.querySelectorAll('.trace-choice').forEach(b => {
-                            b.disabled = true;
-                            if (b.dataset.value === currentChallenge.correctOutput) b.classList.add('correct');
-                            else if (b.dataset.value === newBtn.dataset.value && !result.correct) b.classList.add('incorrect');
-                        });
-
-                        setTimeout(() => showResult(result, timeMs), 600);
-                    });
-                });
-            }, 0);
-        } else if (!userSaidCorrect && !currentChallenge.isCorrect) {
-            // Override debug line click for lens
-            const codeEl = document.getElementById('code-display');
-            const newCodeEl = codeEl.cloneNode(true);
-            codeEl.parentNode.replaceChild(newCodeEl, codeEl);
-
-            newCodeEl.addEventListener('click', (e) => {
-                const line = e.target.closest('.code-line.selectable');
-                if (!line) return;
-                selectedLine = parseInt(line.dataset.line);
-
-                newCodeEl.querySelectorAll('.code-line').forEach(el => {
-                    el.classList.remove('selected');
-                    if (parseInt(el.dataset.line) === selectedLine) el.classList.add('selected');
-                });
-
-                // Show bug choices with lens scoring
-                const container = document.getElementById('debug-choices');
-                container.innerHTML = currentChallenge.bugChoices.map((choice, i) => {
-                    return `<button class="choice-btn debug-choice" data-index="${i}">${escapeHtml(choice)}</button>`;
-                }).join('');
-
-                container.querySelectorAll('.debug-choice').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const choiceIdx = parseInt(btn.dataset.index);
-                        const result = Engine.checkLens(currentChallenge, false, { line: selectedLine, choiceIndex: choiceIdx });
-                        const timeMs = Date.now() - challengeStartTime;
-
-                        container.querySelectorAll('.debug-choice').forEach(b => {
-                            b.disabled = true;
-                            if (parseInt(b.dataset.index) === currentChallenge.correctBugChoice) b.classList.add('correct');
-                            else if (parseInt(b.dataset.index) === choiceIdx && !result.correct) b.classList.add('incorrect');
-                        });
-
-                        newCodeEl.querySelectorAll('.code-line').forEach(el => {
-                            if (parseInt(el.dataset.line) === currentChallenge.bugLine) el.classList.add('selected');
-                        });
-
-                        setTimeout(() => showResult(result, timeMs), 600);
-                    });
-                });
-            });
-        }
-    }
-
     // === Results ===
 
     function showResult(result, timeMs) {
@@ -498,7 +363,7 @@ const App = (() => {
         const correctDisplay = document.getElementById('correct-answer-display');
         if (!wasCorrect) {
             correctBox.style.display = 'block';
-            if (currentMode === 'trace' || (currentMode === 'lens' && currentChallenge.isCorrect)) {
+            if (currentMode === 'trace') {
                 correctDisplay.textContent = `Output: ${currentChallenge.correctOutput}`;
             } else {
                 const bugDesc = currentChallenge.bugChoices[currentChallenge.correctBugChoice];
@@ -532,11 +397,7 @@ const App = (() => {
             presentChallenge(challenges[currentIdx + 1]);
         } else {
             // End of tier/mode — go back
-            if (currentMode === 'lens') {
-                showView('home');
-            } else {
-                showTiers(currentMode);
-            }
+            showTiers(currentMode);
         }
     }
 

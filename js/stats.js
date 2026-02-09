@@ -98,22 +98,6 @@ const Stats = (() => {
         ];
         const debugCompleted = Storage.getCompletedCount(debugIds);
         updateProgressBar('debug-progress', 'debug-progress-label', debugCompleted, debugIds.length);
-
-        // Lens progress
-        const lensIds = Engine.getChallengeIds('lens', 0);
-        const lensCompleted = Storage.getCompletedCount(lensIds);
-        updateProgressBar('lens-progress', 'lens-progress-label', lensCompleted, lensIds.length);
-
-        // Lens lock state
-        const lensCard = document.getElementById('lens-card');
-        const lensLock = document.getElementById('lens-lock');
-        if (Storage.isUnlocked('lens')) {
-            lensCard.classList.remove('locked');
-            lensLock.style.display = 'none';
-        } else {
-            lensCard.classList.add('locked');
-            lensLock.style.display = 'flex';
-        }
     }
 
     function updateProgressBar(barId, labelId, completed, total) {

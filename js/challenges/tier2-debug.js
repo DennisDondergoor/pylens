@@ -193,5 +193,290 @@ window.TIER2_DEBUG = [
         fixedCode: "list1 = [1, 2, 3]\nlist2 = [1, 2, 3]\nif list1 == list2:\n    print('Lists are the same')\nelse:\n    print('Lists are different')",
         explanation: "The is operator checks identity (whether two variables reference the exact same object in memory), while == checks equality (whether values are the same). Two separate lists with identical contents are equal (==) but not identical (is). Use == for comparing values; reserve is for checking None or comparing to singleton objects.",
         conceptLink: "https://docs.python.org/3/reference/expressions.html#is"
+    },
+    {
+        id: "t2d-negative-index-confusion",
+        tier: 2,
+        tags: ["lists", "indexing", "negative-indices"],
+        title: "Incorrect Negative Indexing",
+        code: "colors = ['red', 'green', 'blue', 'yellow']\nprint('Last color:', colors[-1])\nprint('Second to last:', colors[-4])\nprint('Third to last:', colors[-3])",
+        bugLine: 3,
+        bugDescription: "colors[-4] is first element, not second to last; should be colors[-2]",
+        bugChoices: [
+            "colors[-4] accesses first element (same as [0]); use colors[-2] for second to last",
+            "Negative indices are not allowed in Python",
+            "Should use colors[len(colors) - 4]",
+            "Missing parentheses around the index"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "colors = ['red', 'green', 'blue', 'yellow']\nprint('Last color:', colors[-1])\nprint('Second to last:', colors[-2])\nprint('Third to last:', colors[-3])",
+        explanation: "Negative indices count from the end: -1 is last, -2 is second to last, etc. In a list of 4 items, -4 wraps around to the first element (same as index 0). This is technically valid but confusing. Use positive indices when counting from the start, negative when counting from the end.",
+        conceptLink: "https://docs.python.org/3/tutorial/introduction.html#lists"
+    },
+    {
+        id: "t2d-dict-keys-immutable",
+        tier: 2,
+        tags: ["dictionaries", "keys", "type-error"],
+        title: "Mutable Dictionary Key",
+        code: "student_grades = {}\nstudent1 = ['Alice', 'Smith']\nstudent_grades[student1] = 95\nprint(student_grades)",
+        bugLine: 3,
+        bugDescription: "Lists are mutable and cannot be dict keys; use tuple instead",
+        bugChoices: [
+            "Lists are mutable and unhashable; cannot be dict keys; use tuple (student1[0], student1[1])",
+            "Dictionary assignment syntax is incorrect",
+            "Should use student_grades.add() method",
+            "Missing quotes around student1"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "student_grades = {}\nstudent1 = ('Alice', 'Smith')\nstudent_grades[student1] = 95\nprint(student_grades)",
+        explanation: "Dictionary keys must be hashable (immutable). Lists, dictionaries, and sets cannot be keys because they're mutable. Attempting to use a list as a key raises TypeError: unhashable type: 'list'. Use immutable types as keys: strings, numbers, tuples (containing only immutable items), or frozensets.",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#dictionaries"
+    },
+    {
+        id: "t2d-list-copy-reference",
+        tier: 2,
+        tags: ["lists", "copying", "references"],
+        title: "Shallow Copy vs Reference",
+        code: "original = [1, 2, 3]\ncopy = original\ncopy.append(4)\nprint('Original:', original)\nprint('Copy:', copy)",
+        bugLine: 2,
+        bugDescription: "Assignment creates reference, not copy; both variables point to same list",
+        bugChoices: [
+            "Assignment (=) creates reference to same list; use copy = original[:] or original.copy()",
+            "append() method syntax is incorrect",
+            "Should use copy = list(original)",
+            "Missing parentheses around the assignment"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "original = [1, 2, 3]\ncopy = original[:]\ncopy.append(4)\nprint('Original:', original)\nprint('Copy:', copy)",
+        explanation: "Assignment with = creates a reference, not a copy. Both variables point to the same list in memory, so modifying one affects the other. To create an independent copy, use slicing original[:], the .copy() method, or list(original). For nested structures, use copy.deepcopy().",
+        conceptLink: "https://docs.python.org/3/library/copy.html"
+    },
+    {
+        id: "t2d-slice-step-confusion",
+        tier: 2,
+        tags: ["lists", "slicing", "step"],
+        title: "Reversed Slice Indices",
+        code: "numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nsubset = numbers[7:3]\nprint('Subset:', subset)\nprint('Length:', len(subset))",
+        bugLine: 2,
+        bugDescription: "Slice [7:3] is empty because start > stop; use [7:3:-1] for reverse or [3:7]",
+        bugChoices: [
+            "Slice [7:3] produces empty list (start > stop); use [7:3:-1] to reverse or [3:7] forward",
+            "Slice syntax is incorrect",
+            "Should use numbers[3, 7] instead",
+            "Missing step parameter"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nsubset = numbers[3:7]\nprint('Subset:', subset)\nprint('Length:', len(subset))",
+        explanation: "Slicing [start:stop] works forward by default (step=1). When start > stop without a negative step, the result is an empty list. To slice backwards, use negative step: [7:3:-1] gives [7, 6, 5, 4]. To get elements 3-7, use [3:7] (remember stop is exclusive). Always ensure start < stop when using positive step.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#common-sequence-operations"
+    },
+    {
+        id: "t2d-in-operator-substring",
+        tier: 2,
+        tags: ["strings", "membership", "in-operator"],
+        title: "Membership Test on Wrong Type",
+        code: "fruits = ['apple', 'banana', 'cherry']\nif 'app' in fruits:\n    print('Found app!')\nelse:\n    print('Not found')",
+        bugLine: 2,
+        bugDescription: "'in' checks for exact element match in list, not substring; check in string instead",
+        bugChoices: [
+            "'in' with lists checks exact elements, not substrings; use any('app' in fruit for fruit in fruits)",
+            "Missing colon after if statement",
+            "Should use fruits.contains('app')",
+            "String comparison syntax is incorrect"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "fruits = ['apple', 'banana', 'cherry']\nif any('app' in fruit for fruit in fruits):\n    print('Found app!')\nelse:\n    print('Not found')",
+        explanation: "The 'in' operator checks for exact element membership in lists: 'apple' in fruits works, but 'app' in fruits doesn't because 'app' is not an element. To check if any string contains a substring, use a generator: any('app' in fruit for fruit in fruits), or check each string individually.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#common-sequence-operations"
+    },
+    {
+        id: "t2d-dict-values-method",
+        tier: 2,
+        tags: ["dictionaries", "methods", "iteration"],
+        title: "Iterating Dict Without Values()",
+        code: "inventory = {'apples': 10, 'oranges': 5, 'bananas': 8}\ntotal = 0\nfor count in inventory:\n    total += count\nprint('Total items:', total)",
+        bugLine: 3,
+        bugDescription: "Iterating dict gives keys, not values; use inventory.values()",
+        bugChoices: [
+            "Iterating dict yields keys, not values; use for count in inventory.values() or inventory[key]",
+            "for loop syntax is incorrect",
+            "Should use inventory.items() instead",
+            "Variable total is not defined"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "inventory = {'apples': 10, 'oranges': 5, 'bananas': 8}\ntotal = 0\nfor count in inventory.values():\n    total += count\nprint('Total items:', total)",
+        explanation: "When you iterate over a dictionary directly, you get the keys, not values. In this case, for count in inventory gives 'apples', 'oranges', 'bananas' (strings), causing TypeError when adding to total. Use .values() to iterate over values, .keys() for keys explicitly, or .items() for key-value pairs.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict.values"
+    },
+    {
+        id: "t2d-list-sort-vs-sorted",
+        tier: 2,
+        tags: ["lists", "methods", "sorting"],
+        title: "Sort Method Returns None",
+        code: "numbers = [5, 2, 8, 1, 9]\nsorted_numbers = numbers.sort()\nprint('Sorted:', sorted_numbers)\nprint('Original:', numbers)",
+        bugLine: 2,
+        bugDescription: "list.sort() modifies in-place and returns None; use sorted() for new list",
+        bugChoices: [
+            "list.sort() modifies list in-place and returns None; use sorted(numbers) to get new sorted list",
+            "sort() method syntax is incorrect",
+            "Should use numbers.sorted() instead",
+            "Missing parentheses in method call"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "numbers = [5, 2, 8, 1, 9]\nsorted_numbers = sorted(numbers)\nprint('Sorted:', sorted_numbers)\nprint('Original:', numbers)",
+        explanation: "The .sort() method sorts the list in-place and returns None. To get a new sorted list while preserving the original, use the sorted() function: sorted(numbers) returns a new sorted list. Use .sort() when you want to modify the list directly; use sorted() when you need to keep the original unchanged.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#list.sort"
+    },
+    {
+        id: "t2d-dict-get-default",
+        tier: 2,
+        tags: ["dictionaries", "methods", "default-values"],
+        title: "Get Method Default Not Working",
+        code: "config = {'host': 'localhost', 'port': 8080}\ntimeout = config.get('timeout')\nif timeout > 0:\n    print('Timeout:', timeout)",
+        bugLine: 3,
+        bugDescription: "get() returns None when key missing; provide default: config.get('timeout', 30)",
+        bugChoices: [
+            "get() returns None for missing keys; cannot compare None > 0; use config.get('timeout', 30)",
+            "Comparison operator is incorrect",
+            "Should use config['timeout'] instead",
+            "Variable timeout is not defined"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "config = {'host': 'localhost', 'port': 8080}\ntimeout = config.get('timeout', 30)\nif timeout > 0:\n    print('Timeout:', timeout)",
+        explanation: "The .get() method returns None if the key doesn't exist and no default is provided. Comparing None > 0 raises TypeError. Always provide a sensible default as the second argument: config.get('timeout', 30) returns 30 if 'timeout' key is missing. This prevents None-related errors and provides fallback values.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict.get"
+    },
+    {
+        id: "t2d-list-index-method",
+        tier: 2,
+        tags: ["lists", "methods", "value-error"],
+        title: "Index Method on Missing Element",
+        code: "colors = ['red', 'green', 'blue']\nprint('Green at:', colors.index('green'))\nposition = colors.index('yellow')\nprint('Yellow at:', position)",
+        bugLine: 3,
+        bugDescription: "index() raises ValueError if element not in list; check with 'in' first",
+        bugChoices: [
+            "index() raises ValueError if element not found; check 'yellow' in colors first or use try/except",
+            "index() method syntax is incorrect",
+            "Should use colors.find('yellow') instead",
+            "Missing parentheses in method call"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "colors = ['red', 'green', 'blue']\nprint('Green at:', colors.index('green'))\nif 'yellow' in colors:\n    position = colors.index('yellow')\n    print('Yellow at:', position)",
+        explanation: "The .index() method returns the first index of an element, but raises ValueError if the element isn't in the list. Before calling .index(), check if the element exists using 'in': if 'yellow' in colors, or use try/except to handle the ValueError. Unlike .find() for strings (returns -1), .index() raises an error.",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#more-on-lists"
+    },
+    {
+        id: "t2d-string-split-default",
+        tier: 2,
+        tags: ["strings", "methods", "split"],
+        title: "Split With Wrong Delimiter",
+        code: "data = 'apple banana cherry'\nitems = data.split(',')\nprint('First item:', items[0])\nprint('Count:', len(items))",
+        bugLine: 2,
+        bugDescription: "String has spaces but split uses comma; result is single item; use split() or split(' ')",
+        bugChoices: [
+            "String uses spaces but split(',') looks for commas; use split() (default whitespace) or split(' ')",
+            "split() method syntax is incorrect",
+            "Should use data.split(',', ' ') with multiple delimiters",
+            "Missing parentheses in split call"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "data = 'apple banana cherry'\nitems = data.split()\nprint('First item:', items[0])\nprint('Count:', len(items))",
+        explanation: "The .split() method splits on the specified delimiter. Using split(',') on a space-separated string returns the whole string as a single element. Call split() without arguments to split on any whitespace (spaces, tabs, newlines), or specify the correct delimiter: split(' ') for single spaces.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#str.split"
+    },
+    {
+        id: "t2d-tuple-single-element",
+        tier: 2,
+        tags: ["tuples", "syntax", "literals"],
+        title: "Missing Comma in Single-Element Tuple",
+        code: "single = (42)\nprint('Type:', type(single))\nprint('Is tuple:', isinstance(single, tuple))",
+        bugLine: 1,
+        bugDescription: "(42) is int, not tuple; need comma for single-element tuple: (42,)",
+        bugChoices: [
+            "(42) is just int in parentheses; use (42,) with trailing comma for single-element tuple",
+            "Tuple syntax requires square brackets",
+            "Should use tuple(42) instead",
+            "Missing quotes around the number"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "single = (42,)\nprint('Type:', type(single))\nprint('Is tuple:', isinstance(single, tuple))",
+        explanation: "Parentheses alone don't create a tuple; the comma does. (42) is just an integer with parentheses. To create a single-element tuple, add a trailing comma: (42,). This is required because parentheses are also used for grouping expressions. Empty tuple () and multi-element tuples (1, 2) work as expected.",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#tuples-and-sequences"
+    },
+    {
+        id: "t2d-list-plus-equals",
+        tier: 2,
+        tags: ["lists", "operators", "concatenation"],
+        title: "Adding Single Element Without List",
+        code: "tasks = ['code', 'test']\ntasks += 'deploy'\nprint('Tasks:', tasks)",
+        bugLine: 2,
+        bugDescription: "+= iterates over string, adding each char as element; use tasks += ['deploy']",
+        bugChoices: [
+            "+= iterates string chars: ['code', 'test', 'd', 'e', 'p', 'l', 'o', 'y']; use tasks += ['deploy']",
+            "Should use tasks.append('deploy') instead",
+            "+= operator doesn't work with lists",
+            "Missing parentheses around 'deploy'"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "tasks = ['code', 'test']\ntasks += ['deploy']\nprint('Tasks:', tasks)",
+        explanation: "The += operator extends a list by iterating over the right operand. Using tasks += 'deploy' iterates over the string, adding each character: ['code', 'test', 'd', 'e', 'p', 'l', 'o', 'y']. To add a single item, use append() or wrap in a list: tasks += ['deploy'].",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#common-sequence-operations"
+    },
+    {
+        id: "t2d-dict-keys-order",
+        tier: 2,
+        tags: ["dictionaries", "ordering", "iteration"],
+        title: "Assuming Dict Key Order",
+        code: "person = {'name': 'Bob', 'age': 30, 'city': 'NYC'}\nkeys = list(person)\nif keys[0] == 'name' and keys[1] == 'age':\n    print('Correct order')\nelse:\n    print('Wrong order')",
+        bugLine: 3,
+        bugDescription: "Dict order is insertion order (Python 3.7+) but shouldn't rely on indices; use keys directly",
+        bugChoices: [
+            "Relying on dict key order by index is fragile; use 'name' in person or person['name'] directly",
+            "list() doesn't work on dictionaries",
+            "Should use keys[0] == 'Bob' to check values",
+            "Comparison operators are incorrect"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "person = {'name': 'Bob', 'age': 30, 'city': 'NYC'}\nif 'name' in person and 'age' in person:\n    print('Correct order')\nelse:\n    print('Wrong order')",
+        explanation: "While Python 3.7+ maintains insertion order for dicts, relying on positional indices is bad practice because: 1) code is less readable, 2) breaks if keys are added/removed elsewhere, 3) doesn't express intent clearly. Access dict values by key directly: person['name'], or check membership with 'name' in person.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#dict"
+    },
+    {
+        id: "t2d-set-add-list",
+        tier: 2,
+        tags: ["sets", "type-error", "mutability"],
+        title: "Adding Unhashable Type to Set",
+        code: "tags = set()\ntags.add('python')\ntags.add(['web', 'api'])\nprint(tags)",
+        bugLine: 3,
+        bugDescription: "Lists are unhashable and cannot be added to sets",
+        bugChoices: [
+            "Lists are mutable/unhashable and can't be added to sets; use a tuple or add items individually",
+            "The add() method only accepts numeric values",
+            "Sets cannot contain string values",
+            "The set() constructor requires initial values"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "tags = set()\ntags.add('python')\ntags.update(['web', 'api'])\nprint(tags)",
+        explanation: "Sets require their elements to be hashable (immutable). Lists are mutable and therefore unhashable, causing TypeError. Use update() to add multiple items from a list, or add() with tuples/strings. Only immutable types (strings, numbers, tuples of immutables) can be set members.",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#set"
+    },
+    {
+        id: "t2d-pop-empty-list",
+        tier: 2,
+        tags: ["lists", "methods", "index-error"],
+        title: "Pop from Empty List",
+        code: "stack = [1, 2, 3]\nwhile stack:\n    stack.pop()\nlast = stack.pop()\nprint(last)",
+        bugLine: 4,
+        bugDescription: "Popping from empty list raises IndexError; the while loop already emptied it",
+        bugChoices: [
+            "The while loop empties the list, then pop() on empty list raises IndexError",
+            "The pop() method doesn't work after a while loop",
+            "The variable 'last' conflicts with a built-in function",
+            "The while condition should use len(stack) > 0"
+        ],
+        correctBugChoice: 0,
+        fixedCode: "stack = [1, 2, 3]\nwhile len(stack) > 1:\n    stack.pop()\nlast = stack.pop()\nprint(last)",
+        explanation: "The while loop condition 'while stack' is truthy as long as the list is non-empty. It pops all elements, leaving an empty list. The subsequent pop() on an empty list raises IndexError. Either stop the loop earlier (while len(stack) > 1) or check if the list is non-empty before the final pop.",
+        conceptLink: "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks"
     }
 ];
