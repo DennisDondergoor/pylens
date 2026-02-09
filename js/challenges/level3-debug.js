@@ -1,10 +1,10 @@
-// Tier 3 Debug Challenges: Functions & Control Flow bugs
+// Level 3 Debug Challenges: Functions & Control Flow bugs
 // Each challenge contains exactly ONE bug that tests Python semantics understanding
 
-window.TIER3_DEBUG = [
+window.LEVEL3_DEBUG = [
     {
         id: "t3d-missing-return",
-        tier: 3,
+        level: 3,
         tags: ["functions", "return"],
         title: "Missing Return Statement",
         code: "def calculate_total(items):\n    total = 0\n    for item in items:\n        total += item\n    # Function ends without return",
@@ -23,7 +23,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-early-return",
-        tier: 3,
+        level: 3,
         tags: ["loops", "return", "control-flow"],
         title: "Return Inside Loop",
         code: "def find_evens(numbers):\n    evens = []\n    for num in numbers:\n        if num % 2 == 0:\n            evens.append(num)\n            return evens\n    return evens",
@@ -42,7 +42,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-mutable-default",
-        tier: 3,
+        level: 3,
         tags: ["functions", "default-arguments", "mutable"],
         title: "Mutable Default Argument",
         code: "def add_item(item, items=[]):\n    items.append(item)\n    return items\n\nprint(add_item('a'))  # ['a']\nprint(add_item('b'))  # ['a', 'b'] - Bug!",
@@ -61,7 +61,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-infinite-loop",
-        tier: 3,
+        level: 3,
         tags: ["loops", "while", "control-flow"],
         title: "Infinite Loop",
         code: "def count_to_n(n):\n    i = 1\n    while i <= n:\n        print(i)\n    return 'Done'",
@@ -80,7 +80,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-range-off-by-one",
-        tier: 3,
+        level: 3,
         tags: ["loops", "range", "off-by-one"],
         title: "Range Off-By-One Error",
         code: "def sum_1_to_n(n):\n    total = 0\n    for i in range(1, n):\n        total += i\n    return total\n\n# sum_1_to_n(5) returns 10, not 15",
@@ -99,7 +99,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-unreachable-code",
-        tier: 3,
+        level: 3,
         tags: ["functions", "return", "control-flow"],
         title: "Unreachable Code After Return",
         code: "def process_data(data):\n    if not data:\n        return None\n        print('No data provided')\n    return len(data)",
@@ -118,7 +118,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-arg-order",
-        tier: 3,
+        level: 3,
         tags: ["functions", "arguments", "parameters"],
         title: "Wrong Argument Order",
         code: "def divide(dividend, divisor):\n    return dividend / divisor\n\nresult = divide(2, 10)\nprint(result)  # 0.2 instead of 5.0",
@@ -137,7 +137,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-forgot-to-call",
-        tier: 3,
+        level: 3,
         tags: ["functions", "function-calls"],
         title: "Forgot Function Call Parentheses",
         code: "def get_greeting():\n    return 'Hello, World!'\n\nmessage = get_greeting\nprint(message)  # Prints function object, not 'Hello, World!'",
@@ -156,7 +156,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-nested-break",
-        tier: 3,
+        level: 3,
         tags: ["loops", "break", "nested-loops"],
         title: "Break Only Exits Inner Loop",
         code: "def find_pair(matrix, target):\n    for row in matrix:\n        for val in row:\n            if val == target:\n                break\n    return 'Found'  # Returns even if not found",
@@ -175,7 +175,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-variable-shadowing",
-        tier: 3,
+        level: 3,
         tags: ["scope", "variables", "shadowing"],
         title: "Variable Shadowing",
         code: "total = 100\n\ndef add_to_total(amount):\n    total = total + amount\n    return total\n\nresult = add_to_total(50)  # UnboundLocalError",
@@ -194,7 +194,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-recursion-base",
-        tier: 3,
+        level: 3,
         tags: ["recursion", "functions", "base-case"],
         title: "Wrong Recursion Base Case",
         code: "def factorial(n):\n    if n == 1:\n        return 1\n    return n * factorial(n - 1)\n\nprint(factorial(0))  # RecursionError!",
@@ -213,7 +213,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-infinite-recursion",
-        tier: 3,
+        level: 3,
         tags: ["recursion", "functions", "control-flow"],
         title: "Infinite Recursion",
         code: "def countdown(n):\n    print(n)\n    countdown(n - 1)\n    if n == 0:\n        return",
@@ -232,7 +232,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-loop-condition",
-        tier: 3,
+        level: 3,
         tags: ["loops", "while", "logic"],
         title: "Wrong Loop Condition",
         code: "def find_first_positive(numbers):\n    i = 0\n    while i < len(numbers) and numbers[i] >= 0:\n        i += 1\n    return i if i < len(numbers) else -1",
@@ -251,7 +251,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-using-global-without-declaring",
-        tier: 3,
+        level: 3,
         tags: ["scope", "global", "variables"],
         title: "Reading Global Without Global Keyword",
         code: "counter = 0\n\ndef increment():\n    counter += 1\n    return counter\n\nincrement()  # UnboundLocalError",
@@ -270,7 +270,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-elif-logic",
-        tier: 3,
+        level: 3,
         tags: ["conditionals", "if-elif-else", "logic"],
         title: "Wrong elif Ordering",
         code: "def grade(score):\n    if score >= 60:\n        return 'Pass'\n    elif score >= 80:\n        return 'Excellent'\n    else:\n        return 'Fail'",
@@ -289,7 +289,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-return-in-finally",
-        tier: 3,
+        level: 3,
         tags: ["exceptions", "try-except", "finally"],
         title: "Return in Finally Block",
         code: "def divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return 'Error'\n    finally:\n        return 'Done'",
@@ -308,7 +308,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-modifying-loop-variable",
-        tier: 3,
+        level: 3,
         tags: ["loops", "for", "iteration"],
         title: "Modifying Loop Variable",
         code: "def skip_evens(n):\n    result = []\n    for i in range(n):\n        if i % 2 == 0:\n            i += 1\n        result.append(i)\n    return result",
@@ -327,7 +327,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-boolean-logic",
-        tier: 3,
+        level: 3,
         tags: ["logic", "conditionals", "boolean"],
         title: "Wrong Boolean Logic in Condition",
         code: "def is_valid_password(pwd):\n    has_digit = any(c.isdigit() for c in pwd)\n    has_letter = any(c.isalpha() for c in pwd)\n    return len(pwd) >= 8 or has_digit or has_letter",
@@ -346,7 +346,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-forgot-to-accumulate",
-        tier: 3,
+        level: 3,
         tags: ["loops", "accumulation", "logic"],
         title: "Forgot to Accumulate in Loop",
         code: "def sum_squares(numbers):\n    total = 0\n    for num in numbers:\n        square = num * num\n    return total",
@@ -365,7 +365,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-parameter-default",
-        tier: 3,
+        level: 3,
         tags: ["functions", "default-arguments", "evaluation"],
         title: "Wrong Default Parameter Evaluation Time",
         code: "import time\n\ndef log(msg, timestamp=time.time()):\n    print(f'{timestamp}: {msg}')\n\nlog('First')   # 1234567890.5\nlog('Second')  # 1234567890.5 - Same time!",
@@ -384,7 +384,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-continue-in-finally",
-        tier: 3,
+        level: 3,
         tags: ["loops", "exceptions", "continue"],
         title: "Continue in Try Block",
         code: "def process_items(items):\n    results = []\n    for item in items:\n        try:\n            result = 100 / item\n            continue\n        except ZeroDivisionError:\n            result = 0\n        results.append(result)\n    return results",
@@ -403,7 +403,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-for-else-misunderstanding",
-        tier: 3,
+        level: 3,
         tags: ["loops", "for-else", "control-flow"],
         title: "Misunderstanding for-else",
         code: "def find_negative(numbers):\n    for num in numbers:\n        if num < 0:\n            return num\n    else:\n        return 'Error: negative found'\n    return 'No negatives'",
@@ -422,7 +422,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-walrus-in-condition",
-        tier: 3,
+        level: 3,
         tags: ["assignment", "walrus-operator", "while"],
         title: "Wrong Assignment in While Condition",
         code: "def read_until_empty(items):\n    results = []\n    i = 0\n    while item = items[i]:\n        results.append(item)\n        i += 1\n    return results",
@@ -441,7 +441,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-pass-by-reference-confusion",
-        tier: 3,
+        level: 3,
         tags: ["functions", "mutability", "lists"],
         title: "Unexpected List Mutation",
         code: "def clear_list(lst):\n    lst = []\n    return lst\n\nmy_list = [1, 2, 3]\nresult = clear_list(my_list)\nprint(my_list)  # Still [1, 2, 3]!",
@@ -460,7 +460,7 @@ window.TIER3_DEBUG = [
     },
     {
         id: "t3d-wrong-elif-chain",
-        tier: 3,
+        level: 3,
         tags: ["conditionals", "elif", "logic"],
         title: "Wrong elif Ordering",
         code: "def grade(score):\n    if score >= 60:\n        return 'Pass'\n    elif score >= 90:\n        return 'Excellent'\n    else:\n        return 'Fail'\n\nprint(grade(95))",

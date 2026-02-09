@@ -66,13 +66,13 @@ const Storage = (() => {
 
     function getUnlocks() {
         return _get(KEYS.unlocks, {
-            tier2: false,
-            tier3: false,
-            tier4: false,
-            tier5: false,
-            tier6: false,
-            tier7: false,
-            tier8: false
+            level2: false,
+            level3: false,
+            level4: false,
+            level5: false,
+            level6: false,
+            level7: false,
+            level8: false
         });
     }
 

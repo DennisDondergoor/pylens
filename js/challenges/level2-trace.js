@@ -1,10 +1,10 @@
-// PyLens Tier 2 Trace Challenges: Collections
+// PyLens Level 2 Trace Challenges: Collections
 // Topics: lists, dicts, tuples, sets, slicing, indexing, membership
 
-window.TIER2_TRACE = [
+window.LEVEL2_TRACE = [
     {
         id: "t2t-list-len",
-        tier: 2,
+        level: 2,
         tags: ["list", "len", "built-in-functions"],
         title: "List Creation and Length",
         code: "numbers = [10, 20, 30, 40]\nprint(len(numbers))\nprint(numbers[1])",
@@ -15,7 +15,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-dict-access",
-        tier: 2,
+        level: 2,
         tags: ["dict", "dictionary", "indexing"],
         title: "Dictionary Key Access",
         code: "person = {'name': 'Alice', 'age': 25}\nprint(person['name'])\nprint(person['age'])",
@@ -26,7 +26,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-tuple-unpack",
-        tier: 2,
+        level: 2,
         tags: ["tuple", "unpacking", "assignment"],
         title: "Tuple Unpacking",
         code: "a, b = 10, 20\nprint(a)\nprint(b)\nprint(a + b)",
@@ -37,7 +37,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-list-slice",
-        tier: 2,
+        level: 2,
         tags: ["list", "slicing"],
         title: "List Slicing Start to Stop",
         code: "items = ['a', 'b', 'c', 'd', 'e']\nprint(items[1:4])",
@@ -48,7 +48,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-in-operator",
-        tier: 2,
+        level: 2,
         tags: ["membership", "in", "strings"],
         title: "Membership Test with In",
         code: "text = 'Python'\nprint('th' in text)\nprint('x' in text)",
@@ -59,7 +59,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-set-duplicates",
-        tier: 2,
+        level: 2,
         tags: ["set", "duplicates", "type-conversion"],
         title: "Set Removes Duplicates",
         code: "numbers = [1, 2, 2, 3, 3, 3]\nunique = set(numbers)\nprint(len(unique))",
@@ -70,7 +70,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-negative-index",
-        tier: 2,
+        level: 2,
         tags: ["list", "negative-indexing"],
         title: "Negative List Indexing",
         code: "letters = ['a', 'b', 'c', 'd']\nprint(letters[-1])\nprint(letters[-2])",
@@ -81,7 +81,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-dict-keys",
-        tier: 2,
+        level: 2,
         tags: ["dict", "dictionary", "keys", "iteration"],
         title: "Dictionary Keys Iteration",
         code: "data = {'x': 1, 'y': 2, 'z': 3}\nfor key in data.keys():\n    print(key, end=' ')",
@@ -92,7 +92,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-slice-step",
-        tier: 2,
+        level: 2,
         tags: ["list", "slicing", "step"],
         title: "List Slicing with Step",
         code: "nums = [0, 1, 2, 3, 4, 5, 6]\nprint(nums[::2])",
@@ -103,7 +103,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-nested-list",
-        tier: 2,
+        level: 2,
         tags: ["list", "nested", "indexing"],
         title: "Nested List Access",
         code: "matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nprint(matrix[1][2])\nprint(matrix[0][0])",
@@ -114,7 +114,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-list-append",
-        tier: 2,
+        level: 2,
         tags: ["list", "methods", "append"],
         title: "List Append Method",
         code: "fruits = ['apple', 'banana']\nfruits.append('cherry')\nprint(len(fruits))\nprint(fruits[-1])",
@@ -125,7 +125,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-dict-get",
-        tier: 2,
+        level: 2,
         tags: ["dict", "dictionary", "get", "methods"],
         title: "Dictionary Get Method",
         code: "data = {'a': 10, 'b': 20}\nprint(data.get('a'))\nprint(data.get('c', 0))",
@@ -136,7 +136,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-list-extend",
-        tier: 2,
+        level: 2,
         tags: ["list", "methods", "extend"],
         title: "List Extend vs Append",
         code: "nums = [1, 2]\nnums.extend([3, 4])\nprint(nums)",
@@ -147,7 +147,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-tuple-immutable",
-        tier: 2,
+        level: 2,
         tags: ["tuple", "immutable", "indexing"],
         title: "Tuple Immutability",
         code: "coords = (5, 10, 15)\nprint(coords[1])\nprint(len(coords))",
@@ -158,7 +158,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-list-in",
-        tier: 2,
+        level: 2,
         tags: ["list", "membership", "in"],
         title: "List Membership Test",
         code: "colors = ['red', 'blue', 'green']\nprint('blue' in colors)\nprint('yellow' in colors)",
@@ -169,7 +169,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-dict-values",
-        tier: 2,
+        level: 2,
         tags: ["dict", "dictionary", "values", "list"],
         title: "Dictionary Values as List",
         code: "scores = {'Alice': 90, 'Bob': 85, 'Carol': 95}\nvals = list(scores.values())\nprint(len(vals))\nprint(max(vals))",
@@ -180,7 +180,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-slice-negative",
-        tier: 2,
+        level: 2,
         tags: ["list", "slicing", "negative-indexing"],
         title: "Negative Slice Indices",
         code: "items = ['a', 'b', 'c', 'd', 'e']\nprint(items[-3:-1])",
@@ -191,7 +191,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-list-count",
-        tier: 2,
+        level: 2,
         tags: ["list", "methods", "count"],
         title: "List Count Method",
         code: "numbers = [1, 2, 2, 3, 2, 4]\nprint(numbers.count(2))\nprint(numbers.count(5))",
@@ -202,7 +202,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-dict-update",
-        tier: 2,
+        level: 2,
         tags: ["dict", "dictionary", "update", "methods"],
         title: "Dictionary Update Method",
         code: "data = {'a': 1, 'b': 2}\ndata.update({'b': 20, 'c': 3})\nprint(data['b'])\nprint(len(data))",
@@ -213,7 +213,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-reverse-slice",
-        tier: 2,
+        level: 2,
         tags: ["list", "slicing", "step", "reverse"],
         title: "Reversing with Negative Step",
         code: "nums = [1, 2, 3, 4, 5]\nprint(nums[::-1])",
@@ -224,7 +224,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-set-operations",
-        tier: 2,
+        level: 2,
         tags: ["set", "union", "operations"],
         title: "Set Union Operation",
         code: "a = {1, 2, 3}\nb = {3, 4, 5}\nprint(len(a | b))",
@@ -235,7 +235,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-list-index",
-        tier: 2,
+        level: 2,
         tags: ["list", "methods", "index"],
         title: "List Index Method",
         code: "fruits = ['apple', 'banana', 'cherry', 'banana']\nprint(fruits.index('banana'))\nprint(fruits.index('cherry'))",
@@ -246,7 +246,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-dict-items",
-        tier: 2,
+        level: 2,
         tags: ["dict", "dictionary", "items", "iteration"],
         title: "Dictionary Items Iteration",
         code: "data = {'x': 10, 'y': 20}\nfor k, v in data.items():\n    print(v, end=' ')",
@@ -257,7 +257,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-empty-slice",
-        tier: 2,
+        level: 2,
         tags: ["list", "slicing", "copy"],
         title: "Full List Slice Copy",
         code: "original = [1, 2, 3]\ncopy = original[:]\ncopy.append(4)\nprint(len(original))\nprint(len(copy))",
@@ -268,7 +268,7 @@ window.TIER2_TRACE = [
     },
     {
         id: "t2t-set-intersection",
-        tier: 2,
+        level: 2,
         tags: ["set", "intersection", "operations"],
         title: "Set Intersection Operation",
         code: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\ncommon = a & b\nprint(sorted(common))",

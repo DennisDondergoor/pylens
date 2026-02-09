@@ -1,7 +1,7 @@
-window.TIER4_TRACE = [
+window.LEVEL4_TRACE = [
     {
         id: "t4t-split-join",
-        tier: 4,
+        level: 4,
         tags: ["strings", "split", "join", "methods"],
         title: "Split and Join",
         code: "text = 'apple-orange-banana'\nfruits = text.split('-')\nresult = ' '.join(fruits)\nprint(result)",
@@ -17,7 +17,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-list-comp-filter",
-        tier: 4,
+        level: 4,
         tags: ["list-comprehension", "comprehensions", "filtering"],
         title: "List Comprehension with Condition",
         code: "numbers = [1, 2, 3, 4, 5, 6]\nevens = [n for n in numbers if n % 2 == 0]\nprint(evens)",
@@ -33,7 +33,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-dict-get",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "get", "default-values"],
         title: "Dict Get with Default",
         code: "scores = {'Alice': 95, 'Bob': 82}\nprint(scores.get('Alice', 0))\nprint(scores.get('Charlie', 0))",
@@ -49,7 +49,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-sorted-key",
-        tier: 4,
+        level: 4,
         tags: ["sorting", "sorted", "key-function"],
         title: "Sorted with Key Function",
         code: "words = ['python', 'is', 'awesome']\nresult = sorted(words, key=len)\nprint(result)",
@@ -65,7 +65,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-replace-chain",
-        tier: 4,
+        level: 4,
         tags: ["strings", "replace", "method-chaining"],
         title: "Chained Replace",
         code: "text = 'hello world'\nresult = text.replace('l', 'L').replace('o', 'O')\nprint(result)",
@@ -81,7 +81,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-dict-comp",
-        tier: 4,
+        level: 4,
         tags: ["dict-comprehension", "comprehensions", "dictionaries"],
         title: "Dictionary Comprehension",
         code: "numbers = [1, 2, 3, 4]\nsquares = {n: n**2 for n in numbers}\nprint(squares[3])",
@@ -97,7 +97,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-enumerate",
-        tier: 4,
+        level: 4,
         tags: ["enumerate", "loops", "indexing"],
         title: "Enumerate in Loop",
         code: "fruits = ['apple', 'banana', 'cherry']\nfor i, fruit in enumerate(fruits, start=1):\n    print(f'{i}. {fruit}')",
@@ -113,7 +113,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-zip",
-        tier: 4,
+        level: 4,
         tags: ["zip", "loops", "iteration"],
         title: "Zip Two Lists",
         code: "names = ['Alice', 'Bob', 'Charlie']\nscores = [85, 92, 78]\nfor name, score in zip(names, scores):\n    print(f'{name}: {score}')",
@@ -129,7 +129,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-star-unpack",
-        tier: 4,
+        level: 4,
         tags: ["unpacking", "star-operator", "extended-unpacking"],
         title: "Star Unpacking",
         code: "values = [1, 2, 3, 4, 5]\na, *middle, c = values\nprint(a)\nprint(middle)\nprint(c)",
@@ -145,7 +145,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-list-comp-method",
-        tier: 4,
+        level: 4,
         tags: ["list-comprehension", "string-methods", "comprehensions"],
         title: "List Comp with String Method",
         code: "words = ['hello', 'world', 'python']\nloud = [s.upper() for s in words]\nprint(loud)",
@@ -161,7 +161,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-str-format",
-        tier: 4,
+        level: 4,
         tags: ["strings", "format", "formatting"],
         title: "String Format Method",
         code: "name = 'Alice'\nage = 30\nmsg = 'Name: {}, Age: {}'.format(name, age)\nprint(msg)",
@@ -177,7 +177,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-list-count",
-        tier: 4,
+        level: 4,
         tags: ["lists", "count", "methods"],
         title: "List Count Method",
         code: "numbers = [1, 2, 2, 3, 2, 4, 2]\ncount = numbers.count(2)\nprint(count)",
@@ -193,7 +193,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-dict-items",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "items", "iteration"],
         title: "Dict Items Iteration",
         code: "data = {'x': 10, 'y': 20}\nfor key, val in data.items():\n    print(f'{key}={val}', end=' ')",
@@ -209,7 +209,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-nested-comp",
-        tier: 4,
+        level: 4,
         tags: ["list-comprehension", "nested", "comprehensions"],
         title: "Nested List Comprehension",
         code: "matrix = [[1, 2], [3, 4]]\nflat = [num for row in matrix for num in row]\nprint(flat)",
@@ -225,7 +225,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-set-comp",
-        tier: 4,
+        level: 4,
         tags: ["set-comprehension", "comprehensions", "sets"],
         title: "Set Comprehension",
         code: "numbers = [1, 2, 2, 3, 3, 3, 4]\nunique = {n for n in numbers}\nprint(sorted(unique))",
@@ -241,7 +241,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-str-startswith",
-        tier: 4,
+        level: 4,
         tags: ["strings", "startswith", "methods"],
         title: "String Startswith",
         code: "words = ['python', 'java', 'javascript']\njs_words = [w for w in words if w.startswith('j')]\nprint(js_words)",
@@ -257,7 +257,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-str-endswith",
-        tier: 4,
+        level: 4,
         tags: ["strings", "endswith", "methods"],
         title: "String Endswith",
         code: "files = ['doc.txt', 'image.png', 'data.txt']\ntxt_files = [f for f in files if f.endswith('.txt')]\nprint(txt_files)",
@@ -273,7 +273,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-reversed",
-        tier: 4,
+        level: 4,
         tags: ["reversed", "iteration", "lists"],
         title: "Reversed Iteration",
         code: "nums = [1, 2, 3, 4]\nfor n in reversed(nums):\n    print(n, end=' ')",
@@ -289,7 +289,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-map-function",
-        tier: 4,
+        level: 4,
         tags: ["map", "functions", "iteration"],
         title: "Map Function",
         code: "nums = [1, 2, 3, 4]\nsquared = list(map(lambda x: x**2, nums))\nprint(squared)",
@@ -305,7 +305,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-filter-function",
-        tier: 4,
+        level: 4,
         tags: ["filter", "functions", "iteration"],
         title: "Filter Function",
         code: "nums = [1, 2, 3, 4, 5, 6]\nevens = list(filter(lambda x: x % 2 == 0, nums))\nprint(evens)",
@@ -321,7 +321,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-multiple-unpack",
-        tier: 4,
+        level: 4,
         tags: ["unpacking", "tuples", "assignment"],
         title: "Multiple Unpacking",
         code: "data = [(1, 2), (3, 4), (5, 6)]\nfor a, b in data:\n    print(a + b, end=' ')",
@@ -337,7 +337,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-dict-update",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "update", "methods"],
         title: "Dict Update Method",
         code: "scores = {'Alice': 85, 'Bob': 90}\nscores.update({'Bob': 95, 'Charlie': 88})\nprint(scores['Bob'])",
@@ -353,7 +353,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-sorted-reverse",
-        tier: 4,
+        level: 4,
         tags: ["sorting", "sorted", "reverse"],
         title: "Sorted with Reverse",
         code: "numbers = [3, 1, 4, 1, 5]\nresult = sorted(numbers, reverse=True)\nprint(result)",
@@ -369,7 +369,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-str-strip",
-        tier: 4,
+        level: 4,
         tags: ["strings", "strip", "methods"],
         title: "String Strip Method",
         code: "text = '  hello  '\nresult = text.strip().upper()\nprint(result)",
@@ -385,7 +385,7 @@ window.TIER4_TRACE = [
     },
     {
         id: "t4t-list-extend",
-        tier: 4,
+        level: 4,
         tags: ["lists", "extend", "methods"],
         title: "List Extend Method",
         code: "a = [1, 2]\nb = [3, 4]\na.extend(b)\nprint(a)",

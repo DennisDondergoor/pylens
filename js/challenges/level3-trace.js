@@ -1,7 +1,7 @@
-window.TIER3_TRACE = [
+window.LEVEL3_TRACE = [
     {
         id: "t3t-default-arg",
-        tier: 3,
+        level: 3,
         tags: ["functions", "default-arguments"],
         title: "Default Argument",
         code: "def greet(name, greeting='Hello'):\n    return f'{greeting}, {name}!'\n\nprint(greet('Alice'))\nprint(greet('Bob', 'Hi'))",
@@ -17,7 +17,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-multiple-return",
-        tier: 3,
+        level: 3,
         tags: ["functions", "return-values", "tuples"],
         title: "Multiple Return Values",
         code: "def get_stats(nums):\n    return min(nums), max(nums)\n\nsmall, large = get_stats([5, 2, 8, 1])\nprint(small)\nprint(large)",
@@ -33,7 +33,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-range-step",
-        tier: 3,
+        level: 3,
         tags: ["range", "loops", "for"],
         title: "Range with Step",
         code: "for i in range(10, 4, -2):\n    print(i, end=' ')",
@@ -49,7 +49,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-for-else",
-        tier: 3,
+        level: 3,
         tags: ["for", "else", "control-flow"],
         title: "For-Else Construct",
         code: "for n in [2, 4, 6, 8]:\n    if n > 10:\n        print('Found')\n        break\nelse:\n    print('Not found')",
@@ -65,7 +65,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-nested-loops",
-        tier: 3,
+        level: 3,
         tags: ["nested-loops", "for", "range"],
         title: "Nested Loops Output",
         code: "for i in range(2):\n    for j in range(3):\n        print(f'{i}{j}', end=' ')",
@@ -81,7 +81,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-args-collect",
-        tier: 3,
+        level: 3,
         tags: ["functions", "args", "variable-arguments"],
         title: "Collecting Extra Arguments",
         code: "def add_all(first, *rest):\n    total = first\n    for num in rest:\n        total += num\n    return total\n\nprint(add_all(1, 2, 3, 4))",
@@ -97,7 +97,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-implicit-none",
-        tier: 3,
+        level: 3,
         tags: ["functions", "return", "None"],
         title: "Implicit None Return",
         code: "def show_double(x):\n    print(x * 2)\n\nresult = show_double(5)\nprint(result)",
@@ -113,7 +113,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-while-break",
-        tier: 3,
+        level: 3,
         tags: ["while", "break", "control-flow"],
         title: "While Loop with Break",
         code: "count = 0\nwhile True:\n    count += 1\n    if count == 3:\n        break\n    print(count, end=' ')",
@@ -129,7 +129,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-lambda-basic",
-        tier: 3,
+        level: 3,
         tags: ["lambda", "functions", "anonymous-functions"],
         title: "Lambda Function",
         code: "square = lambda x: x * x\nresult = square(7)\nprint(result)",
@@ -145,7 +145,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-ternary",
-        tier: 3,
+        level: 3,
         tags: ["conditional-expression", "ternary", "if-else"],
         title: "Conditional Expression",
         code: "age = 15\nstatus = 'adult' if age >= 18 else 'minor'\nprint(status)\nage = 20\nstatus = 'adult' if age >= 18 else 'minor'\nprint(status)",
@@ -161,7 +161,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-recursion-countdown",
-        tier: 3,
+        level: 3,
         tags: ["recursion", "functions", "base-case"],
         title: "Simple Recursion",
         code: "def countdown(n):\n    if n <= 0:\n        print('Done!')\n    else:\n        print(n)\n        countdown(n - 1)\n\ncountdown(3)",
@@ -177,7 +177,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-nested-function",
-        tier: 3,
+        level: 3,
         tags: ["nested-functions", "functions", "scope"],
         title: "Nested Function",
         code: "def outer(x):\n    def inner(y):\n        return x + y\n    return inner(10)\n\nprint(outer(5))",
@@ -193,7 +193,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-closure",
-        tier: 3,
+        level: 3,
         tags: ["closures", "nested-functions", "scope"],
         title: "Closure Capturing Variable",
         code: "def multiplier(factor):\n    def multiply(num):\n        return num * factor\n    return multiply\n\ntimes3 = multiplier(3)\nprint(times3(7))",
@@ -209,7 +209,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-global-keyword",
-        tier: 3,
+        level: 3,
         tags: ["global", "scope", "variables"],
         title: "Global Keyword",
         code: "count = 0\n\ndef increment():\n    global count\n    count += 1\n\nincrement()\nincrement()\nprint(count)",
@@ -225,7 +225,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-nonlocal-keyword",
-        tier: 3,
+        level: 3,
         tags: ["nonlocal", "nested-functions", "scope"],
         title: "Nonlocal Keyword",
         code: "def outer():\n    x = 1\n    def inner():\n        nonlocal x\n        x += 2\n    inner()\n    return x\n\nprint(outer())",
@@ -241,7 +241,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-early-return",
-        tier: 3,
+        level: 3,
         tags: ["return", "functions", "control-flow"],
         title: "Early Return Pattern",
         code: "def check_positive(n):\n    if n <= 0:\n        return 'Invalid'\n    if n > 100:\n        return 'Too large'\n    return 'Valid'\n\nprint(check_positive(50))",
@@ -257,7 +257,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-multiple-return-paths",
-        tier: 3,
+        level: 3,
         tags: ["return", "functions", "conditionals"],
         title: "Multiple Return Paths",
         code: "def classify(score):\n    if score >= 90:\n        return 'A'\n    elif score >= 80:\n        return 'B'\n    else:\n        return 'C'\n\nprint(classify(85))",
@@ -273,7 +273,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-loop-else-break",
-        tier: 3,
+        level: 3,
         tags: ["for", "else", "break", "control-flow"],
         title: "Loop Else with Break",
         code: "for n in [3, 6, 9, 12]:\n    if n > 10:\n        print('Found')\n        break\nelse:\n    print('Not found')",
@@ -289,7 +289,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-continue-statement",
-        tier: 3,
+        level: 3,
         tags: ["continue", "for", "control-flow"],
         title: "Continue Statement",
         code: "for i in range(5):\n    if i % 2 == 0:\n        continue\n    print(i, end=' ')",
@@ -305,7 +305,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-nested-conditionals",
-        tier: 3,
+        level: 3,
         tags: ["conditionals", "if-else", "nesting"],
         title: "Nested Conditionals",
         code: "x = 15\nif x > 10:\n    if x < 20:\n        print('Medium')\n    else:\n        print('Large')\nelse:\n    print('Small')",
@@ -321,7 +321,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-function-as-argument",
-        tier: 3,
+        level: 3,
         tags: ["functions", "higher-order", "lambda"],
         title: "Function as Argument",
         code: "def apply(func, value):\n    return func(value)\n\nresult = apply(lambda x: x * 2, 8)\nprint(result)",
@@ -337,7 +337,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-recursion-sum",
-        tier: 3,
+        level: 3,
         tags: ["recursion", "functions", "base-case"],
         title: "Recursive Sum",
         code: "def sum_to(n):\n    if n == 1:\n        return 1\n    return n + sum_to(n - 1)\n\nprint(sum_to(4))",
@@ -353,7 +353,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-while-else",
-        tier: 3,
+        level: 3,
         tags: ["while", "else", "control-flow"],
         title: "While-Else Construct",
         code: "x = 0\nwhile x < 3:\n    x += 1\nelse:\n    print('Done')\nprint(x)",
@@ -369,7 +369,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-kwargs-basic",
-        tier: 3,
+        level: 3,
         tags: ["kwargs", "functions", "keyword-arguments"],
         title: "Keyword Arguments Collection",
         code: "def describe(**kwargs):\n    for key, val in kwargs.items():\n        print(f'{key}: {val}')\n\ndescribe(name='Alice', age=30)",
@@ -385,7 +385,7 @@ window.TIER3_TRACE = [
     },
     {
         id: "t3t-range-empty",
-        tier: 3,
+        level: 3,
         tags: ["range", "loops", "edge-cases"],
         title: "Empty Range",
         code: "total = 0\nfor i in range(5, 2):\n    total += i\nprint(total)",

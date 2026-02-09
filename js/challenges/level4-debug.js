@@ -1,10 +1,10 @@
-// Tier 4 Debug Challenges: Methods & Comprehensions bugs
+// Level 4 Debug Challenges: Methods & Comprehensions bugs
 // Each challenge contains exactly ONE bug that tests Python semantics understanding
 
-window.TIER4_DEBUG = [
+window.LEVEL4_DEBUG = [
     {
         id: "t4d-sort-returns-none",
-        tier: 4,
+        level: 4,
         tags: ["methods", "lists", "mutability"],
         title: "sort() Returns None",
         code: "numbers = [3, 1, 4, 1, 5]\nsorted_nums = numbers.sort()\nprint(sorted_nums)  # Prints None\nprint(numbers)      # Prints [1, 1, 3, 4, 5]",
@@ -23,7 +23,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-wrong-split-delimiter",
-        tier: 4,
+        level: 4,
         tags: ["strings", "methods", "parsing"],
         title: "Wrong split() Delimiter",
         code: "csv_line = 'apple,banana,cherry'\nfruits = csv_line.split()\nprint(fruits)  # ['apple,banana,cherry'] - not split!",
@@ -42,7 +42,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-comprehension-wrong-order",
-        tier: 4,
+        level: 4,
         tags: ["comprehensions", "list-comprehension", "filtering"],
         title: "List Comprehension Wrong Order",
         code: "numbers = [1, 2, 3, 4, 5]\nsquares_of_evens = [n * n if n % 2 == 0 for n in numbers]\n# SyntaxError: invalid syntax",
@@ -61,7 +61,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-string-replace-immutable",
-        tier: 4,
+        level: 4,
         tags: ["strings", "methods", "immutability"],
         title: "String replace() Not Modifying Original",
         code: "text = 'Hello World'\ntext.replace('World', 'Python')\nprint(text)  # Still prints 'Hello World'",
@@ -80,7 +80,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-wrong-sort-key",
-        tier: 4,
+        level: 4,
         tags: ["sorting", "functions", "key-function"],
         title: "Wrong Key Function in sorted()",
         code: "words = ['apple', 'pie', 'zoo', 'a']\nsorted_words = sorted(words, key=len())\n# TypeError: 'int' object is not callable",
@@ -99,7 +99,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-dict-comp-overwrite",
-        tier: 4,
+        level: 4,
         tags: ["comprehensions", "dict-comprehension", "dictionaries"],
         title: "Dict Comprehension Overwriting Keys",
         code: "numbers = [1, 2, 3, 2, 4, 3]\nsquares = {n: n * n for n in numbers}\nprint(squares)  # {1: 1, 2: 4, 3: 9, 4: 16} - lost duplicates!",
@@ -118,7 +118,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-enumerate-wrong-start",
-        tier: 4,
+        level: 4,
         tags: ["loops", "enumerate", "indexing"],
         title: "enumerate() Starting at Wrong Index",
         code: "fruits = ['apple', 'banana', 'cherry']\nfor i, fruit in enumerate(fruits):\n    print(f'{i}. {fruit}')\n# Prints: 0. apple, 1. banana, 2. cherry",
@@ -137,7 +137,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-zip-truncates",
-        tier: 4,
+        level: 4,
         tags: ["iterators", "zip", "iteration"],
         title: "zip() Truncates Silently",
         code: "names = ['Alice', 'Bob', 'Charlie']\nscores = [85, 92]\npairs = list(zip(names, scores))\nprint(pairs)  # [('Alice', 85), ('Bob', 92)] - Charlie lost!",
@@ -156,7 +156,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-wrong-unpacking",
-        tier: 4,
+        level: 4,
         tags: ["unpacking", "variables", "assignment"],
         title: "Wrong Unpacking with Star Expression",
         code: "data = [1, 2, 3, 4, 5]\nfirst, second, *rest = data\nprint(first, second)  # 1 2\nprint(rest)           # [3, 4, 5] - correct\na, b = data  # ValueError: too many values to unpack",
@@ -175,7 +175,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-strip-vs-remove",
-        tier: 4,
+        level: 4,
         tags: ["strings", "methods", "strip"],
         title: "strip() Removes Character Sets, Not Substrings",
         code: "url = 'https://example.com'\nclean = url.strip('https://')\nprint(clean)  # 'example.com' expected, but prints 'example.co'!",
@@ -194,7 +194,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-list-insert-vs-append",
-        tier: 4,
+        level: 4,
         tags: ["lists", "methods", "insert"],
         title: "Wrong List Method: insert vs append",
         code: "numbers = [1, 2, 3]\nnumbers.insert(4)\nprint(numbers)  # TypeError: insert expected 2 arguments, got 1",
@@ -213,7 +213,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-dict-pop-without-default",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "methods", "pop"],
         title: "dict.pop() Without Default Value",
         code: "config = {'host': 'localhost', 'port': 8080}\nusername = config.pop('username')\nprint(username)  # KeyError: 'username'",
@@ -232,7 +232,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-wrong-comprehension-variable",
-        tier: 4,
+        level: 4,
         tags: ["comprehensions", "scope", "variables"],
         title: "Wrong Variable in Comprehension",
         code: "matrix = [[1, 2], [3, 4], [5, 6]]\nflat = [num for row in matrix for num in matrix]\nprint(flat)  # [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, ...]",
@@ -251,7 +251,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-str-find-returns-minus-one",
-        tier: 4,
+        level: 4,
         tags: ["strings", "methods", "find"],
         title: "str.find() Returns -1, Not Error",
         code: "text = 'Hello World'\nindex = text.find('Python')\nfirst_char = text[index]\nprint(first_char)  # Prints 'd' (last character!)",
@@ -270,7 +270,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-sorted-stability-misunderstanding",
-        tier: 4,
+        level: 4,
         tags: ["sorting", "stable-sort", "sorting-stability"],
         title: "Misunderstanding Sort Stability",
         code: "data = [('a', 2), ('b', 1), ('c', 2)]\nsorted_data = sorted(data, key=lambda x: x[1])\nsorted_data.sort(key=lambda x: x[0])\nprint(sorted_data)  # Lost the secondary sort!",
@@ -289,7 +289,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-wrong-map-usage",
-        tier: 4,
+        level: 4,
         tags: ["iterators", "map", "functions"],
         title: "Wrong map() Usage",
         code: "numbers = [1, 2, 3, 4, 5]\nsquares = map(lambda x: x ** 2, numbers)\nprint(squares)  # <map object at 0x...> not the values!",
@@ -308,7 +308,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-join-on-non-strings",
-        tier: 4,
+        level: 4,
         tags: ["strings", "methods", "join"],
         title: "join() on Non-Strings",
         code: "numbers = [1, 2, 3, 4, 5]\nresult = ', '.join(numbers)\nprint(result)  # TypeError: sequence item 0: expected str, int found",
@@ -327,7 +327,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-wrong-dict-merge",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "operators", "merge"],
         title: "Wrong Dict Merge Behavior",
         code: "defaults = {'a': 1, 'b': 2}\nuser_config = {'b': 3, 'c': 4}\nconfig = {**defaults, **user_config}\nprint(config['b'])  # 3, not 2!",
@@ -346,7 +346,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-enumerate-destructuring-error",
-        tier: 4,
+        level: 4,
         tags: ["enumerate", "unpacking", "loops"],
         title: "Enumerate Destructuring Error",
         code: "pairs = [('a', 1), ('b', 2), ('c', 3)]\nfor i, letter, number in enumerate(pairs):\n    print(f'{i}: {letter}={number}')\n# ValueError: not enough values to unpack",
@@ -365,7 +365,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-reversed-not-returning-list",
-        tier: 4,
+        level: 4,
         tags: ["iterators", "reversed", "lists"],
         title: "reversed() Doesn't Return List",
         code: "numbers = [1, 2, 3, 4, 5]\nbackwards = reversed(numbers)\nprint(backwards[0])  # TypeError: 'reversed' object not subscriptable",
@@ -384,7 +384,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-list-extend-vs-append",
-        tier: 4,
+        level: 4,
         tags: ["lists", "methods", "extend"],
         title: "extend() vs append() Confusion",
         code: "letters = ['a', 'b', 'c']\nletters.append(['d', 'e'])\nprint(letters)  # ['a', 'b', 'c', ['d', 'e']] - nested!",
@@ -403,7 +403,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-dict-keys-returns-view",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "views", "methods"],
         title: "dict.keys() Returns View, Not List",
         code: "config = {'a': 1, 'b': 2, 'c': 3}\nkeys = config.keys()\nfirst_key = keys[0]\nprint(first_key)  # TypeError: 'dict_keys' not subscriptable",
@@ -422,7 +422,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-set-comprehension-duplicates",
-        tier: 4,
+        level: 4,
         tags: ["comprehensions", "sets", "set-comprehension"],
         title: "Set Comprehension Removes Duplicates",
         code: "numbers = [1, 2, 2, 3, 3, 3]\nsquares = {n * n for n in numbers}\nprint(len(squares))  # 3, not 6!",
@@ -441,7 +441,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-dict-get-default-none",
-        tier: 4,
+        level: 4,
         tags: ["dictionaries", "methods", "get"],
         title: "dict.get() Default is None",
         code: "scores = {'Alice': 95, 'Bob': 87}\ntotal = scores.get('Charlie') + scores.get('Alice')\nprint(total)  # TypeError: unsupported operand None + int",
@@ -460,7 +460,7 @@ window.TIER4_DEBUG = [
     },
     {
         id: "t4d-list-remove-value",
-        tier: 4,
+        level: 4,
         tags: ["lists", "methods", "remove"],
         title: "remove() Removes by Value, Not Index",
         code: "numbers = [10, 20, 30, 40, 50]\nnumbers.remove(2)\nprint(numbers)  # ValueError: list.remove(x): x not in list",

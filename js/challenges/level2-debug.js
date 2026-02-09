@@ -1,12 +1,12 @@
 /**
- * PyLens - Tier 2 Debug Challenges
+ * PyLens - Level 2 Debug Challenges
  * Level 2: Collections - Errors with lists, dicts, tuples, indexing, slicing
  */
 
-window.TIER2_DEBUG = [
+window.LEVEL2_DEBUG = [
     {
         id: "t2d-index-out-of-bounds",
-        tier: 2,
+        level: 2,
         tags: ["lists", "indexing", "index-error"],
         title: "List Index Out of Range",
         code: "scores = [85, 92, 78, 90]\nprint('First score:', scores[0])\nlast_score = scores[len(scores)]\nprint('Last score:', last_score)",
@@ -25,7 +25,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-dict-key-error",
-        tier: 2,
+        level: 2,
         tags: ["dictionaries", "key-error", "lookup"],
         title: "Missing Dictionary Key",
         code: "student = {'name': 'Alice', 'age': 20, 'major': 'CS'}\nprint('Name:', student['name'])\nprint('GPA:', student['gpa'])\nprint('Major:', student['major'])",
@@ -44,7 +44,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-modify-while-iterating",
-        tier: 2,
+        level: 2,
         tags: ["lists", "iteration", "runtime-error"],
         title: "Modifying List During Iteration",
         code: "numbers = [1, 2, 3, 4, 5, 6]\nfor num in numbers:\n    if num % 2 == 0:\n        numbers.remove(num)\nprint('Odd numbers:', numbers)",
@@ -63,7 +63,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-tuple-immutable",
-        tier: 2,
+        level: 2,
         tags: ["tuples", "immutability", "type-error"],
         title: "Attempting to Modify Tuple",
         code: "coordinates = (10, 20, 30)\nprint('Original:', coordinates)\ncoordinates[1] = 25\nprint('Updated:', coordinates)",
@@ -82,7 +82,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-slice-off-by-one",
-        tier: 2,
+        level: 2,
         tags: ["lists", "slicing", "indexing"],
         title: "Incorrect Slice Bounds",
         code: "letters = ['a', 'b', 'c', 'd', 'e']\nfirst_three = letters[0:2]\nprint('First three letters:', first_three)\nprint('Count:', len(first_three))",
@@ -101,7 +101,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-append-vs-extend",
-        tier: 2,
+        level: 2,
         tags: ["lists", "methods", "append-vs-extend"],
         title: "Wrong List Method Used",
         code: "shopping_list = ['milk', 'eggs']\nnew_items = ['bread', 'butter']\nshopping_list.append(new_items)\nprint('Items:', shopping_list)\nprint('Total items:', len(shopping_list))",
@@ -120,7 +120,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-duplicate-dict-keys",
-        tier: 2,
+        level: 2,
         tags: ["dictionaries", "literals", "duplicate-keys"],
         title: "Dictionary Key Overwriting",
         code: "prices = {\n    'apple': 1.50,\n    'banana': 0.75,\n    'apple': 1.75\n}\nprint('Apple price:', prices['apple'])",
@@ -139,7 +139,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-unpacking-count-mismatch",
-        tier: 2,
+        level: 2,
         tags: ["unpacking", "tuples", "value-error"],
         title: "Wrong Number of Values to Unpack",
         code: "point = (10, 20, 30)\nx, y = point\nprint(f'Coordinates: ({x}, {y})')",
@@ -158,7 +158,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-range-needs-list",
-        tier: 2,
+        level: 2,
         tags: ["range", "lists", "type-conversion"],
         title: "Range Object Instead of List",
         code: "numbers = range(1, 6)\nprint('Numbers:', numbers)\ntotal = sum(numbers)\nprint('First number:', numbers[0])\nprint('Total:', total)",
@@ -177,7 +177,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-is-vs-equals",
-        tier: 2,
+        level: 2,
         tags: ["operators", "comparison", "identity-vs-equality"],
         title: "Identity vs Equality Comparison",
         code: "list1 = [1, 2, 3]\nlist2 = [1, 2, 3]\nif list1 is list2:\n    print('Lists are the same')\nelse:\n    print('Lists are different')",
@@ -196,7 +196,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-negative-index-confusion",
-        tier: 2,
+        level: 2,
         tags: ["lists", "indexing", "negative-indices"],
         title: "Incorrect Negative Indexing",
         code: "colors = ['red', 'green', 'blue', 'yellow']\nprint('Last color:', colors[-1])\nprint('Second to last:', colors[-4])\nprint('Third to last:', colors[-3])",
@@ -215,7 +215,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-dict-keys-immutable",
-        tier: 2,
+        level: 2,
         tags: ["dictionaries", "keys", "type-error"],
         title: "Mutable Dictionary Key",
         code: "student_grades = {}\nstudent1 = ['Alice', 'Smith']\nstudent_grades[student1] = 95\nprint(student_grades)",
@@ -234,7 +234,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-list-copy-reference",
-        tier: 2,
+        level: 2,
         tags: ["lists", "copying", "references"],
         title: "Shallow Copy vs Reference",
         code: "original = [1, 2, 3]\ncopy = original\ncopy.append(4)\nprint('Original:', original)\nprint('Copy:', copy)",
@@ -253,7 +253,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-slice-step-confusion",
-        tier: 2,
+        level: 2,
         tags: ["lists", "slicing", "step"],
         title: "Reversed Slice Indices",
         code: "numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nsubset = numbers[7:3]\nprint('Subset:', subset)\nprint('Length:', len(subset))",
@@ -272,7 +272,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-in-operator-substring",
-        tier: 2,
+        level: 2,
         tags: ["strings", "membership", "in-operator"],
         title: "Membership Test on Wrong Type",
         code: "fruits = ['apple', 'banana', 'cherry']\nif 'app' in fruits:\n    print('Found app!')\nelse:\n    print('Not found')",
@@ -291,7 +291,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-dict-values-method",
-        tier: 2,
+        level: 2,
         tags: ["dictionaries", "methods", "iteration"],
         title: "Iterating Dict Without Values()",
         code: "inventory = {'apples': 10, 'oranges': 5, 'bananas': 8}\ntotal = 0\nfor count in inventory:\n    total += count\nprint('Total items:', total)",
@@ -310,7 +310,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-list-sort-vs-sorted",
-        tier: 2,
+        level: 2,
         tags: ["lists", "methods", "sorting"],
         title: "Sort Method Returns None",
         code: "numbers = [5, 2, 8, 1, 9]\nsorted_numbers = numbers.sort()\nprint('Sorted:', sorted_numbers)\nprint('Original:', numbers)",
@@ -329,7 +329,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-dict-get-default",
-        tier: 2,
+        level: 2,
         tags: ["dictionaries", "methods", "default-values"],
         title: "Get Method Default Not Working",
         code: "config = {'host': 'localhost', 'port': 8080}\ntimeout = config.get('timeout')\nif timeout > 0:\n    print('Timeout:', timeout)",
@@ -348,7 +348,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-list-index-method",
-        tier: 2,
+        level: 2,
         tags: ["lists", "methods", "value-error"],
         title: "Index Method on Missing Element",
         code: "colors = ['red', 'green', 'blue']\nprint('Green at:', colors.index('green'))\nposition = colors.index('yellow')\nprint('Yellow at:', position)",
@@ -367,7 +367,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-string-split-default",
-        tier: 2,
+        level: 2,
         tags: ["strings", "methods", "split"],
         title: "Split With Wrong Delimiter",
         code: "data = 'apple banana cherry'\nitems = data.split(',')\nprint('First item:', items[0])\nprint('Count:', len(items))",
@@ -386,7 +386,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-tuple-single-element",
-        tier: 2,
+        level: 2,
         tags: ["tuples", "syntax", "literals"],
         title: "Missing Comma in Single-Element Tuple",
         code: "single = (42)\nprint('Type:', type(single))\nprint('Is tuple:', isinstance(single, tuple))",
@@ -405,7 +405,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-list-plus-equals",
-        tier: 2,
+        level: 2,
         tags: ["lists", "operators", "concatenation"],
         title: "Adding Single Element Without List",
         code: "tasks = ['code', 'test']\ntasks += 'deploy'\nprint('Tasks:', tasks)",
@@ -424,7 +424,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-dict-keys-order",
-        tier: 2,
+        level: 2,
         tags: ["dictionaries", "ordering", "iteration"],
         title: "Assuming Dict Key Order",
         code: "person = {'name': 'Bob', 'age': 30, 'city': 'NYC'}\nkeys = list(person)\nif keys[0] == 'name' and keys[1] == 'age':\n    print('Correct order')\nelse:\n    print('Wrong order')",
@@ -443,7 +443,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-set-add-list",
-        tier: 2,
+        level: 2,
         tags: ["sets", "type-error", "mutability"],
         title: "Adding Unhashable Type to Set",
         code: "tags = set()\ntags.add('python')\ntags.add(['web', 'api'])\nprint(tags)",
@@ -462,7 +462,7 @@ window.TIER2_DEBUG = [
     },
     {
         id: "t2d-pop-empty-list",
-        tier: 2,
+        level: 2,
         tags: ["lists", "methods", "index-error"],
         title: "Pop from Empty List",
         code: "stack = [1, 2, 3]\nwhile stack:\n    stack.pop()\nlast = stack.pop()\nprint(last)",

@@ -5,14 +5,14 @@
 const App = (() => {
     // State
     let currentMode = null;      // 'trace' | 'debug'
-    let currentTier = null;      // 1-8
+    let currentLevel = null;     // 1-8
     let currentChallenge = null; // challenge object
     let challengeStartTime = null;
     let selectedLine = null;     // for debug mode
 
     // View references
     const views = {};
-    const VIEWS = ['home', 'tiers', 'challenge', 'result', 'stats'];
+    const VIEWS = ['home', 'levels', 'challenge', 'result', 'stats'];
 
     function init() {
         // Cache view elements
@@ -36,8 +36,8 @@ const App = (() => {
             showView('home');
         });
         document.getElementById('btn-next').addEventListener('click', handleNext);
-        document.getElementById('btn-back-to-tiers').addEventListener('click', () => {
-            showTiers(currentMode);
+        document.getElementById('btn-back-to-levels').addEventListener('click', () => {
+            showLevels(currentMode);
         });
 
         // Mode card clicks
@@ -45,7 +45,7 @@ const App = (() => {
             card.addEventListener('click', () => {
                 const mode = card.dataset.mode;
                 currentMode = mode;
-                showTiers(mode);
+                showLevels(mode);
             });
         });
 
@@ -107,10 +107,10 @@ const App = (() => {
 
     function handleBack() {
         if (views.result.classList.contains('active')) {
-            showTiers(currentMode);
+            showLevels(currentMode);
         } else if (views.challenge.classList.contains('active')) {
-            showTiers(currentMode);
-        } else if (views.tiers.classList.contains('active')) {
+            showLevels(currentMode);
+        } else if (views.levels.classList.contains('active')) {
             showView('home');
         } else if (views.stats.classList.contains('active')) {
             showView('home');
@@ -119,37 +119,37 @@ const App = (() => {
         }
     }
 
-    // === Tier Selection ===
+    // === Level Selection ===
 
-    function showTiers(mode) {
+    function showLevels(mode) {
         currentMode = mode;
-        const title = mode === 'trace' ? 'Trace — Select Tier' : 'Debug — Select Tier';
-        document.getElementById('tiers-title').textContent = title;
+        const title = mode === 'trace' ? 'Trace — Select Level' : 'Debug — Select Level';
+        document.getElementById('levels-title').textContent = title;
 
-        const tiers = Engine.getAvailableTiers(mode);
-        const grid = document.getElementById('tier-grid');
+        const levels = Engine.getAvailableLevels(mode);
+        const grid = document.getElementById('level-grid');
 
-        grid.innerHTML = tiers.map(t => {
+        grid.innerHTML = levels.map(t => {
             const pct = t.total > 0 ? Math.round((t.completed / t.total) * 100) : 0;
             const comingSoon = !t.available;
             const locked = !t.unlocked || comingSoon;
-            const tierColor = `var(--tier${t.tier})`;
+            const levelColor = `var(--level${t.level})`;
 
             let badge = '';
             if (comingSoon) {
-                badge = '<span class="tier-lock-icon coming-soon-badge">Coming Soon</span>';
+                badge = '<span class="level-lock-icon coming-soon-badge">Coming Soon</span>';
             } else if (locked) {
-                badge = '<span class="tier-lock-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
+                badge = '<span class="level-lock-icon"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M5 7V5C5 3.34 6.34 2 8 2C9.66 2 11 3.34 11 5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
             }
 
-            return `<div class="tier-card ${locked ? 'locked' : ''} ${comingSoon ? 'coming-soon' : ''}" data-tier="${t.tier}">
-                <div class="tier-badge">${t.tier}</div>
-                <div class="tier-info">
+            return `<div class="level-card ${locked ? 'locked' : ''} ${comingSoon ? 'coming-soon' : ''}" data-level="${t.level}">
+                <div class="level-badge">${t.level}</div>
+                <div class="level-info">
                     <h3>${t.name}</h3>
                     <p>${t.description}</p>
-                    ${comingSoon ? '' : `<div class="tier-progress">
+                    ${comingSoon ? '' : `<div class="level-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${pct}%; background: ${tierColor};"></div>
+                            <div class="progress-fill" style="width: ${pct}%; background: ${levelColor};"></div>
                         </div>
                         <span class="progress-label">${t.completed} / ${t.total}</span>
                     </div>`}
@@ -158,22 +158,22 @@ const App = (() => {
             </div>`;
         }).join('');
 
-        // Bind tier clicks
-        grid.querySelectorAll('.tier-card').forEach(card => {
+        // Bind level clicks
+        grid.querySelectorAll('.level-card').forEach(card => {
             card.addEventListener('click', () => {
                 if (card.classList.contains('locked')) return;
-                currentTier = parseInt(card.dataset.tier);
+                currentLevel = parseInt(card.dataset.level);
                 startNextChallenge();
             });
         });
 
-        showView('tiers');
+        showView('levels');
     }
 
     // === Challenge ===
 
     function startNextChallenge() {
-        const challenge = Engine.getNextChallenge(currentMode, currentTier);
+        const challenge = Engine.getNextChallenge(currentMode, currentLevel);
         if (!challenge) return;
         presentChallenge(challenge);
     }
@@ -184,15 +184,15 @@ const App = (() => {
         selectedLine = null;
 
         // Header
-        const tierNum = challenge.tier || currentTier;
+        const levelNum = challenge.level || currentLevel;
         const tag = document.getElementById('challenge-tag');
-        tag.textContent = `Tier ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
+        tag.textContent = `Level ${levelNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
         tag.className = 'challenge-tag';
-        if (tierNum > 1) tag.classList.add(`tier-${tierNum}`);
+        if (levelNum > 1) tag.classList.add(`level-${levelNum}`);
 
         // Counter
-        const challenges = Engine.getChallenges(currentMode, currentTier);
-        const idx = Engine.getChallengeIndex(challenge, currentMode, currentTier);
+        const challenges = Engine.getChallenges(currentMode, currentLevel);
+        const idx = Engine.getChallengeIndex(challenge, currentMode, currentLevel);
         document.getElementById('challenge-counter').textContent = `${idx + 1} / ${challenges.length}`;
 
         // Title
@@ -401,15 +401,15 @@ const App = (() => {
     }
 
     function handleNext() {
-        const challenges = Engine.getChallenges(currentMode, currentTier);
-        const currentIdx = Engine.getChallengeIndex(currentChallenge, currentMode, currentTier);
+        const challenges = Engine.getChallenges(currentMode, currentLevel);
+        const currentIdx = Engine.getChallengeIndex(currentChallenge, currentMode, currentLevel);
 
         if (currentIdx < challenges.length - 1) {
             // Go to next challenge in sequence
             presentChallenge(challenges[currentIdx + 1]);
         } else {
-            // End of tier/mode — go back
-            showTiers(currentMode);
+            // End of level/mode — go back
+            showLevels(currentMode);
         }
     }
 
