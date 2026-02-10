@@ -6,20 +6,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # Serve locally
-python3 -m http.server 8001 -d /Users/dennis/projects/pylens
+python3 -m http.server 8001 -d docs
 # Open http://localhost:8001
 ```
 
-No build step, no package manager, no tests. Static site served directly from root.
+No build step, no package manager, no tests. Static site served from the `docs/` directory (GitHub Pages).
 
 ## Architecture
 
 Single-page app with view toggling (add/remove `active` class on `<section>` elements). All source is vanilla JS with no dependencies.
 
+All source files live under `docs/`:
+
 - **index.html** — All views: home, tier select, challenge, result, stats. Includes a confirmation modal for clearing progress.
-- **js/app.js** — Main controller. IIFE module handling view routing, navigation, challenge flow, and all user interactions. Manages transient state (currentMode, currentTier, currentChallenge, selectedLine). Shuffles answer choices at display time using Fisher-Yates.
+- **js/app.js** — Main controller. IIFE module handling view routing, navigation, challenge flow, and all user interactions. Manages transient state (currentMode, currentTier, currentChallenge, selectedLine). Shuffles answer choices at display time using Fisher-Yates. Integrates Firebase cloud sync with merge-on-sign-in.
 - **js/engine.js** — Challenge logic: retrieval, answer checking for both modes, scoring with streak multipliers, tier availability (8 tiers), and unlock progression checks.
 - **js/storage.js** — localStorage wrapper with four keys: `pylens_progress` (per-challenge scores), `pylens_unlocks` (tier booleans), `pylens_stats` (streaks, tag mastery), `pylens_history` (last 50 sessions).
+- **js/firebase.js** — `FirebaseSync` class (Firestore compat SDK v10, GitHub OAuth). Shared Firebase project (`typefit-abf48`), subcollection path `users/{uid}/apps/pylens`.
 - **js/stats.js** — Renders stats view and home screen progress bars. Reads from Storage, writes HTML.
 - **js/syntax.js** — Regex-based Python syntax highlighter. Handles keywords, strings, f-strings, comments, numbers, builtins, decorators. Returns HTML with line numbers and optional `selectable` class for debug mode.
 - **js/challenges/** — Challenge data files. Each defines a `window.TIER{N}_{MODE}` array (e.g., `window.TIER1_TRACE`). Tiers 1-4 have 25 challenges each. Tiers 5-8 are empty (Coming Soon).
@@ -28,7 +31,7 @@ Single-page app with view toggling (add/remove `active` class on `<section>` ele
 ### Module loading order (matters)
 
 ```
-syntax.js → challenge data files → storage.js → engine.js → stats.js → app.js
+Firebase SDK → syntax.js → challenge data files → firebase.js → storage.js → engine.js → stats.js → app.js
 ```
 
 Engine reads challenge data from `window.*` globals. App initializes on DOMContentLoaded.
@@ -38,6 +41,14 @@ Engine reads challenge data from `window.*` globals. App initializes on DOMConte
 **Trace:** See code → pick output from 4 shuffled choices → `Engine.checkTrace()` → result. Score: 100 or 0.
 
 **Debug:** See code → click buggy line → pick bug description from 4 shuffled choices → `Engine.checkDebug()` → result. Score: 100 (both right), 50 (line right, choice wrong), 0.
+
+### Cloud Sync (Firebase)
+
+- Single Firestore document per user at `users/{uid}/apps/pylens`, saved with `{ merge: true }`
+- `scheduleSave()` debounces 2 seconds; pending save flushed on page unload via `visibilitychange` + `beforeunload`
+- `_suppressSync` flag prevents cloud-loaded data from triggering a save cycle
+- Merge strategy: progress per-challenge `max(bestScore, attempts, lastAttempt)` / `min(bestTime)`, unlocks union, stats max, history union by `challengeId+date` (keep 50)
+- `Infinity` values (from `bestTime`) converted to `null` before sending to Firestore
 
 ### Progression system
 

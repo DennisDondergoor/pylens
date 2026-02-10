@@ -23,11 +23,13 @@
                     <span class="streak-icon">&#9889;</span>
                     <span id="streak-count">0</span>
                 </div>
+                <button id="btn-auth" class="btn-text" title="Sign in">Sign in</button>
                 <button id="btn-stats" class="btn-icon" title="Stats">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="10" width="3" height="8" rx="1" fill="currentColor"/><rect x="7" y="6" width="3" height="12" rx="1" fill="currentColor"/><rect x="12" y="2" width="3" height="16" rx="1" fill="currentColor"/></svg>
                 </button>
             </div>
         </header>
+        <div id="sync-status" class="sync-status"></div>
 
         <!-- View: Home -->
         <section id="view-home" class="view active">
@@ -185,6 +187,9 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="js/syntax.js"></script>
     <script src="js/challenges/tier1-trace.js"></script>
     <script src="js/challenges/tier1-debug.js"></script>
@@ -202,6 +207,7 @@
     <script src="js/challenges/tier7-debug.js"></script>
     <script src="js/challenges/tier8-trace.js"></script>
     <script src="js/challenges/tier8-debug.js"></script>
+    <script src="js/firebase.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/engine.js"></script>
     <script src="js/stats.js"></script>

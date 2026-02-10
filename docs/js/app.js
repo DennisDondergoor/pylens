@@ -9,6 +9,8 @@ const App = (() => {
     let currentChallenge = null; // challenge object
     let challengeStartTime = null;
     let selectedLine = null;     // for debug mode
+    let firebaseSync = null;
+    let _suppressSync = false;
 
     // View references
     const views = {};
@@ -29,7 +31,15 @@ const App = (() => {
             document.getElementById('modal-clear').classList.add('hidden');
         });
         document.getElementById('btn-clear-confirm').addEventListener('click', () => {
+            if (firebaseSync && firebaseSync.syncTimeout) {
+                clearTimeout(firebaseSync.syncTimeout);
+                firebaseSync.syncTimeout = null;
+                firebaseSync._pendingGetData = null;
+            }
             Storage.clearAll();
+            if (firebaseSync && firebaseSync.isSignedIn()) {
+                firebaseSync.deleteAllData();
+            }
             document.getElementById('modal-clear').classList.add('hidden');
             Stats.render();
             Stats.renderHomeProgress();
@@ -68,6 +78,27 @@ const App = (() => {
                 handleBack();
             }
         });
+
+        // Auth button
+        document.getElementById('btn-auth').addEventListener('click', () => {
+            if (firebaseSync && firebaseSync.isSignedIn()) {
+                firebaseSync.signOut();
+            } else if (firebaseSync) {
+                firebaseSync.signIn();
+            }
+        });
+
+        // Flush pending sync on page unload
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden' && firebaseSync) {
+                firebaseSync.flushPendingSync();
+            }
+        });
+        window.addEventListener('beforeunload', () => {
+            if (firebaseSync) firebaseSync.flushPendingSync();
+        });
+
+        initFirebase();
 
         // Initial render
         Stats.renderHomeProgress();
@@ -339,6 +370,9 @@ const App = (() => {
         // Check for new unlocks
         Engine.checkUnlocks();
 
+        // Sync to cloud
+        syncToCloud();
+
         // Banner
         const banner = document.getElementById('result-banner');
         banner.className = 'result-banner';
@@ -411,6 +445,135 @@ const App = (() => {
         } else {
             // End of tier/mode — go back
             showTiers(currentMode);
+        }
+    }
+
+    // === Firebase ===
+
+    function initFirebase() {
+        firebaseSync = new FirebaseSync();
+        firebaseSync.onSyncResult = (ok) => {
+            const statusEl = document.getElementById('sync-status');
+            if (!ok) {
+                statusEl.textContent = 'Sync failed';
+                setTimeout(() => { statusEl.textContent = ''; }, 3000);
+            }
+        };
+        firebaseSync.onAuthChange(async (user) => {
+            const btn = document.getElementById('btn-auth');
+            const statusEl = document.getElementById('sync-status');
+            if (user) {
+                btn.textContent = 'Sign out';
+                btn.title = 'Sign out';
+                statusEl.textContent = `Signed in as ${firebaseSync.getUserName()}`;
+                await loadFromCloud();
+                Stats.renderHomeProgress();
+                if (views.stats && views.stats.classList.contains('active')) {
+                    Stats.render();
+                }
+            } else {
+                btn.textContent = 'Sign in';
+                btn.title = 'Sign in';
+                statusEl.textContent = '';
+            }
+        });
+        firebaseSync.init();
+    }
+
+    function getAllData() {
+        const progress = Storage.getProgress();
+        // Sanitize Infinity values in progress
+        for (const id in progress) {
+            if (progress[id].bestTime === Infinity || !isFinite(progress[id].bestTime)) {
+                progress[id].bestTime = null;
+            }
+        }
+        return {
+            progress,
+            unlocks: Storage.getUnlocks(),
+            stats: Storage.getStats(),
+            history: Storage.getHistory()
+        };
+    }
+
+    function syncToCloud() {
+        if (_suppressSync || !firebaseSync || !firebaseSync.isSignedIn()) return;
+        firebaseSync.scheduleSave(() => getAllData());
+    }
+
+    async function loadFromCloud() {
+        if (!firebaseSync || !firebaseSync.isSignedIn()) return;
+        const cloud = await firebaseSync.loadFromCloud();
+        if (!cloud) return;
+
+        _suppressSync = true;
+        try {
+            // Merge progress: per-challenge max(bestScore), max(attempts), max(lastAttempt), min(bestTime)
+            if (cloud.progress) {
+                const local = Storage.getProgress();
+                for (const id in cloud.progress) {
+                    const c = cloud.progress[id];
+                    const l = local[id] || { bestScore: 0, attempts: 0, lastAttempt: 0, bestTime: null };
+                    const localBest = (l.bestTime === null || l.bestTime === Infinity) ? Infinity : l.bestTime;
+                    const cloudBest = (c.bestTime === null || c.bestTime === undefined) ? Infinity : c.bestTime;
+                    local[id] = {
+                        bestScore: Math.max(l.bestScore || 0, c.bestScore || 0),
+                        attempts: Math.max(l.attempts || 0, c.attempts || 0),
+                        lastAttempt: Math.max(l.lastAttempt || 0, c.lastAttempt || 0),
+                        bestTime: Math.min(localBest, cloudBest)
+                    };
+                    if (local[id].bestTime === Infinity) local[id].bestTime = null;
+                }
+                localStorage.setItem('pylens_progress', JSON.stringify(local));
+            }
+
+            // Merge unlocks: union (true wins)
+            if (cloud.unlocks) {
+                const local = Storage.getUnlocks();
+                for (const key in cloud.unlocks) {
+                    if (cloud.unlocks[key] === true) local[key] = true;
+                }
+                localStorage.setItem('pylens_unlocks', JSON.stringify(local));
+            }
+
+            // Merge stats: max of scalar fields, tag mastery max(correct, total) per tag
+            if (cloud.stats) {
+                const local = Storage.getStats();
+                local.totalCompleted = Math.max(local.totalCompleted || 0, cloud.stats.totalCompleted || 0);
+                local.bestStreak = Math.max(local.bestStreak || 0, cloud.stats.bestStreak || 0);
+                local.currentStreak = Math.max(local.currentStreak || 0, cloud.stats.currentStreak || 0);
+                if (cloud.stats.tagMastery) {
+                    if (!local.tagMastery) local.tagMastery = {};
+                    for (const tag in cloud.stats.tagMastery) {
+                        const ct = cloud.stats.tagMastery[tag];
+                        const lt = local.tagMastery[tag] || { correct: 0, total: 0 };
+                        local.tagMastery[tag] = {
+                            correct: Math.max(lt.correct || 0, ct.correct || 0),
+                            total: Math.max(lt.total || 0, ct.total || 0)
+                        };
+                    }
+                }
+                localStorage.setItem('pylens_stats', JSON.stringify(local));
+            }
+
+            // Merge history: union by challengeId+date, sort newest first, keep 50
+            if (cloud.history) {
+                const local = Storage.getHistory();
+                const seen = new Set();
+                const all = [];
+                for (const entry of [...local, ...cloud.history]) {
+                    const key = `${entry.challengeId}|${entry.date}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        all.push(entry);
+                    }
+                }
+                all.sort((a, b) => (b.date || 0) - (a.date || 0));
+                if (all.length > 50) all.length = 50;
+                localStorage.setItem('pylens_history', JSON.stringify(all));
+            }
+        } finally {
+            _suppressSync = false;
         }
     }
 
