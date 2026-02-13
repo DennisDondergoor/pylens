@@ -272,6 +272,7 @@ body {
 
 .tier-card:hover {
     border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .tier-card:active {
@@ -608,6 +609,7 @@ body {
 .result-score {
     font-size: 2rem;
     font-weight: 700;
+    color: var(--accent-color);
 }
 
 .result-score-label {
@@ -657,7 +659,7 @@ body {
 .explanation-box p {
     font-size: 0.9rem;
     line-height: 1.7;
-    color: var(--text-muted);
+    color: var(--text-color);
 }
 
 .concept-link {
@@ -774,7 +776,7 @@ body {
 /* ===== Stats ===== */
 .stats-overview {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     margin-bottom: 32px;
 }
@@ -855,7 +857,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 14px;
+    padding: 12px 16px;
     background-color: var(--card-bg);
     border-radius: 8px;
     font-size: 0.85rem;
@@ -942,7 +944,7 @@ body {
     }
 
     .stats-overview {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
     }
 
