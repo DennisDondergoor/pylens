@@ -111,19 +111,6 @@ body {
     transform: scale(0.97);
 }
 
-.streak {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--accent-orange);
-}
-
-.streak-icon {
-    font-size: 1rem;
-}
-
 /* ===== Views ===== */
 .view {
     display: none;
@@ -626,13 +613,6 @@ body {
 .result-score-label {
     font-size: 0.9rem;
     color: var(--text-muted);
-}
-
-.result-streak {
-    margin-left: auto;
-    font-weight: 600;
-    color: var(--accent-orange);
-    font-size: 0.95rem;
 }
 
 .correct-answer-box {

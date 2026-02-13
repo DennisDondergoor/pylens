@@ -10,15 +10,10 @@ const Stats = (() => {
 
         // Overview cards
         document.getElementById('stat-total').textContent = stats.totalCompleted;
-        document.getElementById('stat-best-streak').textContent = stats.bestStreak;
 
-        // Average score from history
-        let avgScore = 0;
-        if (history.length > 0) {
-            const sum = history.reduce((acc, h) => acc + (h.score || 0), 0);
-            avgScore = Math.round(sum / history.length);
-        }
-        document.getElementById('stat-avg-score').textContent = avgScore;
+        // Total score from history
+        const totalScore = history.reduce((acc, h) => acc + (h.score || 0), 0);
+        document.getElementById('stat-total-score').textContent = totalScore;
 
         // Tag mastery
         renderTagMastery(stats.tagMastery);

@@ -112,28 +112,15 @@ const App = (() => {
         views[name].classList.add('active');
 
         const backBtn = document.getElementById('btn-back');
-        const streakDisplay = document.getElementById('streak-display');
 
         if (name === 'home') {
             backBtn.style.display = 'none';
-            streakDisplay.style.display = 'none';
             Stats.renderHomeProgress();
         } else if (name === 'stats') {
             backBtn.style.display = 'flex';
-            streakDisplay.style.display = 'none';
             Stats.render();
-        } else if (name === 'challenge') {
-            backBtn.style.display = 'flex';
-            const streak = Storage.getCurrentStreak();
-            if (streak > 0) {
-                streakDisplay.style.display = 'flex';
-                document.getElementById('streak-count').textContent = streak;
-            } else {
-                streakDisplay.style.display = 'none';
-            }
         } else {
             backBtn.style.display = 'flex';
-            streakDisplay.style.display = 'none';
         }
     }
 
@@ -349,11 +336,9 @@ const App = (() => {
         const wasPartial = result.partial;
 
         // Update stats
-        const stats = Storage.updateStats(currentChallenge.tags, wasCorrect);
-        const streak = wasCorrect ? stats.currentStreak : 0;
+        Storage.updateStats(currentChallenge.tags, wasCorrect);
 
-        // Calculate final score with streak bonus
-        const finalScore = wasCorrect ? Engine.applyStreakBonus(result.score, streak - 1) : result.score;
+        const finalScore = result.score;
 
         // Save progress
         Storage.saveChallengeResult(currentChallenge.id, finalScore, timeMs);
@@ -395,15 +380,6 @@ const App = (() => {
 
         // Score
         document.getElementById('result-score').textContent = finalScore;
-
-        // Streak
-        const streakEl = document.getElementById('result-streak');
-        if (wasCorrect && streak > 1) {
-            streakEl.style.display = 'flex';
-            document.getElementById('result-streak-count').textContent = streak;
-        } else {
-            streakEl.style.display = 'none';
-        }
 
         // Correct answer display
         const correctBox = document.getElementById('correct-answer-box');
@@ -541,8 +517,6 @@ const App = (() => {
             if (cloud.stats) {
                 const local = Storage.getStats();
                 local.totalCompleted = Math.max(local.totalCompleted || 0, cloud.stats.totalCompleted || 0);
-                local.bestStreak = Math.max(local.bestStreak || 0, cloud.stats.bestStreak || 0);
-                local.currentStreak = Math.max(local.currentStreak || 0, cloud.stats.currentStreak || 0);
                 if (cloud.stats.tagMastery) {
                     if (!local.tagMastery) local.tagMastery = {};
                     for (const tag in cloud.stats.tagMastery) {

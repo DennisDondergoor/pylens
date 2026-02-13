@@ -91,8 +91,6 @@ const Storage = (() => {
     function getStats() {
         return _get(KEYS.stats, {
             totalCompleted: 0,
-            currentStreak: 0,
-            bestStreak: 0,
             tagMastery: {}
         });
     }
@@ -101,11 +99,7 @@ const Storage = (() => {
         const stats = getStats();
 
         if (wasCorrect) {
-            stats.currentStreak++;
-            stats.bestStreak = Math.max(stats.bestStreak, stats.currentStreak);
             stats.totalCompleted++;
-        } else {
-            stats.currentStreak = 0;
         }
 
         for (const tag of tags) {
@@ -120,10 +114,6 @@ const Storage = (() => {
 
         _set(KEYS.stats, stats);
         return stats;
-    }
-
-    function getCurrentStreak() {
-        return getStats().currentStreak;
     }
 
     // === History ===
@@ -161,7 +151,6 @@ const Storage = (() => {
         isUnlocked,
         getStats,
         updateStats,
-        getCurrentStreak,
         getHistory,
         addToHistory,
         clearAll

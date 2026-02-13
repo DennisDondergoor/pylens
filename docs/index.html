@@ -19,10 +19,6 @@
                 <h1 class="logo">Py<span class="logo-accent">Lens</span></h1>
             </div>
             <div class="header-right">
-                <div id="streak-display" class="streak" style="display:none;">
-                    <span class="streak-icon">&#9889;</span>
-                    <span id="streak-count">0</span>
-                </div>
                 <button id="btn-auth" class="btn-text" title="Sign in">Sign in</button>
                 <button id="btn-stats" class="btn-icon" title="Stats">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="10" width="3" height="8" rx="1" fill="currentColor"/><rect x="7" y="6" width="3" height="12" rx="1" fill="currentColor"/><rect x="12" y="2" width="3" height="16" rx="1" fill="currentColor"/></svg>
@@ -112,9 +108,6 @@
             <div class="result-score-row">
                 <div class="result-score" id="result-score">100</div>
                 <span class="result-score-label">points</span>
-                <div class="result-streak" id="result-streak" style="display:none;">
-                    <span class="streak-icon">&#9889;</span> <span id="result-streak-count">0</span> streak
-                </div>
             </div>
 
             <!-- Show correct answer if wrong -->
@@ -145,12 +138,8 @@
                     <span class="stat-label">Completed</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value" id="stat-best-streak">0</span>
-                    <span class="stat-label">Best Streak</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-value" id="stat-avg-score">0</span>
-                    <span class="stat-label">Avg Score</span>
+                    <span class="stat-value" id="stat-total-score">0</span>
+                    <span class="stat-label">Total Score</span>
                 </div>
             </div>
 
@@ -178,7 +167,7 @@
         <div id="modal-clear" class="modal hidden">
             <div class="modal-content">
                 <h2>Clear All Progress?</h2>
-                <p>This will reset all scores, streaks, unlocks, and history. This cannot be undone.</p>
+                <p>This will reset all scores, unlocks, and history. This cannot be undone.</p>
                 <div class="modal-actions">
                     <button class="btn btn-secondary" id="btn-clear-cancel">Cancel</button>
                     <button class="btn btn-danger" id="btn-clear-confirm">Clear Everything</button>

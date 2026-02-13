@@ -3,8 +3,6 @@
  * Handles challenge presentation, answer checking, and scoring.
  */
 const Engine = (() => {
-    const STREAK_MULTIPLIERS = [1, 1.5, 2, 2.5, 3];
-
     const TIERS = [
         { tier: 1, name: 'Absolute Basics', description: 'Print, arithmetic, strings, booleans, type()', unlockKey: null },
         { tier: 2, name: 'Collections', description: 'Lists, dicts, tuples, slicing, indexing, membership', unlockKey: 'tier2' },
@@ -107,15 +105,6 @@ const Engine = (() => {
     }
 
     /**
-     * Apply streak bonus to a score.
-     */
-    function applyStreakBonus(baseScore, streak) {
-        const idx = Math.min(streak, STREAK_MULTIPLIERS.length - 1);
-        const multiplier = STREAK_MULTIPLIERS[idx];
-        return Math.round(baseScore * multiplier);
-    }
-
-    /**
      * Get available tiers for a mode.
      */
     function getAvailableTiers(mode) {
@@ -167,7 +156,6 @@ const Engine = (() => {
 
         checkTrace,
         checkDebug,
-        applyStreakBonus,
         getAvailableTiers,
         checkUnlocks
     };
