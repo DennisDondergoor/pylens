@@ -9,7 +9,7 @@
     --bg-color: #000;
     --card-bg: #111;
     --text-color: #fff;
-    --text-muted: #999;
+    --text-muted: #fff;
     --accent-color: #4a9eff;
     --success-color: #4ade80;
     --error-color: #f87171;
@@ -127,7 +127,7 @@ body {
 }
 
 .view-title {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 24px;
 }
@@ -135,7 +135,8 @@ body {
 /* ===== Home ===== */
 .home-intro {
     text-align: center;
-    margin-bottom: 36px;
+    margin-top: 16px;
+    margin-bottom: 48px;
 }
 
 .tagline {
@@ -676,12 +677,13 @@ body {
 .result-actions {
     display: flex;
     gap: 1rem;
+    justify-content: center;
 }
 
 /* ===== Buttons ===== */
 .btn {
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     border: none;
@@ -896,6 +898,7 @@ body {
     margin-top: 1.5rem;
     display: flex;
     gap: 1rem;
+    justify-content: center;
 }
 
 .empty-state {
