@@ -423,23 +423,23 @@ window.TIER1_DEBUG = [
         conceptLink: "https://docs.python.org/3/reference/lexical_analysis.html#string-and-bytes-literals"
     },
     {
-        id: "t1d-negative-vs-subtract",
+        id: "t1d-wrong-string-repeat",
         tier: 1,
-        tags: ["operators", "arithmetic", "negation"],
-        title: "Subtraction Spacing Error",
-        code: "balance = 1000\nwithdrawal = 150\nnew_balance = balance- withdrawal\nprint('New balance:', new_balance)",
+        tags: ["strings", "operators", "types"],
+        title: "Wrong Repetition Operator",
+        code: "separator = '-'\nwidth = 20\nbanner = separator + width\nprint(banner)",
         bugLine: 3,
-        bugDescription: "No space after balance before - operator; confusing but valid syntax",
+        bugDescription: "Using + instead of * to repeat a string; + requires both operands to be strings",
         bugChoices: [
-            "Missing space around - operator makes code hard to read (balance - withdrawal)",
-            "Should use + instead of - for subtraction",
-            "Variable names cannot contain underscores",
-            "Need parentheses around the subtraction"
+            "Cannot use + between a string and int; use * to repeat a string (separator * width)",
+            "The variable width should be a string '20' instead of an integer",
+            "The print function cannot display strings created with concatenation",
+            "The separator variable needs to be longer than one character"
         ],
         correctBugChoice: 0,
-        fixedCode: "balance = 1000\nwithdrawal = 150\nnew_balance = balance - withdrawal\nprint('New balance:', new_balance)",
-        explanation: "While balance-withdrawal is technically valid Python (it works), PEP 8 style guidelines recommend spaces around binary operators for readability: balance - withdrawal. Without spaces, the code is harder to read and can be confused with negative numbers or compound identifiers in other contexts.",
-        conceptLink: "https://peps.python.org/pep-0008/#whitespace-in-expressions-and-statements"
+        fixedCode: "separator = '-'\nwidth = 20\nbanner = separator * width\nprint(banner)",
+        explanation: "The + operator between a string and an integer raises a TypeError. To repeat a string, use the * operator: '-' * 20 produces '--------------------'. The + operator for strings only works when both sides are strings (concatenation).",
+        conceptLink: "https://docs.python.org/3/library/stdtypes.html#common-sequence-operations"
     },
     {
         id: "t1d-type-function-call",

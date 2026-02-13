@@ -459,22 +459,22 @@ window.TIER3_DEBUG = [
         conceptLink: "https://docs.python.org/3/faq/programming.html#how-do-i-write-a-function-with-output-parameters-call-by-reference"
     },
     {
-        id: "t3d-wrong-elif-chain",
+        id: "t3d-loop-variable-closure",
         tier: 3,
-        tags: ["conditionals", "elif", "logic"],
-        title: "Wrong elif Ordering",
-        code: "def grade(score):\n    if score >= 60:\n        return 'Pass'\n    elif score >= 90:\n        return 'Excellent'\n    else:\n        return 'Fail'\n\nprint(grade(95))",
-        bugLine: 2,
-        bugDescription: "score >= 60 catches everything above 60, so >= 90 is never reached",
+        tags: ["closures", "loops", "functions"],
+        title: "Loop Variable Captured by Reference",
+        code: "def make_multipliers():\n    multipliers = []\n    for i in range(4):\n        multipliers.append(lambda x: x * i)\n    return multipliers\n\nfns = make_multipliers()\nprint(fns[0](5), fns[1](5), fns[2](5))",
+        bugLine: 4,
+        bugDescription: "Lambda captures variable i by reference, not by value; all closures share final value",
         bugChoices: [
-            "The >= 60 condition catches all scores 60+, so the >= 90 branch is unreachable; check highest first",
-            "The elif keyword is not valid Python syntax",
-            "The return statement should use print() instead",
-            "The grade function needs a default parameter value"
+            "All lambdas capture the same variable i, which ends at 3, so every function multiplies by 3",
+            "The lambda syntax is incorrect and should use def instead",
+            "The append method does not work with lambda functions",
+            "The range(4) should be range(1, 4) to avoid multiplying by zero"
         ],
         correctBugChoice: 0,
-        fixedCode: "def grade(score):\n    if score >= 90:\n        return 'Excellent'\n    elif score >= 60:\n        return 'Pass'\n    else:\n        return 'Fail'\n\nprint(grade(95))",
-        explanation: "When using elif chains with overlapping numeric ranges, always check the most restrictive condition first. Since 95 >= 60 is true, it returns 'Pass' and never checks >= 90. Reorder from most specific to least specific: check >= 90 first, then >= 60.",
-        conceptLink: "https://docs.python.org/3/tutorial/controlflow.html#if-statements"
+        fixedCode: "def make_multipliers():\n    multipliers = []\n    for i in range(4):\n        multipliers.append(lambda x, i=i: x * i)\n    return multipliers\n\nfns = make_multipliers()\nprint(fns[0](5), fns[1](5), fns[2](5))",
+        explanation: "Closures in Python capture variables by reference, not by value. When the loop ends, i is 3, so all lambdas see i=3. The fix is to use a default argument (i=i) which captures the current value of i at each iteration. This is a classic Python gotcha with closures in loops.",
+        conceptLink: "https://docs.python.org/3/faq/programming.html#why-do-lambdas-defined-in-a-loop-with-different-values-all-return-the-same-result"
     }
 ];

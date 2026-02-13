@@ -103,11 +103,10 @@ const Storage = (() => {
         if (wasCorrect) {
             stats.currentStreak++;
             stats.bestStreak = Math.max(stats.bestStreak, stats.currentStreak);
+            stats.totalCompleted++;
         } else {
             stats.currentStreak = 0;
         }
-
-        stats.totalCompleted++;
 
         for (const tag of tags) {
             if (!stats.tagMastery[tag]) {

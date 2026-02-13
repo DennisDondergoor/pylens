@@ -30,7 +30,7 @@ const App = (() => {
         document.getElementById('btn-clear-cancel').addEventListener('click', () => {
             document.getElementById('modal-clear').classList.add('hidden');
         });
-        document.getElementById('btn-clear-confirm').addEventListener('click', () => {
+        document.getElementById('btn-clear-confirm').addEventListener('click', async () => {
             if (firebaseSync && firebaseSync.syncTimeout) {
                 clearTimeout(firebaseSync.syncTimeout);
                 firebaseSync.syncTimeout = null;
@@ -38,7 +38,7 @@ const App = (() => {
             }
             Storage.clearAll();
             if (firebaseSync && firebaseSync.isSignedIn()) {
-                firebaseSync.deleteAllData();
+                await firebaseSync.deleteAllData();
             }
             document.getElementById('modal-clear').classList.add('hidden');
             Stats.render();
@@ -467,6 +467,7 @@ const App = (() => {
                 btn.title = 'Sign out';
                 statusEl.textContent = `Signed in as ${firebaseSync.getUserName()}`;
                 await loadFromCloud();
+                Engine.checkUnlocks();
                 Stats.renderHomeProgress();
                 if (views.stats && views.stats.classList.contains('active')) {
                     Stats.render();
