@@ -172,7 +172,7 @@ body {
 }
 
 .mode-card.locked {
-    opacity: 0.55;
+    opacity: 0.5;
     cursor: default;
 }
 
@@ -194,7 +194,7 @@ body {
     font-size: 0.8rem;
     color: var(--text-muted);
     background: var(--border-color);
-    padding: 4px 10px;
+    padding: 4px 12px;
     border-radius: 20px;
 }
 
@@ -230,13 +230,13 @@ body {
     flex: 1;
     height: 6px;
     background: var(--border-color);
-    border-radius: 3px;
+    border-radius: 4px;
     overflow: hidden;
 }
 
 .progress-fill {
     height: 100%;
-    border-radius: 3px;
+    border-radius: 4px;
     background: var(--accent-color);
     transition: width 0.3s ease;
     width: 0%;
@@ -334,7 +334,7 @@ body {
 .tier-progress {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .tier-progress .progress-bar {
@@ -665,15 +665,56 @@ body {
     color: var(--text-color);
 }
 
-.concept-link {
+.deepdive-card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.deepdive-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.deepdive-icon {
+    font-size: 1rem;
+}
+
+.deepdive-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.deepdive-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.deepdive-tag {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.deepdive-link {
     display: inline-block;
-    margin-top: 10px;
     font-size: 0.9rem;
     color: var(--accent-color);
     text-decoration: none;
+    transition: color 0.2s;
 }
 
-.concept-link:hover {
+.deepdive-link:hover {
     text-decoration: underline;
 }
 
@@ -787,6 +828,7 @@ body {
 
 .stat-card {
     background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 1.5rem;
     text-align: center;
@@ -823,6 +865,7 @@ body {
 
 .tag-mastery-item {
     background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 12px 16px;
 }
@@ -837,7 +880,7 @@ body {
 .tag-mastery-bar {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .tag-mastery-bar .progress-bar {
@@ -863,6 +906,7 @@ body {
     gap: 12px;
     padding: 12px 16px;
     background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     font-size: 0.9rem;
 }
@@ -953,7 +997,7 @@ body {
     }
 
     .stat-card {
-        padding: 14px 10px;
+        padding: 16px 12px;
     }
 
     .stat-value {

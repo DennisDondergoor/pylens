@@ -399,13 +399,17 @@ const App = (() => {
         // Explanation
         document.getElementById('explanation-text').textContent = currentChallenge.explanation;
 
-        // Concept link
-        const link = document.getElementById('concept-link');
+        // Deep dive card
+        const deepdiveCard = document.getElementById('deepdive-card');
         if (currentChallenge.conceptLink) {
-            link.href = currentChallenge.conceptLink;
-            link.style.display = 'inline-block';
+            document.getElementById('concept-link').href = currentChallenge.conceptLink;
+            const tagsContainer = document.getElementById('deepdive-tags');
+            tagsContainer.innerHTML = (currentChallenge.tags || [])
+                .map(tag => `<span class="deepdive-tag">${tag}</span>`)
+                .join('');
+            deepdiveCard.style.display = 'block';
         } else {
-            link.style.display = 'none';
+            deepdiveCard.style.display = 'none';
         }
 
         showView('result');
