@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Quick Reference
+
+- **Firebase project**: `pylens-new`
+- **Local dev**: `python3 -m http.server 8001 -d docs` → http://localhost:8001
+- **Production**: https://dennisdondergoor.github.io/pylens/
+- **Firestore path**: `users/{uid}/apps/pylens` (nested structure)
+- **GitHub repo**: https://github.com/DennisDondergoor/pylens
+
 ## Development
 
 ```bash
@@ -67,9 +75,40 @@ Debug challenges need: `id`, `tier`, `tags`, `title`, `code`, `bugLine` (1-index
 - Buttons: `id="btn-{action}"`
 - Tags: lowercase with hyphens
 
+## Adding New Challenges
+
+To add challenges to an existing tier:
+
+1. Open the appropriate file in `docs/js/challenges/` (e.g., `tier1-trace.js`)
+2. Add a new object to the `window.TIER{N}_{MODE}` array following the challenge data format above
+3. Ensure `id` is unique and follows naming convention
+4. Test locally by starting a new session in that tier/mode
+5. Verify scoring, explanations, and concept links work correctly
+
+To create a new tier (currently 5-8 are empty):
+
+1. Create new files `tier{N}-trace.js` and `tier{N}-debug.js` in `docs/js/challenges/`
+2. Define `window.TIER{N}_TRACE = [...]` and `window.TIER{N}_DEBUG = [...]` arrays
+3. Add script tags to `index.html` in the correct loading order
+4. The tier will automatically unlock when tier N-1 has 10+ completions
+
+## Deployment
+
+Deployed via GitHub Pages from the `docs/` folder. To deploy:
+
+```bash
+git add docs/
+git commit -m "Update deployment"
+git push origin main
+```
+
+Changes go live automatically within ~1 minute.
+
 ## Commit Style
 
 Short imperative subject, blank line, explanation of why. End with:
 ```
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 ```
+
+(Adjust model name as appropriate: Claude Sonnet 4.5, Claude Opus 4.6, etc.)
