@@ -256,7 +256,7 @@ body {
 .tier-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 .tier-card {
@@ -495,7 +495,7 @@ body {
 .answer-choices {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
 .choice-btn {
@@ -515,6 +515,7 @@ body {
 
 .choice-btn:hover {
     border-color: var(--accent-color);
+    background-color: rgba(74, 158, 255, 0.04);
 }
 
 .choice-btn:active {
@@ -624,7 +625,7 @@ body {
     border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 16px 20px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .correct-answer-box h4 {
@@ -748,7 +749,7 @@ body {
 .modal-content {
     background-color: var(--card-bg);
     padding: 2rem;
-    border-radius: 12px;
+    border-radius: 8px;
     text-align: center;
     max-width: 500px;
     width: 90%;
@@ -805,7 +806,7 @@ body {
 }
 
 .stats-section {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
 .stats-section h3 {
@@ -817,7 +818,7 @@ body {
 .tag-mastery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
+    gap: 12px;
 }
 
 .tag-mastery-item {
@@ -853,7 +854,7 @@ body {
 .recent-activity {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
 }
 
 .activity-item {
@@ -870,7 +871,7 @@ body {
     font-size: 0.8rem;
     font-weight: 600;
     padding: 2px 8px;
-    border-radius: 10px;
+    border-radius: 20px;
     text-transform: uppercase;
     flex-shrink: 0;
 }
