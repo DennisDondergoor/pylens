@@ -49,6 +49,8 @@ const App = (() => {
         document.getElementById('btn-back-to-tiers').addEventListener('click', () => {
             showTiers(currentMode);
         });
+        document.getElementById('btn-prev-challenge').addEventListener('click', handlePrevChallenge);
+        document.getElementById('btn-next-challenge').addEventListener('click', handleNextChallengeNav);
 
         // Mode card clicks
         document.querySelectorAll('.mode-card').forEach(card => {
@@ -198,12 +200,17 @@ const App = (() => {
         challengeStartTime = Date.now();
         selectedLine = null;
 
+        // Check if challenge is already completed
+        const isCompleted = Storage.isCompleted(challenge.id);
+
         // Header
         const tierNum = challenge.tier || currentTier;
         const tag = document.getElementById('challenge-tag');
-        tag.textContent = `Level ${tierNum} — ${currentMode === 'trace' ? 'Trace' : 'Debug'}`;
+        const modeText = currentMode === 'trace' ? 'Trace' : 'Debug';
+        tag.textContent = isCompleted ? `✓ Level ${tierNum} — ${modeText}` : `Level ${tierNum} — ${modeText}`;
         tag.className = 'challenge-tag';
         if (tierNum > 1) tag.classList.add(`tier-${tierNum}`);
+        if (isCompleted) tag.classList.add('completed');
 
         // Counter
         const challenges = Engine.getChallenges(currentMode, currentTier);
@@ -215,22 +222,27 @@ const App = (() => {
 
         // Code display
         const isDebugMode = currentMode === 'debug';
-        const codeHtml = PySyntax.highlight(challenge.code, { selectable: isDebugMode });
+        const codeHtml = PySyntax.highlight(challenge.code, { selectable: isDebugMode && !isCompleted });
         document.getElementById('code-display').innerHTML = codeHtml;
 
-        // Hide all answer sections
+        // Hide all answer sections initially
         document.getElementById('trace-answer').style.display = 'none';
         document.getElementById('debug-answer').style.display = 'none';
 
         // Show appropriate answer section
-        if (currentMode === 'trace') {
+        if (isCompleted) {
+            showCompletedState(challenge);
+        } else if (currentMode === 'trace') {
             showTraceChoices(challenge);
         } else if (currentMode === 'debug') {
             // Debug: first select a line, then show choices
             document.getElementById('debug-answer').style.display = 'block';
             document.getElementById('debug-choices').innerHTML =
-                '<p style="color: var(--text-muted); font-size: 0.85rem;">Click on the line that contains the bug.</p>';
+                '<p style="color: var(--text-color); font-size: 0.85rem;">Click on the line that contains the bug.</p>';
         }
+
+        // Update navigation arrows
+        updateNavigationButtons();
 
         showView('challenge');
     }
@@ -261,6 +273,67 @@ const App = (() => {
         container.querySelectorAll('.debug-choice').forEach(btn => {
             btn.addEventListener('click', () => handleDebugAnswer(parseInt(btn.dataset.index)));
         });
+    }
+
+    function showCompletedState(challenge) {
+        // Show the challenge in review mode with correct answer highlighted
+        if (currentMode === 'trace') {
+            // Show all choices with correct one highlighted
+            const container = document.getElementById('trace-choices');
+            container.innerHTML = challenge.outputChoices.map((choice, i) => {
+                const isCorrect = choice === challenge.correctOutput;
+                return `<button class="choice-btn trace-choice ${isCorrect ? 'correct' : ''}" disabled>${escapeHtml(choice)}</button>`;
+            }).join('');
+            document.getElementById('trace-answer').style.display = 'block';
+        } else if (currentMode === 'debug') {
+            // Highlight the correct line
+            document.querySelectorAll('.code-line').forEach(el => {
+                if (parseInt(el.dataset.line) === challenge.bugLine) {
+                    el.classList.add('selected');
+                }
+            });
+
+            // Show all bug choices with correct one highlighted
+            const container = document.getElementById('debug-choices');
+            container.innerHTML = challenge.bugChoices.map((choice, i) => {
+                const isCorrect = i === challenge.correctBugChoice;
+                return `<button class="choice-btn debug-choice ${isCorrect ? 'correct' : ''}" disabled>${escapeHtml(choice)}</button>`;
+            }).join('');
+            document.getElementById('debug-answer').style.display = 'block';
+        }
+
+        // Show explanation (reuse the result view explanation HTML)
+        showCompletedExplanation(challenge);
+    }
+
+    function showCompletedExplanation(challenge) {
+        // Create explanation section below the answer choices
+        const answerSection = currentMode === 'trace'
+            ? document.getElementById('trace-answer')
+            : document.getElementById('debug-answer');
+
+        const explanationHtml = `
+            <div class="completed-explanation">
+                <div class="explanation-box">
+                    <h4>Explanation</h4>
+                    <p>${escapeHtml(challenge.explanation)}</p>
+                </div>
+                ${challenge.conceptLink ? `
+                    <div class="deepdive-card">
+                        <div class="deepdive-header">
+                            <span class="deepdive-icon">📖</span>
+                            <span class="deepdive-label">Deep Dive</span>
+                        </div>
+                        <div class="deepdive-tags">
+                            ${(challenge.tags || []).map(tag => `<span class="deepdive-tag">${tag}</span>`).join('')}
+                        </div>
+                        <a class="deepdive-link" href="${challenge.conceptLink}" target="_blank" rel="noopener">Read the Python docs →</a>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+
+        answerSection.insertAdjacentHTML('beforeend', explanationHtml);
     }
 
     // === Answer Handlers ===
@@ -419,6 +492,48 @@ const App = (() => {
             // End of tier/mode — go back
             showTiers(currentMode);
         }
+    }
+
+    function handlePrevChallenge() {
+        const challenges = Engine.getChallenges(currentMode, currentTier);
+        const currentIdx = Engine.getChallengeIndex(currentChallenge, currentMode, currentTier);
+
+        if (currentIdx > 0) {
+            presentChallenge(challenges[currentIdx - 1]);
+        }
+    }
+
+    function handleNextChallengeNav() {
+        const challenges = Engine.getChallenges(currentMode, currentTier);
+        const currentIdx = Engine.getChallengeIndex(currentChallenge, currentMode, currentTier);
+
+        if (currentIdx < challenges.length - 1) {
+            presentChallenge(challenges[currentIdx + 1]);
+        }
+    }
+
+    function updateNavigationButtons() {
+        const challenges = Engine.getChallenges(currentMode, currentTier);
+        const currentIdx = Engine.getChallengeIndex(currentChallenge, currentMode, currentTier);
+
+        const prevBtn = document.getElementById('btn-prev-challenge');
+        const nextBtn = document.getElementById('btn-next-challenge');
+
+        // Find the furthest challenge the user can access
+        // (first uncompleted challenge, or last challenge if all completed)
+        let furthestIdx = challenges.length - 1;
+        for (let i = 0; i < challenges.length; i++) {
+            if (!Storage.isCompleted(challenges[i].id)) {
+                furthestIdx = i;
+                break;
+            }
+        }
+
+        // Previous: Show if not at the start (can always go back)
+        prevBtn.style.display = currentIdx > 0 ? 'flex' : 'none';
+
+        // Next: Show if not past the furthest unlocked challenge
+        nextBtn.style.display = currentIdx < furthestIdx ? 'flex' : 'none';
     }
 
     // === Firebase ===
