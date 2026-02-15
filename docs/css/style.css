@@ -144,13 +144,14 @@ body {
 /* ===== Home ===== */
 .home-intro {
     text-align: center;
-    margin-top: 16px;
-    margin-bottom: 48px;
+    margin-top: 8px;
+    margin-bottom: 24px;
 }
 
 .tagline {
     color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
 .mode-cards {
@@ -955,7 +956,7 @@ body {
 }
 
 .sync-status:not(:empty) {
-    padding-top: 8px;
+    padding-top: 2px;
 }
 
 /* ===== Responsive ===== */
