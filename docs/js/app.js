@@ -225,9 +225,17 @@ const App = (() => {
         const codeHtml = PySyntax.highlight(challenge.code, { selectable: isDebugMode && !isCompleted });
         document.getElementById('code-display').innerHTML = codeHtml;
 
-        // Hide all answer sections initially
-        document.getElementById('trace-answer').style.display = 'none';
-        document.getElementById('debug-answer').style.display = 'none';
+        // Clear and hide all answer sections
+        const traceAnswer = document.getElementById('trace-answer');
+        const debugAnswer = document.getElementById('debug-answer');
+        traceAnswer.style.display = 'none';
+        debugAnswer.style.display = 'none';
+        // Clear innerHTML to remove old choices and explanations
+        document.getElementById('trace-choices').innerHTML = '';
+        document.getElementById('debug-choices').innerHTML = '';
+        // Remove any old completed explanations
+        traceAnswer.querySelectorAll('.completed-explanation').forEach(el => el.remove());
+        debugAnswer.querySelectorAll('.completed-explanation').forEach(el => el.remove());
 
         // Show appropriate answer section
         if (isCompleted) {
