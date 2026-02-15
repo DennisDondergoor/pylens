@@ -138,7 +138,7 @@ class FirebaseSync {
         if (this.user && this.db && this._cachedToken) {
             const projectId = this.db.app.options.projectId;
             const uid = this.user.uid;
-            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}/apps/pylens?updateMask.fieldPaths=progress&updateMask.fieldPaths=unlocks&updateMask.fieldPaths=stats&updateMask.fieldPaths=history`;
+            const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/users/${uid}/apps/pylens?updateMask.fieldPaths=progress&updateMask.fieldPaths=stats&updateMask.fieldPaths=history`;
             const fields = {};
             for (const [key, value] of Object.entries(data)) {
                 fields[key] = this._toFirestoreValue(value);

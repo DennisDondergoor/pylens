@@ -4,14 +4,14 @@
  */
 const Engine = (() => {
     const TIERS = [
-        { tier: 1, name: 'Absolute Basics', description: 'Print, arithmetic, strings, booleans, type()', unlockKey: null },
-        { tier: 2, name: 'Collections', description: 'Lists, dicts, tuples, slicing, indexing, membership', unlockKey: 'tier2' },
-        { tier: 3, name: 'Functions & Control Flow', description: 'Functions, arguments, return values, loops, range', unlockKey: 'tier3' },
-        { tier: 4, name: 'Methods & Comprehensions', description: 'String/list/dict methods, comprehensions, sorting, unpacking', unlockKey: 'tier4' },
-        { tier: 5, name: 'Scope & Mutability', description: 'Closures, LEGB, mutable defaults, aliasing, shallow copy', unlockKey: 'tier5' },
-        { tier: 6, name: 'Object-Oriented Python', description: 'Classes, inheritance, super(), special methods', unlockKey: 'tier6' },
-        { tier: 7, name: 'Iterators & Error Handling', description: 'Generators, yield, try/except/finally, decorators', unlockKey: 'tier7' },
-        { tier: 8, name: 'Advanced Python', description: 'Metaclasses, descriptors, async, functools deep cuts', unlockKey: 'tier8' }
+        { tier: 1, name: 'Absolute Basics', description: 'Print, arithmetic, strings, booleans, type()' },
+        { tier: 2, name: 'Collections', description: 'Lists, dicts, tuples, slicing, indexing, membership' },
+        { tier: 3, name: 'Functions & Control Flow', description: 'Functions, arguments, return values, loops, range' },
+        { tier: 4, name: 'Methods & Comprehensions', description: 'String/list/dict methods, comprehensions, sorting, unpacking' },
+        { tier: 5, name: 'Scope & Mutability', description: 'Closures, LEGB, mutable defaults, aliasing, shallow copy' },
+        { tier: 6, name: 'Object-Oriented Python', description: 'Classes, inheritance, super(), special methods' },
+        { tier: 7, name: 'Iterators & Error Handling', description: 'Generators, yield, try/except/finally, decorators' },
+        { tier: 8, name: 'Advanced Python', description: 'Metaclasses, descriptors, async, functools deep cuts' }
     ];
 
     /**
@@ -112,39 +112,14 @@ const Engine = (() => {
             const challenges = getChallenges(mode, t.tier);
             const ids = challenges.map(c => c.id);
             const completed = Storage.getCompletedCount(ids);
-            const unlocked = t.unlockKey === null || Storage.isUnlocked(t.unlockKey);
 
             return {
                 ...t,
                 total: challenges.length,
                 completed,
-                unlocked,
                 available: challenges.length > 0
             };
         });
-    }
-
-    /**
-     * Check and update unlock state based on current progress.
-     * Each tier unlocks when 10+ challenges completed in the previous tier.
-     */
-    function checkUnlocks() {
-        const newUnlocks = [];
-
-        // Tiers 2-8: unlock when 10+ challenges completed in previous tier
-        for (let t = 2; t <= 8; t++) {
-            const key = `tier${t}`;
-            if (!Storage.isUnlocked(key)) {
-                const prevTrace = Storage.getCompletedCount(getChallengeIds('trace', t - 1));
-                const prevDebug = Storage.getCompletedCount(getChallengeIds('debug', t - 1));
-                if (prevTrace + prevDebug >= 10) {
-                    Storage.setUnlock(key, true);
-                    newUnlocks.push(key);
-                }
-            }
-        }
-
-        return newUnlocks;
     }
 
     return {
@@ -156,7 +131,6 @@ const Engine = (() => {
 
         checkTrace,
         checkDebug,
-        getAvailableTiers,
-        checkUnlocks
+        getAvailableTiers
     };
 })();

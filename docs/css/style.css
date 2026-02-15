@@ -6,27 +6,29 @@
 }
 
 :root {
+    /* Base colors */
     --bg-color: #000;
     --card-bg: #111;
     --text-color: #fff;
-    --text-muted: #fff;
+    --border-color: #333;
+
+    /* Accent colors (3 core colors) */
     --accent-color: #4a9eff;
     --success-color: #4ade80;
     --error-color: #f87171;
-    --error-bg: #dc2626;
-    --border-color: #333;
-    --accent-purple: #b07aed;
-    --accent-orange: #e8a854;
 
-    /* Tier colors */
-    --tier1: #4a9eff;
-    --tier2: #34d399;
-    --tier3: #4ade80;
-    --tier4: #e8a854;
-    --tier5: #f59e0b;
-    --tier6: #f87171;
-    --tier7: #e879a8;
-    --tier8: #b07aed;
+    /* Alpha variations */
+    --accent-bg-subtle: rgba(74, 158, 255, 0.04);
+    --accent-bg-light: rgba(74, 158, 255, 0.08);
+    --accent-bg-medium: rgba(74, 158, 255, 0.1);
+    --accent-bg-strong: rgba(74, 158, 255, 0.15);
+    --success-bg: rgba(74, 222, 128, 0.1);
+    --success-bg-strong: rgba(74, 222, 128, 0.15);
+    --success-border: rgba(74, 222, 128, 0.3);
+    --error-bg-light: rgba(248, 113, 113, 0.1);
+    --error-border: rgba(248, 113, 113, 0.3);
+    --white-subtle: rgba(255, 255, 255, 0.03);
+    --modal-backdrop: rgba(0, 0, 0, 0.9);
 
     /* Syntax colors */
     --syn-keyword: #c678dd;
@@ -91,7 +93,7 @@ body {
 .btn-icon {
     background: none;
     border: none;
-    color: var(--text-muted);
+    color: var(--text-color);
     font-family: inherit;
     font-size: 1.4rem;
     cursor: pointer;
@@ -164,38 +166,11 @@ body {
 
 .mode-card:hover {
     border-color: var(--accent-color);
-    background-color: rgba(74, 158, 255, 0.04);
+    background-color: var(--accent-bg-subtle);
 }
 
 .mode-card:active {
     transform: scale(0.97);
-}
-
-.mode-card.locked {
-    opacity: 0.5;
-    cursor: default;
-}
-
-.mode-card.locked:hover {
-    border-color: var(--border-color);
-}
-
-.mode-card.locked:active {
-    transform: none;
-}
-
-.lock-badge {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    background: var(--border-color);
-    padding: 4px 12px;
-    border-radius: 20px;
 }
 
 .mode-icon {
@@ -204,7 +179,7 @@ body {
 }
 
 .mode-card[data-mode="debug"] .mode-icon {
-    color: var(--success-color);
+    color: var(--accent-color);
 }
 
 .mode-card h2 {
@@ -214,7 +189,7 @@ body {
 }
 
 .mode-card p {
-    color: var(--text-muted);
+    color: var(--text-color);
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 16px;
@@ -237,18 +212,14 @@ body {
 .progress-fill {
     height: 100%;
     border-radius: 4px;
-    background: var(--accent-color);
+    background: var(--success-color);
     transition: width 0.3s ease;
     width: 0%;
 }
 
-.mode-card[data-mode="debug"] .progress-fill {
-    background: var(--success-color);
-}
-
 .progress-label {
     font-size: 0.8rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     white-space: nowrap;
 }
 
@@ -273,24 +244,11 @@ body {
 
 .tier-card:hover {
     border-color: var(--accent-color);
-    background-color: rgba(74, 158, 255, 0.04);
+    background-color: var(--accent-bg-subtle);
 }
 
 .tier-card:active {
     transform: scale(0.97);
-}
-
-.tier-card.locked {
-    opacity: 0.4;
-    cursor: default;
-}
-
-.tier-card.locked:hover {
-    border-color: var(--border-color);
-}
-
-.tier-card.locked:active {
-    transform: none;
 }
 
 .tier-badge {
@@ -305,14 +263,14 @@ body {
     flex-shrink: 0;
 }
 
-.tier-card[data-tier="1"] .tier-badge { background: rgba(74, 158, 255, 0.15); color: var(--tier1); }
-.tier-card[data-tier="2"] .tier-badge { background: rgba(52, 211, 153, 0.15); color: var(--tier2); }
-.tier-card[data-tier="3"] .tier-badge { background: rgba(74, 222, 128, 0.15); color: var(--tier3); }
-.tier-card[data-tier="4"] .tier-badge { background: rgba(232, 168, 84, 0.15); color: var(--tier4); }
-.tier-card[data-tier="5"] .tier-badge { background: rgba(245, 158, 11, 0.15); color: var(--tier5); }
-.tier-card[data-tier="6"] .tier-badge { background: rgba(248, 113, 113, 0.15); color: var(--tier6); }
-.tier-card[data-tier="7"] .tier-badge { background: rgba(232, 121, 168, 0.15); color: var(--tier7); }
-.tier-card[data-tier="8"] .tier-badge { background: rgba(176, 122, 237, 0.15); color: var(--tier8); }
+.tier-card[data-tier="1"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="2"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="3"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="4"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="5"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="6"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="7"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
+.tier-card[data-tier="8"] .tier-badge { background: var(--accent-bg-strong); color: var(--accent-color); }
 
 .tier-info {
     flex: 1;
@@ -327,7 +285,7 @@ body {
 
 .tier-info p {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     margin-bottom: 10px;
 }
 
@@ -346,7 +304,7 @@ body {
 }
 
 .tier-lock-icon {
-    color: var(--text-muted);
+    color: var(--text-color);
     flex-shrink: 0;
 }
 
@@ -374,17 +332,17 @@ body {
     font-weight: 600;
     padding: 8px 16px;
     border-radius: 20px;
-    background: rgba(74, 158, 255, 0.15);
-    color: var(--tier1);
+    background: var(--accent-bg-strong);
+    color: var(--accent-color);
 }
 
-.challenge-tag.tier-2 { background: rgba(52, 211, 153, 0.15); color: var(--tier2); }
-.challenge-tag.tier-3 { background: rgba(74, 222, 128, 0.15); color: var(--tier3); }
-.challenge-tag.tier-4 { background: rgba(232, 168, 84, 0.15); color: var(--tier4); }
-.challenge-tag.tier-5 { background: rgba(245, 158, 11, 0.15); color: var(--tier5); }
-.challenge-tag.tier-6 { background: rgba(248, 113, 113, 0.15); color: var(--tier6); }
-.challenge-tag.tier-7 { background: rgba(232, 121, 168, 0.15); color: var(--tier7); }
-.challenge-tag.tier-8 { background: rgba(176, 122, 237, 0.15); color: var(--tier8); }
+.challenge-tag.tier-2 { background: var(--accent-bg-strong); color: var(--accent-color); }
+.challenge-tag.tier-3 { background: var(--accent-bg-strong); color: var(--accent-color); }
+.challenge-tag.tier-4 { background: var(--accent-bg-strong); color: var(--accent-color); }
+.challenge-tag.tier-5 { background: var(--accent-bg-strong); color: var(--accent-color); }
+.challenge-tag.tier-6 { background: var(--accent-bg-strong); color: var(--accent-color); }
+.challenge-tag.tier-7 { background: var(--accent-bg-strong); color: var(--accent-color); }
+.challenge-tag.tier-8 { background: var(--accent-bg-strong); color: var(--accent-color); }
 
 .challenge-counter {
     font-size: 0.9rem;
@@ -416,7 +374,7 @@ body {
 
 .code-filename {
     font-size: 0.8rem;
-    color: var(--text-muted);
+    color: var(--text-color);
 }
 
 .code-block {
@@ -437,7 +395,7 @@ body {
 }
 
 .code-line:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--white-subtle);
 }
 
 .code-line.selectable {
@@ -445,17 +403,17 @@ body {
 }
 
 .code-line.selectable:hover {
-    background: rgba(74, 158, 255, 0.08);
+    background: var(--accent-bg-light);
 }
 
 .code-line.selected {
-    background: rgba(248, 113, 113, 0.12);
+    background: var(--error-bg-light);
     border-left: 3px solid var(--error-color);
     padding-left: 0;
 }
 
 .line-number {
-    color: var(--text-muted);
+    color: var(--text-color);
     text-align: right;
     padding-right: 16px;
     user-select: none;
@@ -489,7 +447,7 @@ body {
     font-size: 1rem;
     font-weight: 500;
     margin-bottom: 14px;
-    color: var(--text-muted);
+    color: var(--text-color);
 }
 
 .answer-choices {
@@ -515,7 +473,7 @@ body {
 
 .choice-btn:hover {
     border-color: var(--accent-color);
-    background-color: rgba(74, 158, 255, 0.04);
+    background-color: var(--accent-bg-subtle);
 }
 
 .choice-btn:active {
@@ -529,13 +487,13 @@ body {
 
 .choice-btn.correct {
     border-color: var(--success-color);
-    background: rgba(74, 222, 128, 0.1);
+    background: var(--success-bg);
     color: var(--success-color);
 }
 
 .choice-btn.incorrect {
     border-color: var(--error-color);
-    background: rgba(248, 113, 113, 0.1);
+    background: var(--error-bg-light);
     color: var(--error-color);
 }
 
@@ -560,12 +518,12 @@ body {
 
 .choice-btn.correct:disabled:hover {
     border-color: var(--success-color);
-    background: rgba(74, 222, 128, 0.1);
+    background: var(--success-bg);
 }
 
 .choice-btn.incorrect:disabled:hover {
     border-color: var(--error-color);
-    background: rgba(248, 113, 113, 0.1);
+    background: var(--error-bg-light);
 }
 
 /* ===== Result ===== */
@@ -581,21 +539,21 @@ body {
 }
 
 .result-banner.correct {
-    background: rgba(74, 222, 128, 0.1);
-    border: 2px solid rgba(74, 222, 128, 0.3);
+    background: var(--success-bg);
+    border: 2px solid var(--success-border);
     color: var(--success-color);
 }
 
 .result-banner.incorrect {
-    background: rgba(248, 113, 113, 0.1);
-    border: 2px solid rgba(248, 113, 113, 0.3);
+    background: var(--error-bg-light);
+    border: 2px solid var(--error-border);
     color: var(--error-color);
 }
 
 .result-banner.partial {
-    background: rgba(232, 168, 84, 0.1);
-    border: 2px solid rgba(232, 168, 84, 0.3);
-    color: var(--accent-orange);
+    background: var(--accent-bg-medium);
+    border: 2px solid var(--accent-bg-strong);
+    color: var(--accent-color);
 }
 
 .result-icon {
@@ -617,7 +575,7 @@ body {
 
 .result-score-label {
     font-size: 1rem;
-    color: var(--text-muted);
+    color: var(--text-color);
 }
 
 .correct-answer-box {
@@ -630,7 +588,7 @@ body {
 
 .correct-answer-box h4 {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 10px;
@@ -653,7 +611,7 @@ body {
 
 .explanation-box h4 {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 10px;
@@ -686,7 +644,7 @@ body {
 
 .deepdive-label {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -701,7 +659,7 @@ body {
 .deepdive-tag {
     font-size: 0.8rem;
     color: var(--accent-color);
-    background-color: rgba(74, 158, 255, 0.1);
+    background-color: var(--accent-bg-medium);
     padding: 2px 8px;
     border-radius: 4px;
 }
@@ -709,7 +667,7 @@ body {
 .deepdive-link {
     display: inline-block;
     font-size: 0.9rem;
-    color: var(--accent-color);
+    color: var(--text-color);
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -776,7 +734,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: var(--modal-backdrop);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -802,7 +760,7 @@ body {
 }
 
 .modal-content p {
-    color: var(--text-muted);
+    color: var(--text-color);
     font-size: 1rem;
     margin-bottom: 1.5rem;
     line-height: 1.6;
@@ -844,7 +802,7 @@ body {
 
 .stat-label {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--text-color);
 }
 
 .stats-section {
@@ -889,7 +847,7 @@ body {
 
 .tag-mastery-pct {
     font-size: 0.8rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     min-width: 36px;
     text-align: right;
 }
@@ -920,12 +878,12 @@ body {
     flex-shrink: 0;
 }
 
-.activity-mode.trace { background: rgba(74, 158, 255, 0.15); color: var(--tier1); }
-.activity-mode.debug { background: rgba(74, 222, 128, 0.15); color: var(--tier2); }
+.activity-mode.trace { background: var(--accent-bg-strong); color: var(--accent-color); }
+.activity-mode.debug { background: var(--success-bg-strong); color: var(--accent-color); }
 
 .activity-title {
     flex: 1;
-    color: var(--text-muted);
+    color: var(--text-color);
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -938,7 +896,7 @@ body {
 }
 
 .activity-score.good { color: var(--success-color); }
-.activity-score.ok { color: var(--accent-orange); }
+.activity-score.ok { color: var(--accent-color); }
 .activity-score.bad { color: var(--error-color); }
 
 .stats-actions {
@@ -951,7 +909,7 @@ body {
 .empty-state {
     text-align: center;
     padding: 2rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     font-size: 1rem;
 }
 
@@ -975,7 +933,7 @@ body {
 .sync-status {
     text-align: center;
     font-size: 1rem;
-    color: var(--text-muted);
+    color: var(--text-color);
     padding: 6px 0;
     min-height: 0;
     transition: min-height 0.2s;

@@ -1,11 +1,10 @@
 /**
  * Storage manager for PyLens.
- * Handles localStorage persistence for progress, unlocks, stats, and history.
+ * Handles localStorage persistence for progress, stats, and history.
  */
 const Storage = (() => {
     const KEYS = {
         progress: 'pylens_progress',
-        unlocks: 'pylens_unlocks',
         stats: 'pylens_stats',
         history: 'pylens_history'
     };
@@ -60,30 +59,6 @@ const Storage = (() => {
     function isCompleted(challengeId) {
         const p = getChallengeProgress(challengeId);
         return p !== null && p.bestScore > 0;
-    }
-
-    // === Unlocks ===
-
-    function getUnlocks() {
-        return _get(KEYS.unlocks, {
-            tier2: false,
-            tier3: false,
-            tier4: false,
-            tier5: false,
-            tier6: false,
-            tier7: false,
-            tier8: false
-        });
-    }
-
-    function setUnlock(key, value) {
-        const unlocks = getUnlocks();
-        unlocks[key] = value;
-        _set(KEYS.unlocks, unlocks);
-    }
-
-    function isUnlocked(key) {
-        return getUnlocks()[key] === true;
     }
 
     // === Stats ===
@@ -146,9 +121,6 @@ const Storage = (() => {
         saveChallengeResult,
         getCompletedCount,
         isCompleted,
-        getUnlocks,
-        setUnlock,
-        isUnlocked,
         getStats,
         updateStats,
         getHistory,
