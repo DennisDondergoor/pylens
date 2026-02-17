@@ -86,7 +86,11 @@ const App = (() => {
             if (firebaseSync && firebaseSync.isSignedIn()) {
                 firebaseSync.signOut();
             } else if (firebaseSync) {
-                firebaseSync.signIn();
+                firebaseSync.signIn().catch(() => {
+                    const statusEl = document.getElementById('sync-status');
+                    statusEl.textContent = 'Sign in failed. Please try again.';
+                    setTimeout(() => { statusEl.textContent = ''; }, 4000);
+                });
             }
         });
 
@@ -246,7 +250,7 @@ const App = (() => {
             // Debug: first select a line, then show choices
             document.getElementById('debug-answer').style.display = 'block';
             document.getElementById('debug-choices').innerHTML =
-                '<p style="color: var(--text-color); font-size: 0.85rem;">Click on the line that contains the bug.</p>';
+                '<p class="debug-instruction">Click on the line that contains the bug.</p>';
         }
 
         // Update navigation arrows
@@ -259,7 +263,7 @@ const App = (() => {
         const container = document.getElementById('trace-choices');
         const shuffled = shuffleArray(challenge.outputChoices);
         container.innerHTML = shuffled.map((choice, i) => {
-            return `<button class="choice-btn trace-choice" data-index="${i}" data-value="${escapeAttr(choice)}">${escapeHtml(choice)}</button>`;
+            return `<button class="choice-btn trace-choice" data-value="${escapeAttr(choice)}">${escapeHtml(choice)}</button>`;
         }).join('');
 
         container.querySelectorAll('.trace-choice').forEach(btn => {
@@ -326,7 +330,7 @@ const App = (() => {
                     <h4>Explanation</h4>
                     <p>${escapeHtml(challenge.explanation)}</p>
                 </div>
-                ${challenge.conceptLink ? `
+                ${safeUrl(challenge.conceptLink) ? `
                     <div class="deepdive-card">
                         <div class="deepdive-header">
                             <span class="deepdive-icon">📖</span>
@@ -335,7 +339,7 @@ const App = (() => {
                         <div class="deepdive-tags">
                             ${(challenge.tags || []).map(tag => `<span class="deepdive-tag">${tag}</span>`).join('')}
                         </div>
-                        <a class="deepdive-link" href="${challenge.conceptLink}" target="_blank" rel="noopener">Read the Python docs →</a>
+                        <a class="deepdive-link" href="${safeUrl(challenge.conceptLink)}" target="_blank" rel="noopener">Read the Python docs →</a>
                     </div>
                 ` : ''}
             </div>
@@ -381,6 +385,7 @@ const App = (() => {
     }
 
     function handleDebugAnswer(choiceIndex) {
+        if (!currentChallenge) return;
         if (selectedLine === null) return;
 
         const result = Engine.checkDebug(currentChallenge, selectedLine, choiceIndex);
@@ -475,8 +480,8 @@ const App = (() => {
 
         // Deep dive card
         const deepdiveCard = document.getElementById('deepdive-card');
-        if (currentChallenge.conceptLink) {
-            document.getElementById('concept-link').href = currentChallenge.conceptLink;
+        if (safeUrl(currentChallenge.conceptLink)) {
+            document.getElementById('concept-link').href = safeUrl(currentChallenge.conceptLink);
             const tagsContainer = document.getElementById('deepdive-tags');
             tagsContainer.innerHTML = (currentChallenge.tags || [])
                 .map(tag => `<span class="deepdive-tag">${tag}</span>`)
@@ -578,12 +583,6 @@ const App = (() => {
 
     function getAllData() {
         const progress = Storage.getProgress();
-        // Sanitize Infinity values in progress
-        for (const id in progress) {
-            if (progress[id].bestTime === Infinity || !isFinite(progress[id].bestTime)) {
-                progress[id].bestTime = null;
-            }
-        }
         return {
             progress,
             stats: Storage.getStats(),
@@ -609,15 +608,19 @@ const App = (() => {
                 for (const id in cloud.progress) {
                     const c = cloud.progress[id];
                     const l = local[id] || { bestScore: 0, attempts: 0, lastAttempt: 0, bestTime: null };
-                    const localBest = (l.bestTime === null || l.bestTime === Infinity) ? Infinity : l.bestTime;
-                    const cloudBest = (c.bestTime === null || c.bestTime === undefined) ? Infinity : c.bestTime;
+                    const localBest = l.bestTime ?? null;
+                    const cloudBest = c.bestTime ?? null;
+                    let mergedBest;
+                    if (localBest === null && cloudBest === null) mergedBest = null;
+                    else if (localBest === null) mergedBest = cloudBest;
+                    else if (cloudBest === null) mergedBest = localBest;
+                    else mergedBest = Math.min(localBest, cloudBest);
                     local[id] = {
                         bestScore: Math.max(l.bestScore || 0, c.bestScore || 0),
                         attempts: Math.max(l.attempts || 0, c.attempts || 0),
                         lastAttempt: Math.max(l.lastAttempt || 0, c.lastAttempt || 0),
-                        bestTime: Math.min(localBest, cloudBest)
+                        bestTime: mergedBest
                     };
-                    if (local[id].bestTime === Infinity) local[id].bestTime = null;
                 }
                 localStorage.setItem('pylens_progress', JSON.stringify(local));
             }
@@ -626,17 +629,6 @@ const App = (() => {
             if (cloud.stats) {
                 const local = Storage.getStats();
                 local.totalCompleted = Math.max(local.totalCompleted || 0, cloud.stats.totalCompleted || 0);
-                if (cloud.stats.tagMastery) {
-                    if (!local.tagMastery) local.tagMastery = {};
-                    for (const tag in cloud.stats.tagMastery) {
-                        const ct = cloud.stats.tagMastery[tag];
-                        const lt = local.tagMastery[tag] || { correct: 0, total: 0 };
-                        local.tagMastery[tag] = {
-                            correct: Math.max(lt.correct || 0, ct.correct || 0),
-                            total: Math.max(lt.total || 0, ct.total || 0)
-                        };
-                    }
-                }
                 localStorage.setItem('pylens_stats', JSON.stringify(local));
             }
 
@@ -676,6 +668,10 @@ const App = (() => {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    function safeUrl(url) {
+        return url && url.startsWith('https://') ? url : null;
     }
 
     function escapeAttr(text) {

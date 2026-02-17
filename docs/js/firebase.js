@@ -30,7 +30,7 @@ class FirebaseSync {
         this.auth.onAuthStateChanged((user) => {
             this.user = user;
             if (user) {
-                user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
+                user.getIdToken().then(t => { this._cachedToken = t; }).catch(e => { console.warn('Token refresh failed:', e); });
             } else {
                 this._cachedToken = null;
             }
@@ -122,7 +122,7 @@ class FirebaseSync {
             this._pendingGetData = null;
             const ok = await this.saveToCloud(getDataFn());
             if (this.user) {
-                this.user.getIdToken().then(t => { this._cachedToken = t; }).catch(() => {});
+                this.user.getIdToken().then(t => { this._cachedToken = t; }).catch(e => { console.warn('Token refresh failed:', e); });
             }
             if (this.onSyncResult) this.onSyncResult(ok);
         }, 2000);
@@ -148,7 +148,7 @@ class FirebaseSync {
                 headers: { 'Authorization': `Bearer ${this._cachedToken}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fields }),
                 keepalive: true
-            }).catch(() => {});
+            }).catch(e => { console.warn('Flush sync failed:', e); });
         }
     }
 

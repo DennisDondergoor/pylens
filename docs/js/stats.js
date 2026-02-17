@@ -15,38 +15,10 @@ const Stats = (() => {
         const totalScore = history.reduce((acc, h) => acc + (h.score || 0), 0);
         document.getElementById('stat-total-score').textContent = totalScore;
 
-        // Tag mastery
-        renderTagMastery(stats.tagMastery);
-
         // Recent activity
         renderRecentActivity(history);
     }
 
-    function renderTagMastery(tagMastery) {
-        const grid = document.getElementById('tag-mastery-grid');
-        const tags = Object.keys(tagMastery).sort();
-
-        if (tags.length === 0) {
-            grid.innerHTML = '<div class="empty-state">Complete some challenges to see your tag mastery.</div>';
-            return;
-        }
-
-        grid.innerHTML = tags.map(tag => {
-            const data = tagMastery[tag];
-            const pct = data.total > 0 ? Math.round((data.correct / data.total) * 100) : 0;
-            const color = pct >= 80 ? 'var(--success-color)' : pct >= 50 ? 'var(--accent-orange)' : 'var(--error-color)';
-
-            return `<div class="tag-mastery-item">
-                <div class="tag-mastery-name">${escapeHtml(tag)}</div>
-                <div class="tag-mastery-bar">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${pct}%; background: ${color};"></div>
-                    </div>
-                    <span class="tag-mastery-pct">${pct}%</span>
-                </div>
-            </div>`;
-        }).join('');
-    }
 
     function renderRecentActivity(history) {
         const container = document.getElementById('recent-activity');

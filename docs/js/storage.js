@@ -23,8 +23,8 @@ const Storage = (() => {
     function _set(key, value) {
         try {
             localStorage.setItem(key, JSON.stringify(value));
-        } catch {
-            // Storage full — silently fail
+        } catch (e) {
+            console.warn('localStorage write failed:', e);
         }
     }
 
@@ -41,12 +41,12 @@ const Storage = (() => {
 
     function saveChallengeResult(challengeId, score, timeMs) {
         const all = getProgress();
-        const prev = all[challengeId] || { bestScore: 0, attempts: 0, bestTime: Infinity };
+        const prev = all[challengeId] || { bestScore: 0, attempts: 0, bestTime: null };
         all[challengeId] = {
             bestScore: Math.max(prev.bestScore, score),
             attempts: prev.attempts + 1,
             lastAttempt: Date.now(),
-            bestTime: Math.min(prev.bestTime === Infinity ? timeMs : prev.bestTime, timeMs)
+            bestTime: prev.bestTime === null ? timeMs : Math.min(prev.bestTime, timeMs)
         };
         _set(KEYS.progress, all);
     }
@@ -65,8 +65,7 @@ const Storage = (() => {
 
     function getStats() {
         return _get(KEYS.stats, {
-            totalCompleted: 0,
-            tagMastery: {}
+            totalCompleted: 0
         });
     }
 
@@ -75,16 +74,6 @@ const Storage = (() => {
 
         if (wasCorrect) {
             stats.totalCompleted++;
-        }
-
-        for (const tag of tags) {
-            if (!stats.tagMastery[tag]) {
-                stats.tagMastery[tag] = { correct: 0, total: 0 };
-            }
-            stats.tagMastery[tag].total++;
-            if (wasCorrect) {
-                stats.tagMastery[tag].correct++;
-            }
         }
 
         _set(KEYS.stats, stats);

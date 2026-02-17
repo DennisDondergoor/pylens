@@ -99,7 +99,7 @@ const PySyntax = (() => {
                     }
                 }
                 result += `${quote}</span>`;
-                i = j + 1;
+                i = Math.min(j + 1, line.length);
                 tokens.push(result);
                 continue;
             }
